@@ -1,13 +1,13 @@
-package com.project.mvc;
+package com.project.give;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChatboxApplication {
+public class GiveApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ChatboxApplication.class, args);
+		SpringApplication.run(GiveApplication.class, args);
 	}
 
 }

@@ -1,2 +1,22 @@
+# Maven Wrapper
 /mvnw text eol=lf
-*.cmd text eol=crlf
+/mvnw.cmd text eol=crlf
+
+# Java 소스 파일
+*.java text eol=lf
+
+# XML, properties, YAML 등 설정 파일
+*.xml text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+
+# 스크립트 파일
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# Markdown, 텍스트, 문서 파일
+*.md text eol=lf
+*.txt text eol=lf
+
+# Git 자동 변환
+* text=auto
