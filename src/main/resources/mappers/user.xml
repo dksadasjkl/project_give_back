@@ -4,6 +4,16 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.give.repository.UserMapper">
 
+    <resultMap id="UserResultMap" type="com.project.give.entity.User">
+        <id property="userId" column="user_id" />
+        <result property="username" column="user_username" />
+        <result property="password" column="user_password" />
+        <result property="email" column="user_email" />
+        <result property="name" column="user_name" />
+        <result property="createDate" column="create_date" />
+        <result property="updateDate" column="update_date" />
+    </resultMap>
+
     <insert id="saveUser"
             parameterType="com.project.give.entity.User"
             keyProperty="userId"
@@ -13,5 +23,23 @@
         values
             (0, 3, #{username}, #{password}, #{email}, #{name}, now(), now())
     </insert>
+
+    <select id="findUserByUsername"
+            parameterType="string"
+            resultMap="UserResultMap"
+    >
+        select
+            user_id,
+            user_username,
+            user_password,
+            user_name,
+            user_email,
+            create_date,
+            update_date
+        from
+            user_tb
+        where
+            user_username = #{username}
+    </select>
 
 </mapper>
