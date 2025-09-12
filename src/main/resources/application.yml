@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local: local, common, secret
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+server:
+  port: 8080
+  name: local
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+
+mybatis:
+  mapper-locations:
+    - /mappers/*.xml
