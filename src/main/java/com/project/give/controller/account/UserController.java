@@ -18,7 +18,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody UserSignupRequestDto userSignupRequestDto) {
-        System.out.println(userSignupRequestDto);
         userService.signup(userSignupRequestDto);
         return ResponseEntity.created(null).body(true);
     };
