@@ -21,8 +21,9 @@ public class UserService {
         int successCount = 0;
         User user = userSignupRequestDto.toEntity(bCryptPasswordEncoder);
         successCount += userMapper.saveUser(user);
+        successCount += userMapper.saveRole(user.getUserId(), 1); // 임시사용자 부여
 
-        if (successCount < 1) {
+        if (successCount < 2) {
             throw new DataSaveException("회원 저장 실패");
         }
     }

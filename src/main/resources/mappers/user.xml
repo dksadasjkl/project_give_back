@@ -4,6 +4,19 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.give.repository.UserMapper">
 
+    <resultMap id="RoleResultMap" type="com.project.give.entity.Role">
+        <id property="roleId" column="role_id" />
+        <result property="roleName" column="role_name" />
+        <result property="roleNameKor" column="role_name_kor" />
+    </resultMap>
+
+    <resultMap id="RoleRegisterResultMap" type="com.project.give.entity.RoleRegister">
+        <id property="roleRegisterId" column="role_register_id" />
+        <result property="userId" column="user_id" />
+        <result property="roleId" column="role_id" />
+        <association property="role" resultMap="RoleResultMap" />
+    </resultMap>
+
     <resultMap id="UserResultMap" type="com.project.give.entity.User">
         <id property="userId" column="user_id" />
         <result property="username" column="user_username" />
@@ -12,6 +25,8 @@
         <result property="name" column="user_name" />
         <result property="createDate" column="create_date" />
         <result property="updateDate" column="update_date" />
+        <!-- 권한 리스트 매핑 여러 개의 권한 확인-->
+        <collection property="roleRegisters" javaType="list" resultMap="RoleRegisterResultMap" />
     </resultMap>
 
     <insert id="saveUser"
@@ -21,7 +36,14 @@
         insert into
             user_tb
         values
-            (0, 3, #{username}, #{password}, #{email}, #{name}, now(), now())
+            (0, #{username}, #{password}, #{email}, #{name}, now(), now())
+    </insert>
+
+    <insert id="saveRole">
+        insert into
+            role_register_tb
+        values
+            (0, #{userId}, #{roleId}, now(), now())
     </insert>
 
     <select id="findUserByUsername"
@@ -29,17 +51,24 @@
             resultMap="UserResultMap"
     >
         select
-            user_id,
-            user_username,
-            user_password,
-            user_name,
-            user_email,
-            create_date,
-            update_date
+            ut.user_id,
+            ut.user_username,
+            ut.user_password,
+            ut.user_name,
+            ut.user_email,
+            ut.create_date,
+            ut.update_date,
+            rrt.role_register_id,
+            rrt.role_id,
+            rt.role_name,
+            rt.role_name_kor
         from
-            user_tb
+            user_tb ut
+            left outer join role_register_tb rrt on rrt.user_id = ut.user_id
+            left outer join role_tb rt on rt.role_id = rrt.role_id
         where
-            user_username = #{username}
+            ut.user_username =  #{username}
     </select>
+
 
 </mapper>

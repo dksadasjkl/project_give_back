@@ -1,5 +1,6 @@
 package com.project.give.jwt;
 
+import com.project.give.entity.PrincipalUser;
 import com.project.give.entity.User;
 import com.project.give.repository.UserMapper;
 import io.jsonwebtoken.Claims;
@@ -8,10 +9,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 
 @Component
@@ -27,7 +32,7 @@ public class JwtProvider {
     }
 
     public String generateToken(User user) {
-        // 권한 설정 예정
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
         // 임시로 토근 만료시간 30일로 지정 -> Access Token 1시간으로 변경 예정
         Date expireDate = new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30));
@@ -35,7 +40,7 @@ public class JwtProvider {
         String accessToken = Jwts.builder()
                 .claim("userId", user.getUserId())
                 .claim("username", user.getUsername())
-                // 권한 추가 예정
+                .claim("authorities", authorities)
                 .setExpiration(expireDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -57,5 +62,15 @@ public class JwtProvider {
                 .parseClaimsJws(token)
                 .getBody();
         return claims;
+    }
+
+    public Authentication getAuthentication (Claims claims) {
+        String username = claims.get("username").toString();
+        User user = userMapper.findUserByUsername(username);
+        if(user == null) {
+            return null;
+        }
+        PrincipalUser principalUser = user.toPrincipalUser();
+        return new UsernamePasswordAuthenticationToken(principalUser, principalUser.getPassword(), principalUser.getAuthorities());
     }
 }

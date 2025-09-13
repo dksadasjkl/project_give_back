@@ -31,4 +31,5 @@ public class AuthService {
         // 로그인 성공 시 토근 반환
         return jwtProvider.generateToken(user);
     }
+
 }

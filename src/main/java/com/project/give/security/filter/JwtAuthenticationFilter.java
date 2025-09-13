@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -36,6 +37,13 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }
+            Authentication authentication = jwtProvider.getAuthentication(claims);
+
+            if(authentication == null) {
+                response.sendError(HttpStatus.UNAUTHORIZED.value());
+                return;
+            }
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
