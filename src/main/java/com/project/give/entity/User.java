@@ -21,6 +21,8 @@ public class User {
     private String password;
     private String email;
     private String name;
+    private String nickname;
+    private String phone;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
@@ -40,6 +42,8 @@ public class User {
                 .password(password)
                 .email(email)
                 .name(name)
+                .nickname(nickname)
+                .phone(phone)
                 .authorities(getAuthorities())
                 .build();
     }

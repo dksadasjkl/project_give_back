@@ -36,7 +36,7 @@
         insert into
             user_tb
         values
-            (0, #{username}, #{password}, #{email}, #{name}, now(), now())
+            (0, #{username}, #{password}, #{email}, #{name}, #{nickname}, #{phone}, now(), now())
     </insert>
 
     <insert id="saveRole">
@@ -56,6 +56,8 @@
             ut.user_password,
             ut.user_name,
             ut.user_email,
+            ut.user_nickname,
+            ut.user_phone,
             ut.create_date,
             ut.update_date,
             rrt.role_register_id,
