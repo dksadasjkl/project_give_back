@@ -37,7 +37,7 @@
     </insert>
 
     <select id="selectDonationProjectById" parameterType="int" resultMap="DonationProjectMap">
-        SELECT
+        select
             donation_project_id,
             donation_project_title,
             donation_project_organization,
@@ -49,10 +49,26 @@
             donation_project_end_date,
             create_date,
             update_date
-        FROM
+        from
             donation_project_tb
-        WHERE
+        where
             donation_project_id = #{donationProjectId}
     </select>
 
+    <select id="selectAllDonationProjects" resultMap="DonationProjectMap">
+        select
+            donation_project_id,
+            donation_project_title,
+            donation_project_organization,
+            donation_project_image_url,
+            donation_category_id,
+            donation_project_current_amount,
+            donation_project_target_amount,
+            donation_project_start_date,
+            donation_project_end_date,
+            create_date,
+            update_date
+        from
+            donation_project_tb
+    </select>
 </mapper>

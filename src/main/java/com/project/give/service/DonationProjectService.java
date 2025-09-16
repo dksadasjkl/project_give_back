@@ -1,11 +1,15 @@
 package com.project.give.service;
 
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
+import com.project.give.dto.donation.response.GetDonationProjectsResponseDto;
 import com.project.give.entity.DonationProject;
 import com.project.give.exception.DataSaveException;
 import com.project.give.repository.DonationProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DonationProjectService {
@@ -27,5 +31,10 @@ public class DonationProjectService {
 
     public DonationProject getDonationProject (int donationProjectId) {
         return donationProjectMapper.selectDonationProjectById(donationProjectId);
+    }
+
+    public List<GetDonationProjectsResponseDto> getDonationProjects () {
+        List<DonationProject> donationProjects = donationProjectMapper.selectAllDonationProjects();
+        return donationProjects.stream().map(DonationProject::togetDonationProjectsResponseDto).collect(Collectors.toList());
     }
 }
