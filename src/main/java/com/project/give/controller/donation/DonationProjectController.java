@@ -32,5 +32,10 @@ public class DonationProjectController {
         return ResponseEntity.ok(donationProjectService.getDonationProjects());
     }
 
+    @DeleteMapping("/{donationProjectId}")
+    public ResponseEntity<?> deleteDonationProject(@PathVariable int donationProjectId) {
+        donationProjectService.deleteDonationProject(donationProjectId);
+        return ResponseEntity.ok("Donation project deleted successfully");
+    }
 
 }

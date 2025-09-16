@@ -71,4 +71,13 @@
         from
             donation_project_tb
     </select>
+
+    <delete id="deleteDonationProjectById" parameterType="int">
+        delete from
+            donation_project_tb
+        where
+            donation_project_id = #{donationProjectId}
+    </delete>
+
+    
 </mapper>

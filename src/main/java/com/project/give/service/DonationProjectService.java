@@ -37,4 +37,8 @@ public class DonationProjectService {
         List<DonationProject> donationProjects = donationProjectMapper.selectAllDonationProjects();
         return donationProjects.stream().map(DonationProject::togetDonationProjectsResponseDto).collect(Collectors.toList());
     }
+
+    public void deleteDonationProject(int donationProjectId) {
+        donationProjectMapper.deleteDonationProjectById(donationProjectId);
+    }
 }
