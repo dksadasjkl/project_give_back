@@ -24,4 +24,8 @@ public class DonationProjectService {
             throw new DataSaveException("DonationProject 저장 실패");
         }
     }
+
+    public DonationProject getDonationProject (int donationProjectId) {
+        return donationProjectMapper.selectDonationProjectById(donationProjectId);
+    }
 }

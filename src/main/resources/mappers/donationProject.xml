@@ -4,7 +4,22 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.give.repository.DonationProjectMapper">
 
-    <insert id="insertDonationProject" parameterType="com.project.give.entity.DonationProject" useGeneratedKeys="true" keyProperty="donationProjectId"><![CDATA[
+    <resultMap id="DonationProjectMap" type="com.project.give.entity.DonationProject">
+        <id property="donationProjectId" column="donation_project_id"/>
+        <result property="donationProjectTitle" column="donation_project_title"/>
+        <result property="donationProjectOrganization" column="donation_project_organization"/>
+        <result property="donationProjectImageUrl" column="donation_project_image_url"/>
+        <result property="donationCategoryId" column="donation_category_id"/>
+        <result property="donationProjectCurrentAmount" column="donation_project_current_amount"/>
+        <result property="donationProjectTargetAmount" column="donation_project_target_amount"/>
+        <result property="donationProjectStartDate" column="donation_project_start_date"/>
+        <result property="donationProjectEndDate" column="donation_project_end_date"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+
+    <insert id="insertDonationProject" parameterType="com.project.give.entity.DonationProject" useGeneratedKeys="true" keyProperty="donationProjectId">
         insert into
             donation_project_tb
         values
@@ -19,8 +34,25 @@
                 now(),
                 now(),
                 now()
-            )
-    ]]></insert>
+    </insert>
 
+    <select id="selectDonationProjectById" parameterType="int" resultMap="DonationProjectMap">
+        SELECT
+            donation_project_id,
+            donation_project_title,
+            donation_project_organization,
+            donation_project_image_url,
+            donation_category_id,
+            donation_project_current_amount,
+            donation_project_target_amount,
+            donation_project_start_date,
+            donation_project_end_date,
+            create_date,
+            update_date
+        FROM
+            donation_project_tb
+        WHERE
+            donation_project_id = #{donationProjectId}
+    </select>
 
 </mapper>
