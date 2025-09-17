@@ -50,8 +50,11 @@ public class DonationProjectController {
 
     @GetMapping("/load-more")
     public ResponseEntity<?> loadMoreDonationProjects(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
-        System.out.println(getDonationProjectSearchRequestDto);
-        System.out.println("요청 들어옴");
         return ResponseEntity.ok(donationProjectService.loadMoreDonationProjects(getDonationProjectSearchRequestDto));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<?> getProductCount(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
+        return ResponseEntity.ok(donationProjectService.totalLoadDonationProjectCount(getDonationProjectSearchRequestDto));
     }
 }

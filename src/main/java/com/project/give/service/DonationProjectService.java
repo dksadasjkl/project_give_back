@@ -3,6 +3,7 @@ package com.project.give.service;
 import com.project.give.dto.donation.request.GetDonationProjectSearchRequestDto;
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
 import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
+import com.project.give.dto.donation.response.GetDonationProjectCountResponseDto;
 import com.project.give.dto.donation.response.GetDonationProjectsResponseDto;
 import com.project.give.entity.DonationProject;
 import com.project.give.exception.DataSaveException;
@@ -41,7 +42,6 @@ public class DonationProjectService {
     }
 
     public List<GetDonationProjectsResponseDto> loadMoreDonationProjects(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
-        System.out.println(getDonationProjectSearchRequestDto);
         List<DonationProject> donationProjects = donationProjectMapper.selectDonationProjectsWithPaging(
                 getDonationProjectSearchRequestDto.getStartIndex(),
                 getDonationProjectSearchRequestDto.getCount(),
@@ -51,6 +51,18 @@ public class DonationProjectService {
         return donationProjects.stream().map(DonationProject::toGetDonationProjectsResponseDto).collect(Collectors.toList());
     }
 
+    public GetDonationProjectCountResponseDto totalLoadDonationProjectCount(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
+        int totalCount = donationProjectMapper.selectDonationProjectCount(
+                getDonationProjectSearchRequestDto.getDonationCategoryId()
+        );
+        int totalLoadCount = (int) Math.ceil(((double) totalCount) / getDonationProjectSearchRequestDto.getCount());
+
+        return GetDonationProjectCountResponseDto.builder()
+                .totalCount(totalCount)
+                .totalLoadCount(totalLoadCount)
+                .build();
+    }
+
     public void deleteDonationProject(int donationProjectId) {
         donationProjectMapper.deleteDonationProjectById(donationProjectId);
     }
@@ -58,4 +70,6 @@ public class DonationProjectService {
     public void updateDonationProject (int donationProjectId, PutDonationProjectRequestDto putDonationProjectRequestDto) {
         donationProjectMapper.updateDonationProject(putDonationProjectRequestDto.toEntity(donationProjectId));
     }
+
+
 }

@@ -140,6 +140,15 @@
         limit #{startIndex}, #{count}
     </select>
 
+    <select id="selectDonationProjectCount" resultType="integer">
+        select count(*)
+        from donation_project_tb
+        <where>
+            <if test="donationCategoryId != 0">
+                AND donation_category_id = #{donationCategoryId}
+            </if>
+        </where>
+    </select>
 
     <delete id="deleteDonationProjectById" parameterType="int">
         delete from
