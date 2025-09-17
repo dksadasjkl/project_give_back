@@ -30,13 +30,13 @@ public class DonationProjectService {
         }
     }
 
-    public DonationProject getDonationProject (int donationProjectId) {
-        return donationProjectMapper.selectDonationProjectById(donationProjectId);
+    public GetDonationProjectsResponseDto getDonationProject (int donationProjectId) {
+        return donationProjectMapper.selectDonationProjectById(donationProjectId).toGetDonationProjectsResponseDto();
     }
 
     public List<GetDonationProjectsResponseDto> getDonationProjects () {
         List<DonationProject> donationProjects = donationProjectMapper.selectAllDonationProjects();
-        return donationProjects.stream().map(DonationProject::togetDonationProjectsResponseDto).collect(Collectors.toList());
+        return donationProjects.stream().map(DonationProject::toGetDonationProjectsResponseDto).collect(Collectors.toList());
     }
 
     public void deleteDonationProject(int donationProjectId) {

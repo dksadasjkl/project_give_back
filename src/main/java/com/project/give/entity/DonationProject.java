@@ -26,7 +26,9 @@ public class DonationProject {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
-    public GetDonationProjectsResponseDto togetDonationProjectsResponseDto () {
+    private DonationCategory donationCategory;
+
+    public GetDonationProjectsResponseDto toGetDonationProjectsResponseDto () {
         return GetDonationProjectsResponseDto.builder()
                 .donationProjectId(donationProjectId)
                 .donationProjectTitle(donationProjectTitle)
@@ -39,6 +41,7 @@ public class DonationProject {
                 .donationProjectEndDate(donationProjectEndDate)
                 .createDate(createDate)
                 .updateDate(updateDate)
+                .donationCategoryNameKor(donationCategory.getDonationCategoryNameKor())
                 .build();
     }
 }

@@ -9,13 +9,17 @@
         <result property="donationProjectTitle" column="donation_project_title"/>
         <result property="donationProjectOrganization" column="donation_project_organization"/>
         <result property="donationProjectImageUrl" column="donation_project_image_url"/>
-        <result property="donationCategoryId" column="donation_category_id"/>
         <result property="donationProjectCurrentAmount" column="donation_project_current_amount"/>
         <result property="donationProjectTargetAmount" column="donation_project_target_amount"/>
         <result property="donationProjectStartDate" column="donation_project_start_date"/>
         <result property="donationProjectEndDate" column="donation_project_end_date"/>
         <result property="createDate" column="create_date"/>
         <result property="updateDate" column="update_date"/>
+
+        <association property="donationCategory" javaType="com.project.give.entity.DonationCategory">
+            <id property="donationCategoryId" column="donation_category_id"/>
+            <result property="donationCategoryNameKor" column="donation_category_name_kor"/>
+        </association>
     </resultMap>
 
 
@@ -39,38 +43,44 @@
 
     <select id="selectDonationProjectById" parameterType="int" resultMap="DonationProjectMap">
         select
-            donation_project_id,
-            donation_project_title,
-            donation_project_organization,
-            donation_project_image_url,
-            donation_category_id,
-            donation_project_current_amount,
-            donation_project_target_amount,
-            donation_project_start_date,
-            donation_project_end_date,
-            create_date,
-            update_date
+            dpt.donation_project_id,
+            dpt.donation_project_title,
+            dpt.donation_project_organization,
+            dpt.donation_project_image_url,
+            dpt.donation_category_id,
+            dpt.donation_project_current_amount,
+            dpt.donation_project_target_amount,
+            dpt.donation_project_start_date,
+            dpt.donation_project_end_date,
+            dpt.create_date,
+            dpt.update_date,
+            dct.donation_category_name_kor
         from
-            donation_project_tb
+            donation_project_tb dpt
+            left outer join donation_category_tb dct
+            on(dpt.donation_category_id = dct.donation_category_id)
         where
-            donation_project_id = #{donationProjectId}
+            dpt.donation_project_id = #{donationProjectId}
     </select>
 
     <select id="selectAllDonationProjects" resultMap="DonationProjectMap">
         select
-            donation_project_id,
-            donation_project_title,
-            donation_project_organization,
-            donation_project_image_url,
-            donation_category_id,
-            donation_project_current_amount,
-            donation_project_target_amount,
-            donation_project_start_date,
-            donation_project_end_date,
-            create_date,
-            update_date
+            dpt.donation_project_id,
+            dpt.donation_project_title,
+            dpt.donation_project_organization,
+            dpt.donation_project_image_url,
+            dpt.donation_category_id,
+            dpt.donation_project_current_amount,
+            dpt.donation_project_target_amount,
+            dpt.donation_project_start_date,
+            dpt.donation_project_end_date,
+            dpt.create_date,
+            dpt.update_date,
+            dct.donation_category_name_kor
         from
-            donation_project_tb
+            donation_project_tb dpt
+            left outer join donation_category_tb dct
+            on(dpt.donation_category_id = dct.donation_category_id)
     </select>
 
     <delete id="deleteDonationProjectById" parameterType="int">

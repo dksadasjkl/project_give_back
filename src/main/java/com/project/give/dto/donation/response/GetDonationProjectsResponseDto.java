@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class GetDonationProjectsResponseDto {
     private int donationProjectId;
     private String donationProjectTitle;
@@ -24,4 +22,5 @@ public class GetDonationProjectsResponseDto {
     private LocalDate donationProjectEndDate;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
+    private String donationCategoryNameKor;
 }
