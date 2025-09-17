@@ -1,5 +1,6 @@
 package com.project.give.controller.donation;
 
+import com.project.give.dto.donation.request.GetDonationProjectSearchRequestDto;
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
 import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
 import com.project.give.entity.DonationProject;
@@ -36,7 +37,7 @@ public class DonationProjectController {
     @DeleteMapping("/{donationProjectId}")
     public ResponseEntity<?> deleteDonationProject(@PathVariable int donationProjectId) {
         donationProjectService.deleteDonationProject(donationProjectId);
-        return ResponseEntity.ok("Donation project deleted successfully");
+        return ResponseEntity.ok("기부 프로젝트 삭제 완료");
     }
 
     @PutMapping("/{donationProjectId}")
@@ -44,6 +45,13 @@ public class DonationProjectController {
             @PathVariable int donationProjectId,
             @RequestBody PutDonationProjectRequestDto putDonationProjectRequestDto) {
         donationProjectService.updateDonationProject(donationProjectId, putDonationProjectRequestDto);
-        return ResponseEntity.ok("Donation project updated successfully");
+        return ResponseEntity.ok("기부 프로젝트 수정 완료");
+    }
+
+    @GetMapping("/load-more")
+    public ResponseEntity<?> loadMoreDonationProjects(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
+        System.out.println(getDonationProjectSearchRequestDto);
+        System.out.println("요청 들어옴");
+        return ResponseEntity.ok(donationProjectService.loadMoreDonationProjects(getDonationProjectSearchRequestDto));
     }
 }

@@ -1,5 +1,6 @@
 package com.project.give.service;
 
+import com.project.give.dto.donation.request.GetDonationProjectSearchRequestDto;
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
 import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
 import com.project.give.dto.donation.response.GetDonationProjectsResponseDto;
@@ -36,6 +37,17 @@ public class DonationProjectService {
 
     public List<GetDonationProjectsResponseDto> getDonationProjects () {
         List<DonationProject> donationProjects = donationProjectMapper.selectAllDonationProjects();
+        return donationProjects.stream().map(DonationProject::toGetDonationProjectsResponseDto).collect(Collectors.toList());
+    }
+
+    public List<GetDonationProjectsResponseDto> loadMoreDonationProjects(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
+        System.out.println(getDonationProjectSearchRequestDto);
+        List<DonationProject> donationProjects = donationProjectMapper.selectDonationProjectsWithPaging(
+                getDonationProjectSearchRequestDto.getStartIndex(),
+                getDonationProjectSearchRequestDto.getCount(),
+                getDonationProjectSearchRequestDto.getDonationCategoryId(),
+                getDonationProjectSearchRequestDto.getSearchTypeId()
+        );
         return donationProjects.stream().map(DonationProject::toGetDonationProjectsResponseDto).collect(Collectors.toList());
     }
 

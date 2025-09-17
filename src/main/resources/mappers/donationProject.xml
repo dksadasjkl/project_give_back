@@ -83,6 +83,64 @@
             on(dpt.donation_category_id = dct.donation_category_id)
     </select>
 
+    <select id="selectDonationProjectsWithPaging" resultMap="DonationProjectMap">
+        select
+            dpt.donation_project_id,
+            dpt.donation_project_title,
+            dpt.donation_project_organization,
+            dpt.donation_project_image_url,
+            dpt.donation_category_id,
+            dpt.donation_project_current_amount,
+            dpt.donation_project_target_amount,
+            dpt.donation_project_start_date,
+            dpt.donation_project_end_date,
+            dpt.create_date,
+            dpt.update_date,
+            dct.donation_category_name_kor
+        from
+            donation_project_tb dpt
+            left outer join donation_category_tb dct
+            on(dpt.donation_category_id = dct.donation_category_id)
+        where 1 = 1
+        <if test="donationCategoryId != 0">
+            and dpt.donation_category_id = #{donationCategoryId}
+        </if>
+        order by
+            <choose>
+                <!-- 최신순: 생성일 기준 내림차순 -->
+                <when test="searchTypeId == 1">
+                    dpt.create_date DESC
+                </when>
+
+                <!-- 모금액 많은순: 현재 모금액 기준 내림차순 -->
+                <when test="searchTypeId == 2">
+                    dpt.donation_project_current_amount DESC
+                </when>
+
+                <!-- 모금액 적은순: 현재 모금액 기준 오름차순 -->
+                <when test="searchTypeId == 3">
+                    dpt.donation_project_current_amount ASC
+                </when>
+
+                <!-- 모금률 높은순: 모금액 / 목표금액 비율 기준 내림차순 -->
+                <when test="searchTypeId == 4">
+                    (dpt.donation_project_current_amount / dpt.donation_project_target_amount) DESC
+                </when>
+
+                <!-- 종료임박순: 종료일 기준 오름차순 -->
+                <when test="searchTypeId == 5">
+                    dpt.donation_project_end_date ASC
+                </when>
+
+                <!-- 기본값: 최신순 -->
+                <otherwise>
+                    dpt.create_date DESC
+                </otherwise>
+            </choose>
+        limit #{startIndex}, #{count}
+    </select>
+
+
     <delete id="deleteDonationProjectById" parameterType="int">
         delete from
             donation_project_tb
@@ -106,4 +164,6 @@
         where
             donation_project_id = #{donationProjectId}
     </update>
+
+
 </mapper>
