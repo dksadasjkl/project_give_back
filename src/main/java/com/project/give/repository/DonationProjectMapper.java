@@ -7,11 +7,9 @@ import java.util.List;
 
 @Mapper
 public interface DonationProjectMapper {
-    public int insertDonationProject(DonationProject project);
-
+    public int insertDonationProject(DonationProject donationProject);
     public DonationProject selectDonationProjectById(int donationProjectId);
-
     public List<DonationProject> selectAllDonationProjects();
-
     public int deleteDonationProjectById(int donationProjectId);
+    public int updateDonationProject(DonationProject donationProject);
 }

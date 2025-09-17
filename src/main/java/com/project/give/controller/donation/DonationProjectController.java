@@ -1,6 +1,7 @@
 package com.project.give.controller.donation;
 
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
+import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
 import com.project.give.entity.DonationProject;
 import com.project.give.service.DonationProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +39,11 @@ public class DonationProjectController {
         return ResponseEntity.ok("Donation project deleted successfully");
     }
 
+    @PutMapping("/{donationProjectId}")
+    public ResponseEntity<?> updateDonationProject (
+            @PathVariable int donationProjectId,
+            @RequestBody PutDonationProjectRequestDto putDonationProjectRequestDto) {
+        donationProjectService.updateDonationProject(donationProjectId, putDonationProjectRequestDto);
+        return ResponseEntity.ok("Donation project updated successfully");
+    }
 }

@@ -1,6 +1,7 @@
 package com.project.give.service;
 
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
+import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
 import com.project.give.dto.donation.response.GetDonationProjectsResponseDto;
 import com.project.give.entity.DonationProject;
 import com.project.give.exception.DataSaveException;
@@ -40,5 +41,9 @@ public class DonationProjectService {
 
     public void deleteDonationProject(int donationProjectId) {
         donationProjectMapper.deleteDonationProjectById(donationProjectId);
+    }
+
+    public void updateDonationProject (int donationProjectId, PutDonationProjectRequestDto putDonationProjectRequestDto) {
+        donationProjectMapper.updateDonationProject(putDonationProjectRequestDto.toEntity(donationProjectId));
     }
 }

@@ -34,6 +34,7 @@
                 now(),
                 now(),
                 now()
+        )
     </insert>
 
     <select id="selectDonationProjectById" parameterType="int" resultMap="DonationProjectMap">
@@ -79,5 +80,20 @@
             donation_project_id = #{donationProjectId}
     </delete>
 
-    
+    <update id="updateDonationProject" parameterType="com.project.give.entity.DonationProject">
+        update
+            donation_project_tb
+        set
+            donation_project_title = #{donationProjectTitle},
+            donation_project_organization = #{donationProjectOrganization},
+            donation_project_image_url = #{donationProjectImageUrl},
+            donation_category_id = #{donationCategoryId},
+            donation_project_current_amount = #{donationProjectCurrentAmount},
+            donation_project_target_amount = #{donationProjectTargetAmount},
+            donation_project_start_date = #{donationProjectStartDate},
+            donation_project_end_date = #{donationProjectEndDate},
+            update_date = now()
+        where
+            donation_project_id = #{donationProjectId}
+    </update>
 </mapper>
