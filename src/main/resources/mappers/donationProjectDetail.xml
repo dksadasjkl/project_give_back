@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.give.repository.DonationProjectDetailMapper">
+
+    <resultMap id="DonationProjectDetailWithProjectMap" type="com.project.give.entity.DonationProjectDetail">
+        <id property="donationProjectDetailId" column="donation_project_detail_id"/>
+        <result property="donationProjectId" column="donation_project_id"/>
+        <result property="donationProjectDetailSubtitle" column="donation_project_detail_subtitle"/>
+        <result property="donationProjectDetailImageUrl" column="donation_project_detail_image_url"/>
+        <result property="donationProjectDetailContent" column="donation_project_detail_content"/>
+        <result property="donationProjectDetailOrderNo" column="donation_project_detail_order_no"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+
+        <!-- 프로젝트 정보 -->
+        <association property="donationProject" javaType="com.project.give.entity.DonationProject">
+            <id property="donationProjectId" column="donation_project_id"/>
+            <result property="donationProjectTitle" column="donation_project_title"/>
+            <result property="donationProjectOrganization" column="donation_project_organization"/>
+            <result property="donationProjectOrganizationImageUrl" column="donation_project_organization_image_url"/>
+            <result property="donationProjectImageUrl" column="donation_project_image_url"/>
+            <result property="donationProjectCurrentAmount" column="donation_project_current_amount"/>
+            <result property="donationProjectTargetAmount" column="donation_project_target_amount"/>
+            <result property="donationProjectStartDate" column="donation_project_start_date"/>
+            <result property="donationProjectEndDate" column="donation_project_end_date"/>
+            <result property="createDate" column="create_date"/>
+            <result property="updateDate" column="update_date"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertDonationProjectDetail" parameterType="com.project.give.entity.DonationProjectDetail" useGeneratedKeys="true" keyProperty="donationProjectDetailId">
+        insert into
+            donation_project_detail_tb
+        values
+            (0, #{donationProjectId}, #{donationProjectDetailSubtitle}, #{donationProjectDetailImageUrl}, #{donationProjectDetailContent}, #{donationProjectDetailOrderNo}, now(), now())
+    </insert>
+
+    <select id="selectDonationProjectDetailById" parameterType="int" resultMap="DonationProjectDetailWithProjectMap">
+        select
+            dpdt.donation_project_detail_id,
+            dpdt.donation_project_id,
+            dpdt.donation_project_detail_subtitle,
+            dpdt.donation_project_detail_image_url,
+            dpdt.donation_project_detail_content,
+            dpdt.donation_project_detail_order_no,
+
+            dpt.donation_project_title,
+            dpt.donation_project_organization,
+            dpt.donation_project_organization_image_url,
+            dpt.donation_project_image_url,
+            dpt.donation_project_current_amount,
+            dpt.donation_project_target_amount,
+            dpt.donation_project_start_date,
+            dpt.donation_project_end_date,
+            dpt.create_date,
+            dpt.update_date
+        from
+            donation_project_detail_tb dpdt
+            join donation_project_tb dpt
+            on dpdt.donation_project_id = dpt.donation_project_id
+        where
+            dpdt.donation_project_id = #{donationProjectId}
+    </select>
+
+
+
+
+</mapper>

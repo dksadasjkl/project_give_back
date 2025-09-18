@@ -7,6 +7,7 @@ import com.project.give.exception.DataSaveException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -17,6 +18,7 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Transactional(rollbackFor = Exception.class)
     public void signup (UserSignupRequestDto userSignupRequestDto) {
         int successCount = 0;
         User user = userSignupRequestDto.toEntity(bCryptPasswordEncoder);
