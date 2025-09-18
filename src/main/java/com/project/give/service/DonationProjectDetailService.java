@@ -26,4 +26,8 @@ public class DonationProjectDetailService {
     public GetDonationProjectDetailResponseDto getDetailsByDonationProjectId (int donationProjectId) {
         return donationProjectDetailMapper.selectDonationProjectDetailById(donationProjectId).toGetDonationProjectDetailResponseDto();
     }
+
+    public void deleteDonationProjectDetailById(int donationProjectId) {
+        donationProjectDetailMapper.deleteDonationProjectDetailById(donationProjectId);
+    }
 }

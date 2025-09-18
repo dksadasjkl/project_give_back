@@ -25,4 +25,10 @@ public class DonationProjectDetailController {
         return ResponseEntity.ok(donationProjectDetailService.getDetailsByDonationProjectId(donationProjectId));
     }
 
+    @DeleteMapping("/{donationProjectDetailId}")
+    public ResponseEntity<?> deleteDonationProjectDetailById(@PathVariable int donationProjectDetailId) {
+        donationProjectDetailService.deleteDonationProjectDetailById(donationProjectDetailId);
+        return ResponseEntity.ok("기부 상세페이지 삭제 완료");
+    }
+
 }

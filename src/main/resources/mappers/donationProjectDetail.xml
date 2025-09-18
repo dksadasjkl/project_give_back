@@ -64,7 +64,12 @@
             dpdt.donation_project_id = #{donationProjectId}
     </select>
 
-
+    <delete id="deleteDonationProjectDetailById" parameterType="int">
+        delete from
+            donation_project_detail_tb
+        where
+            donation_project_detail_id = #{donationProjectDetailId}
+    </delete>
 
 
 </mapper>

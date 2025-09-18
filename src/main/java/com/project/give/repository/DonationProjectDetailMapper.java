@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface DonationProjectDetailMapper {
     public int insertDonationProjectDetail(DonationProjectDetail donationProjectDetail);
-    DonationProjectDetail selectDonationProjectDetailById(@Param("donationProjectId") int donationProjectId);
-
+    public DonationProjectDetail selectDonationProjectDetailById(@Param("donationProjectId") int donationProjectId);
+    public int deleteDonationProjectDetailById(@Param("donationProjectDetailId") int donationProjectDetailId);
 }
