@@ -14,6 +14,7 @@ public class GetDonationProjectsResponseDto {
     private int donationProjectId;
     private String donationProjectTitle;
     private String donationProjectOrganization;
+    private String donationProjectOrganizationImageUrl;
     private String donationProjectImageUrl;
     private int donationCategoryId;
     private int donationProjectCurrentAmount;

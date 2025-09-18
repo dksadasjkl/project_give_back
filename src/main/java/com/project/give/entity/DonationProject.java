@@ -17,6 +17,7 @@ public class DonationProject {
     private int donationProjectId;
     private String donationProjectTitle;
     private String donationProjectOrganization;
+    private String donationProjectOrganizationImageUrl;
     private String donationProjectImageUrl;
     private int donationCategoryId;
     private int donationProjectCurrentAmount;
@@ -28,11 +29,20 @@ public class DonationProject {
 
     private DonationCategory donationCategory;
 
+    // 기본 이미지 적용 getter 이미지는 나중에 수정
+    public String getDonationProjectOrganizationImageUrl() {
+        if (donationProjectOrganizationImageUrl == null || donationProjectOrganizationImageUrl.isEmpty()) {
+            return "https://example.com/default-image.png";
+        }
+        return donationProjectOrganizationImageUrl;
+    }
+
     public GetDonationProjectsResponseDto toGetDonationProjectsResponseDto () {
         return GetDonationProjectsResponseDto.builder()
                 .donationProjectId(donationProjectId)
                 .donationProjectTitle(donationProjectTitle)
                 .donationProjectOrganization(donationProjectOrganization)
+                .donationProjectOrganizationImageUrl(getDonationProjectOrganizationImageUrl())
                 .donationProjectImageUrl(donationProjectImageUrl)
                 .donationCategoryId(donationCategoryId)
                 .donationProjectCurrentAmount(donationProjectCurrentAmount)

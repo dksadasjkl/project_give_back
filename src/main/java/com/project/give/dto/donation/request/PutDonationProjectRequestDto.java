@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class PutDonationProjectRequestDto {
     private String donationProjectTitle;
     private String donationProjectOrganization;
+    private String donationProjectOrganizationImageUrl;
     private String donationProjectImageUrl;
     private int donationCategoryId;
     private int donationProjectCurrentAmount;
@@ -21,6 +22,7 @@ public class PutDonationProjectRequestDto {
                 .donationProjectId(donationProjectId)
                 .donationProjectTitle(donationProjectTitle)
                 .donationProjectOrganization(donationProjectOrganization)
+                .donationProjectOrganizationImageUrl(donationProjectOrganizationImageUrl)
                 .donationProjectImageUrl(donationProjectImageUrl)
                 .donationCategoryId(donationCategoryId)
                 .donationProjectCurrentAmount(donationProjectCurrentAmount)

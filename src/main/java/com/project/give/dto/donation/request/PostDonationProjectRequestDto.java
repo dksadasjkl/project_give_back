@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class PostDonationProjectRequestDto {
     private String donationProjectTitle;
     private String donationProjectOrganization;
+    private String donationProjectOrganizationImageUrl;
     private String donationProjectImageUrl;
     private int donationCategoryId;
     private int donationProjectCurrentAmount;
@@ -18,6 +19,7 @@ public class PostDonationProjectRequestDto {
         return DonationProject.builder()
                 .donationProjectTitle(donationProjectTitle)
                 .donationProjectOrganization(donationProjectOrganization)
+                .donationProjectOrganizationImageUrl(donationProjectOrganizationImageUrl)
                 .donationProjectImageUrl(donationProjectImageUrl)
                 .donationCategoryId(donationCategoryId)
                 .donationProjectCurrentAmount(donationProjectCurrentAmount)
