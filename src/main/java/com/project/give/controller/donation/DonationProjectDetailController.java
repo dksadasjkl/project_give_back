@@ -1,6 +1,7 @@
 package com.project.give.controller.donation;
 
 import com.project.give.dto.donation.request.PostDonationProjectDetailRequestDto;
+import com.project.give.dto.donation.request.PutDonationProjectDetailRequestDto;
 import com.project.give.entity.DonationProjectDetail;
 import com.project.give.service.DonationProjectDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,11 @@ public class DonationProjectDetailController {
         return ResponseEntity.ok("기부 상세페이지 삭제 완료");
     }
 
+    @PutMapping("/{donationProjectDetailId}")
+    public ResponseEntity<?> updateDonationProjectDetail (
+            @PathVariable int donationProjectDetailId,
+            @RequestBody PutDonationProjectDetailRequestDto putDonationProjectDetailRequestDto) {
+        donationProjectDetailService.updateDonationProjectDetail(donationProjectDetailId, putDonationProjectDetailRequestDto);
+        return ResponseEntity.ok("기부 프로젝트 상세 수정 완료");
+    }
 }

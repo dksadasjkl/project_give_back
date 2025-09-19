@@ -71,5 +71,17 @@
             donation_project_detail_id = #{donationProjectDetailId}
     </delete>
 
+    <update id="updateDonationProjectDetail" parameterType="com.project.give.entity.DonationProjectDetail">
+        update
+            donation_project_detail_tb
+        set
+            donation_project_detail_subtitle = #{donationProjectDetailSubtitle},
+            donation_project_detail_image_url = #{donationProjectDetailImageUrl},
+            donation_project_detail_content = #{donationProjectDetailContent},
+            donation_project_detail_order_no = #{donationProjectDetailOrderNo},
+            update_date = now()
+        where
+            donation_project_detail_id = #{donationProjectDetailId}
+    </update>
 
 </mapper>
