@@ -44,4 +44,7 @@ public class DonationProjectContributionService {
         return donationProjectContributions.stream().map(DonationProjectContribution::toGetDonationProjectContributionsResponseDto).collect(Collectors.toList());
     }
 
+    public void deleteContribution(int donationProjectContributionId) {
+        donationProjectContributionMapper.deleteContribution(donationProjectContributionId);
+    }
 }

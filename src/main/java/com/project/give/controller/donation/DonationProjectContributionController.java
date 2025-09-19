@@ -23,4 +23,13 @@ public class DonationProjectContributionController {
     public ResponseEntity<?> getContributions(@PathVariable int donationProjectId) {
         return ResponseEntity.ok(donationProjectContributionService.getContributionsByProjectId(donationProjectId));
     }
+
+    @DeleteMapping("/{donationProjectContributionId}")
+    public ResponseEntity<?> deleteContribution(@PathVariable int donationProjectContributionId) {
+        donationProjectContributionService.deleteContribution(donationProjectContributionId);
+        return ResponseEntity.ok("참여 내역 삭제 완료");
+    }
+
+    // 수정(update) 기능은 기부 플랫폼 특성상 필요하지 않음
+    // => 기부 금액을 변경하는 것은 일반적으로 허용되지 않으므로, update 메서드는 구현하지 않음
 }

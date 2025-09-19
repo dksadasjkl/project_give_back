@@ -33,4 +33,12 @@
         WHERE
             donation_project_id = #{donationProjectId}
     </select>
+
+    <delete id="deleteContribution" parameterType="int">
+        DELETE FROM
+            donation_project_contribution_tb
+        WHERE
+            donation_project_contribution_id = #{donationProjectContributionId}
+    </delete>
+
 </mapper>

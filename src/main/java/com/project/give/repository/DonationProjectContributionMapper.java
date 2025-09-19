@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface DonationProjectContributionMapper {
-    public int insertContribution(DonationProjectContribution contribution);
-    List<DonationProjectContribution> selectContributionsByProjectId(@Param("donationProjectId") int donationProjectId);
+    public int insertContribution(DonationProjectContribution donationProjectContribution);
+    public List<DonationProjectContribution> selectContributionsByProjectId(@Param("donationProjectId") int donationProjectId);
+    public int deleteContribution(@Param("donationProjectContributionId") int donationProjectContributionId);
 }
