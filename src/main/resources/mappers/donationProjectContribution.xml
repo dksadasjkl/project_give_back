@@ -3,6 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.give.repository.DonationProjectContributionMapper">
+
+    <resultMap id="DonationProjectContributionMap" type="com.project.give.entity.DonationProjectContribution">
+        <id property="donationProjectContributionId" column="donation_project_contribution_id"/>
+        <result property="donationProjectId" column="donation_project_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="donationProjectContributorName" column="donation_project_contributor_name"/>
+        <result property="donationProjectContributionAmount" column="donation_project_contribution_amount"/>
+        <result property="donationProjectContributionDate" column="donation_project_contribution_date"/>
+    </resultMap>
+
     <insert id="insertContribution" parameterType="com.project.give.entity.DonationProjectContribution">
         insert into
             donation_project_contribution_tb
@@ -10,4 +20,17 @@
             (0, #{donationProjectId}, #{userId}, #{donationProjectContributorName}, #{donationProjectContributionAmount}, NOW())
     </insert>
 
+    <select id="selectContributionsByProjectId" parameterType="int" resultMap="DonationProjectContributionMap">
+        SELECT
+            donation_project_contribution_id,
+            donation_project_id,
+            user_id,
+            donation_project_contributor_name,
+            donation_project_contribution_amount,
+            donation_project_contribution_date
+        FROM
+            donation_project_contribution_tb
+        WHERE
+            donation_project_id = #{donationProjectId}
+    </select>
 </mapper>

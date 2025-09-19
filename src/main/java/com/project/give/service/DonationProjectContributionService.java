@@ -1,6 +1,7 @@
 package com.project.give.service;
 
 import com.project.give.dto.donation.request.PostDonationProjectContributionRequestDto;
+import com.project.give.dto.donation.response.GetDonationProjectContributionsResponseDto;
 import com.project.give.entity.DonationProjectContribution;
 import com.project.give.entity.User;
 import com.project.give.exception.DataNotFoundException;
@@ -9,6 +10,9 @@ import com.project.give.repository.DonationProjectContributionMapper;
 import com.project.give.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DonationProjectContributionService {
@@ -34,4 +38,10 @@ public class DonationProjectContributionService {
             throw new DataSaveException("기부 모금 실패");
         }
     }
+
+    public List<GetDonationProjectContributionsResponseDto> getContributionsByProjectId(int donationProjectId) {
+        List<DonationProjectContribution> donationProjectContributions = donationProjectContributionMapper.selectContributionsByProjectId(donationProjectId);
+        return donationProjectContributions.stream().map(DonationProjectContribution::toGetDonationProjectContributionsResponseDto).collect(Collectors.toList());
+    }
+
 }

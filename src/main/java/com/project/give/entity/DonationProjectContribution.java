@@ -1,5 +1,6 @@
 package com.project.give.entity;
 
+import com.project.give.dto.donation.response.GetDonationProjectContributionsResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,14 @@ public class DonationProjectContribution {
     private int donationProjectContributionAmount;
     private LocalDateTime donationProjectContributionDate;
 
+    public GetDonationProjectContributionsResponseDto toGetDonationProjectContributionsResponseDto() {
+        return GetDonationProjectContributionsResponseDto.builder()
+                .donationProjectContributionId(donationProjectContributionId)
+                .donationProjectId(donationProjectId)
+                .userId(userId)
+                .donationProjectContributorName(donationProjectContributorName)
+                .donationProjectContributionAmount(donationProjectContributionAmount)
+                .donationProjectContributionDate(donationProjectContributionDate)
+                .build();
+    }
 }
