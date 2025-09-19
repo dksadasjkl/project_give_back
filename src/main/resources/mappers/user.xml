@@ -23,6 +23,8 @@
         <result property="password" column="user_password" />
         <result property="email" column="user_email" />
         <result property="name" column="user_name" />
+        <result property="nickname" column="user_nickname" />
+        <result property="phone" column="user_phone" />
         <result property="createDate" column="create_date" />
         <result property="updateDate" column="update_date" />
         <!-- 권한 리스트 매핑 여러 개의 권한 확인-->
@@ -72,5 +74,30 @@
             ut.user_username =  #{username}
     </select>
 
+    <select id="findNicknameByUserId"
+            parameterType="int"
+            resultMap="UserResultMap"
+    >
+        select
+            ut.user_id,
+            ut.user_username,
+            ut.user_password,
+            ut.user_name,
+            ut.user_email,
+            ut.user_nickname,
+            ut.user_phone,
+            ut.create_date,
+            ut.update_date,
+            rrt.role_register_id,
+            rrt.role_id,
+            rt.role_name,
+            rt.role_name_kor
+        from
+        user_tb ut
+            left outer join role_register_tb rrt on rrt.user_id = ut.user_id
+            left outer join role_tb rt on rt.role_id = rrt.role_id
+        where
+            ut.user_id = #{userId}
+    </select>
 
 </mapper>

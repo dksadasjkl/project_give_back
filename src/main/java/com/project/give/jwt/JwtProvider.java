@@ -67,6 +67,7 @@ public class JwtProvider {
     public Authentication getAuthentication (Claims claims) {
         String username = claims.get("username").toString();
         User user = userMapper.findUserByUsername(username);
+        System.out.println("user=" + user);
         if(user == null) {
             return null;
         }
