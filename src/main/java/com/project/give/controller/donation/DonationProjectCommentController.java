@@ -34,4 +34,11 @@ public class DonationProjectCommentController {
         donationProjectCommentService.updateDonationProjectComment(donationProjectCommentId, putDonationProjectCommentRequestDto);
         return ResponseEntity.ok("댓글 수정 완료");
     }
+
+    // 댓글 삭제
+    @DeleteMapping("/{donationProjectCommentId}")
+    public ResponseEntity<?> deleteDonationProjectComment(@PathVariable int donationProjectCommentId) {
+        donationProjectCommentService.deleteDonationProjectComment(donationProjectCommentId);
+        return ResponseEntity.ok("댓글 삭제 완료");
+    }
 }

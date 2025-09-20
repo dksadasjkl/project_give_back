@@ -52,4 +52,11 @@
         WHERE
             donation_project_comment_id = #{donationProjectCommentId}
     </update>
+
+    <delete id="deleteDonationProjectComment" parameterType="int">
+        DELETE FROM
+            donation_project_comment_tb
+        WHERE
+            donation_project_comment_id = #{donationProjectCommentId}
+    </delete>
 </mapper>

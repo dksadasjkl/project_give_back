@@ -48,4 +48,8 @@ public class DonationProjectCommentService {
             throw new DataSaveException("댓글 수정 실패");
         }
     }
+    public void deleteDonationProjectComment(int donationProjectCommentId) {
+        donationProjectCommentMapper.deleteDonationProjectComment(donationProjectCommentId);
+    }
+
 }

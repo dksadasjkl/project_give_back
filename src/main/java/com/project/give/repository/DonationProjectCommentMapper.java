@@ -11,4 +11,5 @@ public interface DonationProjectCommentMapper {
     public int insertDonationProjectComment(DonationProjectComment donationProjectComment);
     public List<DonationProjectComment> selectCommentsByProjectId(@Param("donationProjectId") int donationProjectId);
     public int updateDonationProjectComment(DonationProjectComment donationProjectComment);
+    public int deleteDonationProjectComment(int donationProjectCommentId);
 }
