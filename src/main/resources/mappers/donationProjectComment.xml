@@ -42,4 +42,14 @@
         WHERE
             donation_project_id = #{donationProjectId}
     </select>
+
+    <update id="updateDonationProjectComment" parameterType="com.project.give.entity.DonationProjectComment">
+        UPDATE
+            donation_project_comment_tb
+        SET
+            donation_project_comment_text = #{donationProjectCommentText},
+            update_date = now()
+        WHERE
+            donation_project_comment_id = #{donationProjectCommentId}
+    </update>
 </mapper>

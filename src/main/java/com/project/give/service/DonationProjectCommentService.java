@@ -1,6 +1,7 @@
 package com.project.give.service;
 
 import com.project.give.dto.donation.request.PostDonationProjectCommentRequestDto;
+import com.project.give.dto.donation.request.PutDonationProjectCommentRequestDto;
 import com.project.give.dto.donation.response.GetDonationProjectCommentsResponseDto;
 import com.project.give.entity.DonationProjectComment;
 import com.project.give.exception.DataNotFoundException;
@@ -37,5 +38,14 @@ public class DonationProjectCommentService {
         return donationProjectComments.stream()
                 .map(DonationProjectComment::toGetDonationProjectCommentsResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    // 댓글 수정
+    public void updateDonationProjectComment(int donationProjectCommentId , PutDonationProjectCommentRequestDto putDonationProjectCommentRequestDto) {
+        DonationProjectComment donationProjectComment = putDonationProjectCommentRequestDto.toEntity(donationProjectCommentId);
+        int affectedRows = donationProjectCommentMapper.updateDonationProjectComment(donationProjectComment);
+        if (affectedRows != 1) {
+            throw new DataSaveException("댓글 수정 실패");
+        }
     }
 }

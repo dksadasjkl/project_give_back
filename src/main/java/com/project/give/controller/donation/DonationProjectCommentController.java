@@ -1,6 +1,7 @@
 package com.project.give.controller.donation;
 
 import com.project.give.dto.donation.request.PostDonationProjectCommentRequestDto;
+import com.project.give.dto.donation.request.PutDonationProjectCommentRequestDto;
 import com.project.give.service.DonationProjectCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,13 @@ public class DonationProjectCommentController {
     @GetMapping("/{donationProjectId}")
     public ResponseEntity<?> getComments(@PathVariable int donationProjectId) {
         return ResponseEntity.ok(donationProjectCommentService.getCommentsByProjectId(donationProjectId));
+    }
+
+    // 댓글 수정
+    @PutMapping("/{donationProjectCommentId}")
+    public ResponseEntity<?> updateDonationProjectComment(@PathVariable int donationProjectCommentId,
+                                                          @RequestBody PutDonationProjectCommentRequestDto putDonationProjectCommentRequestDto) {
+        donationProjectCommentService.updateDonationProjectComment(donationProjectCommentId, putDonationProjectCommentRequestDto);
+        return ResponseEntity.ok("댓글 수정 완료");
     }
 }
