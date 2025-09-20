@@ -1,5 +1,6 @@
 package com.project.give.entity;
 
+import com.project.give.dto.donation.response.GetDonationProjectCommentsResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +19,19 @@ public class DonationProjectComment {
     private String donationProjectCommentText;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
+
+    private User user;
+
+    public GetDonationProjectCommentsResponseDto toGetDonationProjectCommentsResponseDto() {
+        return GetDonationProjectCommentsResponseDto.builder()
+                .donationProjectCommentId(donationProjectCommentId)
+                .donationProjectId(donationProjectId)
+                .userId(userId)
+                .donationProjectCommentText(donationProjectCommentText)
+                .createDate(createDate)
+                .updateDate(updateDate)
+                .username(user.getUsername())
+                .nickname(user.getNickname())
+                .build();
+    }
 }
