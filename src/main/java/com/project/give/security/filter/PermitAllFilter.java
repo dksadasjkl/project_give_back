@@ -18,7 +18,11 @@ public class PermitAllFilter extends GenericFilter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        List<String> antMatchers = List.of("/users", "/auth/", "/donations", "/donations/", "/donation-categories", "/donation-project-details", "/donation-project-details/", "/donation-project-contributions", "/donation-project-contributions/"); // 수정예정
+        List<String> antMatchers = List.of("/users", "/auth/", "/donations", "/donations/", "/donation-categories",
+                                            "/donation-project-details", "/donation-project-details/",
+                                            "/donation-project-contributions", "/donation-project-contributions/",
+                                            "/donation-project-comments", "/donation-project-comments/"
+                                            ); // 수정예정
 
         String uri = request.getRequestURI();
 

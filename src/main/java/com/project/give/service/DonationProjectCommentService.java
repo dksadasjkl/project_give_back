@@ -1,0 +1,24 @@
+package com.project.give.service;
+
+import com.project.give.dto.donation.request.PostDonationProjectCommentRequestDto;
+import com.project.give.entity.DonationProjectComment;
+import com.project.give.exception.DataSaveException;
+import com.project.give.repository.DonationProjectCommentMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class DonationProjectCommentService {
+
+    @Autowired
+    private DonationProjectCommentMapper donationProjectCommentMapper;
+
+    // 댓글 작성
+    public void createDonationProjectComment(PostDonationProjectCommentRequestDto postDonationProjectCommentRequestDto) {
+        DonationProjectComment donationProjectComment = postDonationProjectCommentRequestDto.toEntity();
+        int affectedRows = donationProjectCommentMapper.insertDonationProjectComment(donationProjectComment);
+        if (affectedRows != 1) {
+            throw new DataSaveException("댓글 작성 실패");
+        }
+    }
+}
