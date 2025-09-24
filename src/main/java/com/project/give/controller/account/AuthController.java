@@ -4,6 +4,8 @@ import com.project.give.dto.account.request.UserLoginRequestDto;
 import com.project.give.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
-        return ResponseEntity.created(null).body(authService.login(userLoginRequestDto));
+        try {
+            String token = authService.login(userLoginRequestDto);
+            return ResponseEntity.ok(token); // 로그인 성공 → 200 OK + 토큰
+        } catch (UsernameNotFoundException | BadCredentialsException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 }

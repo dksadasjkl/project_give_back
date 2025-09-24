@@ -1,7 +1,7 @@
 package com.project.give.config;
 
+import com.project.give.security.exception.AuthEntryPoint;
 import com.project.give.security.filter.JwtAuthenticationFilter;
-import com.project.give.security.filter.PermitAllFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,17 +10,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private PermitAllFilter permitAllFilter;
+    private AuthEntryPoint authEntryPoint;
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
     // 비밀번호 암호화에 사용할 BCryptPasswordEncoder 빈 등록
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -38,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .addFilterAfter(permitAllFilter, LogoutFilter.class) //(LogoutFilter 후 필터추가) // 1
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); //(Username 전에 필터추가) // 2
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(authEntryPoint);
     }
 }

@@ -13,6 +13,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends GenericFilter {
@@ -24,6 +25,22 @@ public class JwtAuthenticationFilter extends GenericFilter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        List<String> antMatchers = List.of("/users", "/auth/login", "/donations", "/donations/", "/donation-categories",
+                "/donation-project-details", "/donation-project-details/",
+                "/donation-project-contributions", "/donation-project-contributions/",
+                "/donation-project-comments", "/donation-project-comments/"
+        ); // 수정예정
+
+        String uri = request.getRequestURI();
+
+        request.setAttribute("isPermitAll", false);
+
+        for(String antMatcher : antMatchers) {
+            if(uri.startsWith(antMatcher)) {
+                request.setAttribute("isPermitAll", true);
+            }
+        }
 
         Boolean isPermitAll = (Boolean) request.getAttribute("isPermitAll");
 
