@@ -1,5 +1,6 @@
 package com.project.give.aop;
 
+import com.project.give.dto.account.request.OAuth2SignupRequestDto;
 import com.project.give.dto.account.request.UserSignupRequestDto;
 import com.project.give.exception.ValidException;
 import com.project.give.repository.UserMapper;
@@ -51,6 +52,19 @@ public class ValidAop {
                 }
             }
             if(userMapper.findUserByUsername(authSignupRequestDto.getUsername()) != null){
+                ObjectError objectError = new FieldError("username", "username", "이미 존재하는 사용자이름입니다.");
+                bindingResult.addError(objectError);
+            }
+        }
+
+        if(methodName.equals("oAuth2Signup")) {
+            OAuth2SignupRequestDto oAuth2SignupRequestDto = null;
+            for(Object arg : args) {
+                if(arg.getClass() == OAuth2SignupRequestDto.class) {
+                    oAuth2SignupRequestDto = (OAuth2SignupRequestDto) arg;
+                }
+            }
+            if(userMapper.findUserByUsername(oAuth2SignupRequestDto.getUsername()) != null){
                 ObjectError objectError = new FieldError("username", "username", "이미 존재하는 사용자이름입니다.");
                 bindingResult.addError(objectError);
             }

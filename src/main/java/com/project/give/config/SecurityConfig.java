@@ -2,6 +2,8 @@ package com.project.give.config;
 
 import com.project.give.security.exception.AuthEntryPoint;
 import com.project.give.security.filter.JwtAuthenticationFilter;
+import com.project.give.security.handler.OAuth2SuccessHandler;
+import com.project.give.service.OAuth2PrincipalUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,12 +26,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    @Autowired
+    private OAuth2PrincipalUserService oAuth2PrincipalUserService;
+    @Autowired
+    private OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable(); //  // CSRF 보호 기능 비활성화
         http.authorizeRequests()
-                .antMatchers("/auth/**", "/users/**", "/donations/**", "/donation-categories/**",
+                .antMatchers("/auth/**", "/user/**", "/donations/**", "/donation-categories/**",
                                 "/donation-project-details/**", "/donation-project-contributions/**", "/donation-project-comments/**"
                 ) // 비회원, 회원, 관리자 방식으로 수정 예정
                 .permitAll()
@@ -38,6 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(authEntryPoint);
+                .authenticationEntryPoint(authEntryPoint)
+                .and()
+                .oauth2Login()
+                .successHandler(oAuth2SuccessHandler)
+                .userInfoEndpoint()
+                .userService(oAuth2PrincipalUserService);
     }
 }

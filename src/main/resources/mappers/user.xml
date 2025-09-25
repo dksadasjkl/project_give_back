@@ -48,6 +48,15 @@
             (0, #{userId}, #{roleId}, now(), now())
     </insert>
 
+    <insert id="saveOAuth2"
+            parameterType="com.project.give.entity.OAuth2"
+    >
+        insert into
+            oauth2_tb
+        values
+        (0, #{userId}, #{oAuth2Name}, #{providerName}, now(), now())
+    </insert>
+
     <select id="findUserByUsername"
             parameterType="string"
             resultMap="UserResultMap"
@@ -98,6 +107,35 @@
             left outer join role_tb rt on rt.role_id = rrt.role_id
         where
             ut.user_id = #{userId}
+    </select>
+
+    <select id="findUserByOAuth2name"
+            resultMap="UserResultMap"
+    >
+        select
+            ut.user_id,
+            ut.user_username,
+            ut.user_password,
+            ut.user_name,
+            ut.user_email,
+            ut.user_nickname,
+            ut.user_phone,
+            ut.create_date,
+            ut.update_date,
+            rrt.role_register_id,
+            rrt.role_id,
+            rt.role_name,
+            rt.role_name_kor,
+            ot.oauth2_id,
+            ot.oauth2_name,
+            ot.provider_name
+        from
+        user_tb ut
+            left outer join role_register_tb rrt on(rrt.user_id = ut.user_id)
+            left outer join role_tb rt on(rt.role_id = rrt.role_id)
+            left outer join oauth2_tb ot on(ut.user_id = ot.user_id)
+        where
+            ot.oauth2_name = #{oAuth2name}
     </select>
 
 </mapper>
