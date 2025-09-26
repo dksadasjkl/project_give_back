@@ -2,6 +2,7 @@ package com.project.give.security.filter;
 
 import com.project.give.jwt.JwtProvider;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        List<String> antMatchers = List.of("/user", "/auth/login", "/donations", "/donations/", "/donation-categories",
+        List<String> antMatchers = List.of("/users", "/auth/login", "/donations", "/donations/", "/donation-categories",
                 "/donation-project-details", "/donation-project-details/",
                 "/donation-project-contributions", "/donation-project-contributions/",
                 "/donation-project-comments", "/donation-project-comments/"
@@ -34,7 +35,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
 
         String uri = request.getRequestURI();
 
-        request.setAttribute("isPermitAll", false);
+            request.setAttribute("isPermitAll", false);
 
         for(String antMatcher : antMatchers) {
             if(uri.startsWith(antMatcher)) {
@@ -47,15 +48,23 @@ public class JwtAuthenticationFilter extends GenericFilter {
         if(!isPermitAll) {
             String accessToken = request.getHeader("Authorization");
             String removeBearerToken = jwtProvider.removeBearer(accessToken);
+            if (removeBearerToken == null) {
+                response.sendError(HttpStatus.UNAUTHORIZED.value());
+                return;
+            }
             Claims claims = null;
             try {
                 claims = jwtProvider.getClaims(removeBearerToken);
+            } catch (ExpiredJwtException e) {
+                System.out.println("JWT 만료: " + e.getMessage());
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), "JWT 만료");
+                return;
             } catch (Exception e) {
+                System.out.println("JWT 검증 실패: " + e.getMessage());
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }
             Authentication authentication = jwtProvider.getAuthentication(claims);
-
             if(authentication == null) {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;

@@ -49,10 +49,12 @@ public class JwtProvider {
     }
 
     public String removeBearer(String token) {
-        if(!StringUtils.hasText(token)) {
-            return null;
+        if (token == null) return null;
+        token = token.trim(); // 앞뒤 공백 제거
+        if (token.startsWith("Bearer ")) {
+            return token.substring(7).trim(); // "Bearer " 제거 + 남은 공백 제거
         }
-        return token.substring("Bearer ".length());
+        return null;
     }
 
     public Claims getClaims(String token) {
@@ -67,7 +69,6 @@ public class JwtProvider {
     public Authentication getAuthentication (Claims claims) {
         String username = claims.get("username").toString();
         User user = userMapper.findUserByUsername(username);
-        System.out.println("user=" + user);
         if(user == null) {
             return null;
         }

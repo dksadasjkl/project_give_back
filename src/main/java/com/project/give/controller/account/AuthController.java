@@ -27,4 +27,10 @@ public class AuthController {
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }
+//
+//    @GetMapping("/login/status")
+//    public ResponseEntity<?> getLoginStatus(@RequestHeader("Authorization") String authorization) {
+//        System.out.println(authorization);
+//        return ResponseEntity.ok(jwtService.validLoginAccessToken(authorization));
+//    }
 }
