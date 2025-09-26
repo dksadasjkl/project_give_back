@@ -27,7 +27,11 @@ public class JwtAuthenticationFilter extends GenericFilter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        List<String> antMatchers = List.of("/users", "/auth/login", "/donations", "/donations/", "/donation-categories",
+        List<String> antMatchers = List.of(
+                "/users",
+                "/auth/login",
+                "/donations", "/donations/",
+                "/donation-categories",
                 "/donation-project-details", "/donation-project-details/",
                 "/donation-project-contributions", "/donation-project-contributions/",
                 "/donation-project-comments", "/donation-project-comments/"
@@ -52,6 +56,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }
+
             Claims claims = null;
             try {
                 claims = jwtProvider.getClaims(removeBearerToken);
@@ -64,11 +69,13 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }
+
             Authentication authentication = jwtProvider.getAuthentication(claims);
             if(authentication == null) {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

@@ -2,7 +2,9 @@ package com.project.give.controller.account;
 
 import com.project.give.aop.annotation.ValidAspect;
 import com.project.give.dto.account.request.OAuth2SignupRequestDto;
+import com.project.give.dto.account.request.PasswordResetRequestDto;
 import com.project.give.dto.account.request.UserSignupRequestDto;
+import com.project.give.service.AccountService;
 import com.project.give.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AccountService accountService;
 
     @ValidAspect
     @PostMapping
@@ -38,5 +42,16 @@ public class UserController {
         return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication());
     }
 
+
+    @PutMapping("/passwordReset")
+    public ResponseEntity<?> updateUser(@RequestBody PasswordResetRequestDto passwordResetRequestDto){
+        accountService.resetPassword(passwordResetRequestDto);
+        boolean result = accountService.resetPassword(passwordResetRequestDto);
+        if(result) {
+            return ResponseEntity.ok("비밀번호 초기화 완료");
+        } else {
+            return ResponseEntity.badRequest().body("해당 이메일을 찾을 수 없습니다.");
+        }
+    }
 
 }

@@ -13,4 +13,7 @@ public interface UserMapper {
     public User findUserByUsername(String username); // username으로 회원 조회
     public User findNicknameByUserId(@Param("userId") int userId);
     public User findUserByOAuth2name(String oAuth2name);
+    public User findUserByEmail(String email);
+    int updatePassword(@Param("userId") int id, @Param("password") String password);
+
 }

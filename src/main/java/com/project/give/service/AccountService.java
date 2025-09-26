@@ -1,0 +1,88 @@
+package com.project.give.service;
+
+import com.project.give.dto.account.request.PasswordResetRequestDto;
+import com.project.give.entity.User;
+import com.project.give.repository.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.security.SecureRandom;
+
+@Service
+public class AccountService {
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${spring.mail.address}")
+    private String fromMailAddress;
+    @Value("${server.deploy-address}")
+    private String serverAddress;
+    @Value("${server.port}")
+    private String serverPort;
+
+    // 비밀번호 초기화 + 메일 발송
+    @Transactional
+    public boolean resetPassword(PasswordResetRequestDto passwordResetRequestDto) {
+        User user = userMapper.findUserByEmail(passwordResetRequestDto.getEmail());
+        if (user == null) return false;
+
+        // 임시 비밀번호 생성
+        String tempPassword = generateRandomPassword(10);
+
+        // DB에 암호화된 비밀번호 저장
+        String encodedPassword = bCryptPasswordEncoder.encode(tempPassword);
+        userMapper.updatePassword(user.getUserId(), encodedPassword);
+
+        // 메일 전송
+        return sendTempPasswordMail(passwordResetRequestDto.getEmail(), tempPassword);
+    }
+
+    // 메일 발송
+    private boolean sendTempPasswordMail(String toEmail, String tempPassword) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
+
+            helper.setSubject("비밀번호 초기화 안내");
+            helper.setFrom(fromMailAddress);
+            helper.setTo(toEmail);
+
+            String content = "<div>"
+                    + "<h1>임시 비밀번호 안내</h1>"
+                    + "<p>회원님의 임시 비밀번호는 아래와 같습니다.</p>"
+                    + "<p><strong>" + tempPassword + "</strong></p>"
+                    + "<p>로그인 후 반드시 비밀번호를 변경해 주세요.</p>"
+                    + "</div>";
+
+            message.setText(content, "utf-8", "html");
+            javaMailSender.send(message);
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 임시 비밀번호 생성
+    private String generateRandomPassword(int length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+}

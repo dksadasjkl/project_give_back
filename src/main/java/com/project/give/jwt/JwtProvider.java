@@ -35,7 +35,7 @@ public class JwtProvider {
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
         // 임시로 토근 만료시간 30일로 지정 -> Access Token 1시간으로 변경 예정
-        Date expireDate = new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30));
+        Date expireDate = new Date(new Date().getTime() + (1000l * 60l * 60l * 24l * 30l));
 
         String accessToken = Jwts.builder()
                 .claim("userId", user.getUserId())
