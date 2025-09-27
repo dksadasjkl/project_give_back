@@ -2,12 +2,15 @@ package com.project.give.service;
 
 import com.project.give.dto.account.request.FindUsernameRequestDto;
 import com.project.give.dto.account.request.PasswordResetRequestDto;
+import com.project.give.dto.account.request.UserPasswordRequestDto;
+import com.project.give.entity.PrincipalUser;
 import com.project.give.entity.User;
 import com.project.give.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +37,7 @@ public class AccountService {
     private String serverPort;
 
     // 비밀번호 초기화 + 메일 발송
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean resetPassword(PasswordResetRequestDto passwordResetRequestDto) {
         User user = userMapper.findUserByEmail(passwordResetRequestDto.getEmail());
         if (user == null) return false;
@@ -44,7 +47,7 @@ public class AccountService {
 
         // DB에 암호화된 비밀번호 저장
         String encodedPassword = bCryptPasswordEncoder.encode(tempPassword);
-        userMapper.updatePassword(user.getUserId(), encodedPassword);
+        userMapper.resetPasswordByEmail(user.getUserId(), encodedPassword);
 
         // 메일 전송
         return sendTempPasswordMail(passwordResetRequestDto.getEmail(), tempPassword);
@@ -111,5 +114,21 @@ public class AccountService {
         return masked.toString();
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void changePassword(UserPasswordRequestDto userPasswordRequestDto, PrincipalUser principalUser) {
+        // 1. 현재 로그인 되어있는 비밀번호와 요청때 받은 현재 비밀번호가 일치하는지 확인.
+        if (!bCryptPasswordEncoder.matches(userPasswordRequestDto.getOldPassword(), principalUser.getPassword())) {
+            throw new BadCredentialsException("현재 비밀번호가 일치하지 않습니다.");
+        }
+
+        // 2. 새 비밀번호와 새 비밀번호 확인이 일치하는지.
+        if (!userPasswordRequestDto.getNewPassword().equals(userPasswordRequestDto.getNewPasswordCheck())) {
+            throw new BadCredentialsException("새 비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 새 비밀번호 저장
+        String encodedNewPassword = bCryptPasswordEncoder.encode(userPasswordRequestDto.getNewPassword());
+        userMapper.updatePasswordByUserId(principalUser.getUserId(), encodedNewPassword);
+    }
 
 }

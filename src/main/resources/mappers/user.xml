@@ -156,7 +156,7 @@
             user_email = #{email}
     </select>
 
-    <update id="updatePassword">
+    <update id="resetPasswordByEmail">
         update
             user_tb
         set
@@ -178,4 +178,15 @@
             user_name = #{name}
         AND user_email = #{email}
     </select>
+
+    <update id="updatePasswordByUserId">
+        update
+            user_tb
+        set
+            user_password = #{password},
+            update_date = now()
+        where
+            user_id = #{userId}
+    </update>
+
 </mapper>

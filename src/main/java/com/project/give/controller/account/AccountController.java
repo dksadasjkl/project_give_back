@@ -2,9 +2,13 @@ package com.project.give.controller.account;
 
 import com.project.give.dto.account.request.FindUsernameRequestDto;
 import com.project.give.dto.account.request.PasswordResetRequestDto;
+import com.project.give.dto.account.request.UserPasswordRequestDto;
+import com.project.give.entity.PrincipalUser;
+import com.project.give.exception.MyAccountException;
 import com.project.give.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +27,6 @@ public class AccountController {
 
     @PutMapping("/passwordReset")
     public ResponseEntity<?> updateUser(@RequestBody PasswordResetRequestDto passwordResetRequestDto){
-        accountService.resetPassword(passwordResetRequestDto);
         boolean result = accountService.resetPassword(passwordResetRequestDto);
         if(result) {
             return ResponseEntity.ok("비밀번호 초기화 완료");
@@ -42,5 +45,11 @@ public class AccountController {
                 : ResponseEntity.badRequest().body("가입된 사용자가 없습니다.");
     }
 
-
+    @PutMapping("/password")
+    public ResponseEntity<?> modifyPassword(
+            @RequestBody UserPasswordRequestDto userPasswordRequestDto,
+            @AuthenticationPrincipal PrincipalUser principalUser) {
+        accountService.changePassword(userPasswordRequestDto, principalUser);
+        return ResponseEntity.ok("비밀번호 변경 완료");
+    }
 }
