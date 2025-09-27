@@ -52,4 +52,13 @@ public class AccountController {
         accountService.changePassword(userPasswordRequestDto, principalUser);
         return ResponseEntity.ok("비밀번호 변경 완료");
     }
+    // 회원 탈퇴 (로그인 상태, 일반 회원 + 소셜 회원)
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUserById(@AuthenticationPrincipal PrincipalUser principalUser) {
+        System.out.println(principalUser);
+        accountService.deleteUserById(principalUser.getUserId());
+
+        return ResponseEntity.ok("회원 탈퇴 완료");
+    }
+
 }

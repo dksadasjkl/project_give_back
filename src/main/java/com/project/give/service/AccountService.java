@@ -131,4 +131,15 @@ public class AccountService {
         userMapper.updatePasswordByUserId(principalUser.getUserId(), encodedNewPassword);
     }
 
+
+    // 일반 회원 탈퇴
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteUserById(int userId) {
+        if (userMapper.countOAuthUser(userId) > 0) {
+            userMapper.deleteOAuthUser(userId);
+        }
+        userMapper.deleteUser(userId);
+    }
+
+
 }

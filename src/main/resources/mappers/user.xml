@@ -189,4 +189,35 @@
             user_id = #{userId}
     </update>
 
+    <!-- 일반 회원 삭제 -->
+    <update id="deleteUser"
+            parameterType="int"
+    >
+        DELETE FROM
+            user_tb
+        WHERE
+            user_id = #{userId}
+    </update>
+
+    <!-- OAuth 회원 삭제 -->
+    <delete id="deleteOAuthUser"
+            parameterType="int"
+    >
+        DELETE
+            FROM oauth2_tb
+        WHERE
+            user_id = #{userId}
+    </delete>
+
+    <!-- OAuth 계정 존재 여부 확인 -->
+    <select id="countOAuthUser" parameterType="int" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            oauth2_tb
+        WHERE
+            user_id = #{userId}
+    </select>
+
+
 </mapper>
