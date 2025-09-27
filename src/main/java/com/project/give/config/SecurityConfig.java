@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
         http.csrf().disable(); //  // CSRF 보호 기능 비활성화
         http.authorizeRequests()
                 .antMatchers("/auth/**", "/users/**", "/account/**", "/donations/**", "/donation-categories/**",

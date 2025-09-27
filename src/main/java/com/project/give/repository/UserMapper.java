@@ -36,4 +36,8 @@ public interface UserMapper {
     public void deleteOAuthUser(@Param("userId") int userId);
 
     public int countOAuthUser(@Param("userId") int userId);
+
+    // 중복 체크
+    public int countByUsername(@Param("username") String username);
+    public int countByNickname(@Param("nickname") String nickname);
 }

@@ -219,5 +219,24 @@
             user_id = #{userId}
     </select>
 
+    <!-- 유저네임 중복체크 -->
+    <select id="countByUsername" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            user_tb
+        WHERE
+            user_username = #{username}
+    </select>
+
+    <!-- 닉네임 중복체크 -->
+    <select id="countByNickname" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            user_tb
+        WHERE
+            user_nickname = #{nickname}
+    </select>
 
 </mapper>

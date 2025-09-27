@@ -20,11 +20,13 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    // principal 요청  (로그인 상태)
     @GetMapping("/principal")
     public ResponseEntity<?> getPrincipalUser() {
         return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication());
     }
 
+    // 비밀번호 초기화 (로그인 상태)
     @PutMapping("/passwordReset")
     public ResponseEntity<?> updateUser(@RequestBody PasswordResetRequestDto passwordResetRequestDto){
         boolean result = accountService.resetPassword(passwordResetRequestDto);
@@ -44,7 +46,7 @@ public class AccountController {
                 ? ResponseEntity.ok(username)
                 : ResponseEntity.badRequest().body("가입된 사용자가 없습니다.");
     }
-
+    // 비밀번호 변경 (로그인 상태)
     @PutMapping("/password")
     public ResponseEntity<?> modifyPassword(
             @RequestBody UserPasswordRequestDto userPasswordRequestDto,
@@ -52,6 +54,7 @@ public class AccountController {
         accountService.changePassword(userPasswordRequestDto, principalUser);
         return ResponseEntity.ok("비밀번호 변경 완료");
     }
+    
     // 회원 탈퇴 (로그인 상태, 일반 회원 + 소셜 회원)
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUserById(@AuthenticationPrincipal PrincipalUser principalUser) {
@@ -61,4 +64,17 @@ public class AccountController {
         return ResponseEntity.ok("회원 탈퇴 완료");
     }
 
+    // 유저네임 중복체크
+    @GetMapping("/username-check")
+    public ResponseEntity<Boolean> checkUsername(@RequestParam String username) {
+        boolean exists = accountService.checkUsernameExists(username);
+        return ResponseEntity.ok(exists);
+    }
+
+    // 닉네임 중복체크
+    @GetMapping("/nickname-check")
+    public ResponseEntity<Boolean> checkNickname(@RequestParam String nickname) {
+        boolean exists = accountService.checkNicknameExists(nickname);
+        return ResponseEntity.ok(exists);
+    }
 }

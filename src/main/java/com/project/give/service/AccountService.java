@@ -141,5 +141,14 @@ public class AccountService {
         userMapper.deleteUser(userId);
     }
 
+    // 유저네임 중복체크
+    public boolean checkUsernameExists(String username) {
+        return userMapper.countByUsername(username) > 0;
+    }
+
+    // 닉네임 중복체크
+    public boolean checkNicknameExists(String nickname) {
+        return userMapper.countByNickname(nickname) > 0;
+    }
 
 }
