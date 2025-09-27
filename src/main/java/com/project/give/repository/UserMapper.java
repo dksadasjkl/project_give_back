@@ -15,5 +15,6 @@ public interface UserMapper {
     public User findUserByOAuth2name(String oAuth2name);
     public User findUserByEmail(String email);
     int updatePassword(@Param("userId") int id, @Param("password") String password);
+    public User findByNameAndEmail(String name, String email);
 
 }

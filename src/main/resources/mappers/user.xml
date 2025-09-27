@@ -166,4 +166,16 @@
             user_id = #{userId}
     </update>
 
+    <select id="findByNameAndEmail"
+            parameterType="string"
+            resultMap="UserResultMap"
+    >
+        SELECT
+            user_username
+        FROM
+            user_tb
+        WHERE
+            user_name = #{name}
+        AND user_email = #{email}
+    </select>
 </mapper>

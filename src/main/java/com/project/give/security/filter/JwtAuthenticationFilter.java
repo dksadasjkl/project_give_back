@@ -34,7 +34,9 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 "/donation-categories",
                 "/donation-project-details", "/donation-project-details/",
                 "/donation-project-contributions", "/donation-project-contributions/",
-                "/donation-project-comments", "/donation-project-comments/"
+                "/donation-project-comments", "/donation-project-comments/",
+                "/account/find-username",
+                "/account/passwordReset"
         ); // 수정예정
 
         String uri = request.getRequestURI();

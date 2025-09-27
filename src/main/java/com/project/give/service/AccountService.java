@@ -1,5 +1,6 @@
 package com.project.give.service;
 
+import com.project.give.dto.account.request.FindUsernameRequestDto;
 import com.project.give.dto.account.request.PasswordResetRequestDto;
 import com.project.give.entity.User;
 import com.project.give.repository.UserMapper;
@@ -85,4 +86,30 @@ public class AccountService {
         }
         return sb.toString();
     }
+    
+    // 유저 아이디 찾기
+    public String findUsernameByNameAndEmail(FindUsernameRequestDto findUsernameRequestDto) {
+        User user = userMapper.findByNameAndEmail(findUsernameRequestDto.getName(), findUsernameRequestDto.getEmail());
+        return user != null ? maskUsername(user.getUsername()) : null;
+    }
+
+    // 유저 아이디 부분 마스킹
+    private String maskUsername(String username) {
+        if (username == null || username.length() < 3) return username; // 마스킹 생략
+
+        int len = username.length();
+        int maskStart = 1;
+        int maskEnd = len - 1;
+
+        StringBuilder masked = new StringBuilder();
+        masked.append(username.charAt(0)); // 첫 글자
+        for (int i = maskStart; i < maskEnd; i++) {
+            masked.append("*"); // 중앙 마스킹
+        }
+        masked.append(username.charAt(len - 1)); // 마지막 글자
+
+        return masked.toString();
+    }
+
+
 }
