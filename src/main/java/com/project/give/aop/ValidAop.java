@@ -1,7 +1,9 @@
 package com.project.give.aop;
 
+import com.project.give.dto.account.request.NicknameCheckRequestDto;
 import com.project.give.dto.account.request.OAuth2SignupRequestDto;
 import com.project.give.dto.account.request.UserSignupRequestDto;
+import com.project.give.dto.account.request.UsernameCheckRequestDto;
 import com.project.give.exception.ValidException;
 import com.project.give.repository.UserMapper;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -40,6 +42,32 @@ public class ValidAop {
         for (Object arg : args) {
             if (arg.getClass() == BeanPropertyBindingResult.class) {
                 bindingResult = (BeanPropertyBindingResult) arg;
+            }
+        }
+
+        if(methodName.equals("checkUsername")) {
+            UsernameCheckRequestDto usernameCheckRequestDto = null;
+            for(Object arg : args) {
+                if(arg.getClass() == UsernameCheckRequestDto.class) {
+                    usernameCheckRequestDto = (UsernameCheckRequestDto) arg;
+                }
+            }
+            if(userMapper.countByUsername(usernameCheckRequestDto.getUsername()) > 0){
+                ObjectError objectError = new FieldError("username", "username", "이미 존재하는 사용자이름입니다.");
+                bindingResult.addError(objectError);
+            }
+        }
+
+        if(methodName.equals("checkNickname")) {
+            NicknameCheckRequestDto nicknameCheckRequestDto = null;
+            for(Object arg : args) {
+                if(arg.getClass() == NicknameCheckRequestDto.class) {
+                    nicknameCheckRequestDto = (NicknameCheckRequestDto) arg;
+                }
+            }
+            if(userMapper.countByNickname(nicknameCheckRequestDto.getNickname()) > 0){
+                ObjectError objectError = new FieldError("nickname", "nickname", "이미 존재하는 닉네임입니다.");
+                bindingResult.addError(objectError);
             }
         }
 

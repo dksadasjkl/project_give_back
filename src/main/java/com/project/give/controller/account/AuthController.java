@@ -18,6 +18,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    // 로그인(토큰발급) - 로그인 / 회원가입페이지
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
         try {

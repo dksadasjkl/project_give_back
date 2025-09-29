@@ -20,7 +20,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // 회원 탈퇴 (일반 회원 가입)
+
+    // 회원 가입 (일반 회원 가입) - 로그인 / 회원가입페이지
     @ValidAspect
     @PostMapping
     public ResponseEntity<?> signup(@Valid @RequestBody UserSignupRequestDto userSignupRequestDto, BindingResult bindingResult) {
@@ -28,7 +29,7 @@ public class UserController {
         return ResponseEntity.created(null).body(true);
     };
 
-    // OAuth 회원 가입
+    // OAuth 회원 가입 - 로그인 / 회원가입페이지
     @ValidAspect
     @PostMapping("/oauth2/sign-up")
     public ResponseEntity<?> oAuth2Signup(@Valid @RequestBody OAuth2SignupRequestDto oAuth2SignupRequestDto, BindingResult bindingResult) {

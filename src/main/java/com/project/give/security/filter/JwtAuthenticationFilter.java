@@ -26,7 +26,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-
+        
+        // 인증이 필요없는 페이지 (회원가입, 로그인, 아이디찾기, 비밀번호 찾기, 중복체크 등) - 기부페이지는 개발이후 제외 예정
         List<String> antMatchers = List.of(
                 "/users",
                 "/auth/login",
@@ -36,7 +37,9 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 "/donation-project-contributions", "/donation-project-contributions/",
                 "/donation-project-comments", "/donation-project-comments/",
                 "/account/find-username",
-                "/account/passwordReset"
+                "/account/passwordReset",
+                "/account/username-check", 
+                "/account/nickname-check"
         ); // 수정예정
 
         String uri = request.getRequestURI();
@@ -63,11 +66,9 @@ public class JwtAuthenticationFilter extends GenericFilter {
             try {
                 claims = jwtProvider.getClaims(removeBearerToken);
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT 만료: " + e.getMessage());
-                response.sendError(HttpStatus.UNAUTHORIZED.value(), "JWT 만료");
+                response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             } catch (Exception e) {
-                System.out.println("JWT 검증 실패: " + e.getMessage());
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }

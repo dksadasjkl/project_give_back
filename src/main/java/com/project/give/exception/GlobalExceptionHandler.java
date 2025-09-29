@@ -6,6 +6,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*
  * 모든 컨트롤러에서 발생하는 예외를 한 곳에서 처리하기 위한 클래스
  * @RestControllerAdvice : 전역 예외 처리 + @ResponseBody 포함
@@ -37,5 +40,13 @@ public class GlobalExceptionHandler {
 
         // HTTP 상태 코드 500(INTERNAL_SERVER_ERROR)과 함께 메시지 반환
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+    }
+
+    @ExceptionHandler(ValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidException(ValidException e) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("message", "유효성 검사 오류");
+        result.put("errors", e.getErrorMap()); // 실제 필드 에러 전달
+        return ResponseEntity.badRequest().body(result);
     }
 }
