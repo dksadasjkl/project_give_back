@@ -20,8 +20,8 @@ public interface UserMapper {
     public User findUserByUsername(String username);
     public User findNicknameByUserId(@Param("userId") int userId);
     public User findUserByOAuth2name(String oAuth2name);
-    public User findUserByEmail(String email);
     public User findByNameAndEmail(String name, String email);
+    public User findByUsernameAndEmail(String username, String email);
 
     // 비밀번호 변경 (로그인 상태)
     public int updatePasswordByUserId(@Param("userId") int userId, @Param("password") String password);

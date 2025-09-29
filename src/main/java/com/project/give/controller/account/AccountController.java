@@ -36,7 +36,7 @@ public class AccountController {
         if(result) {
             return ResponseEntity.ok("비밀번호 초기화 완료");
         } else {
-            return ResponseEntity.badRequest().body("해당 이메일을 찾을 수 없습니다.");
+            return ResponseEntity.badRequest().body("사용자의 정보를 확인해주세요.");
         }
     }
 
@@ -44,10 +44,9 @@ public class AccountController {
     @PostMapping("/find-username")
     public ResponseEntity<?> findUsername(@RequestBody FindUsernameRequestDto findUsernameRequestDto) {
         String username = accountService.findUsernameByNameAndEmail(findUsernameRequestDto);
-
         return username != null
                 ? ResponseEntity.ok(username)
-                : ResponseEntity.badRequest().body("가입된 사용자가 없습니다.");
+                : ResponseEntity.badRequest().body("사용자의 정보를 확인해주세요.");
     }
 
     // 비밀번호 변경 (로그인 상태) - 마이페이지

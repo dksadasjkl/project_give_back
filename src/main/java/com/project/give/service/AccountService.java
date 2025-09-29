@@ -39,7 +39,8 @@ public class AccountService {
     // 비밀번호 초기화 + 메일 발송
     @Transactional(rollbackFor = Exception.class)
     public boolean resetPassword(PasswordResetRequestDto passwordResetRequestDto) {
-        User user = userMapper.findUserByEmail(passwordResetRequestDto.getEmail());
+
+        User user = userMapper.findByUsernameAndEmail(passwordResetRequestDto.getUsername(), passwordResetRequestDto.getEmail());
         if (user == null) return false;
 
         // 임시 비밀번호 생성
@@ -94,22 +95,25 @@ public class AccountService {
     public String findUsernameByNameAndEmail(FindUsernameRequestDto findUsernameRequestDto) {
         User user = userMapper.findByNameAndEmail(findUsernameRequestDto.getName(), findUsernameRequestDto.getEmail());
         return user != null ? maskUsername(user.getUsername()) : null;
+
     }
 
     // 유저 아이디 부분 마스킹
     private String maskUsername(String username) {
-        if (username == null || username.length() < 3) return username; // 마스킹 생략
+        if (username == null || username.length() <= 4) return username; // 너무 짧으면 마스킹 생략
 
         int len = username.length();
-        int maskStart = 1;
-        int maskEnd = len - 1;
+        int visibleStart = 2; // 앞에서 몇 글자 보일지
+        int visibleEnd = 2;   // 뒤에서 몇 글자 보일지
 
         StringBuilder masked = new StringBuilder();
-        masked.append(username.charAt(0)); // 첫 글자
-        for (int i = maskStart; i < maskEnd; i++) {
+        masked.append(username, 0, visibleStart); // 앞 2글자 그대로
+
+        for (int i = visibleStart; i < len - visibleEnd; i++) {
             masked.append("*"); // 중앙 마스킹
         }
-        masked.append(username.charAt(len - 1)); // 마지막 글자
+
+        masked.append(username.substring(len - visibleEnd)); // 뒤 2글자 그대로
 
         return masked.toString();
     }

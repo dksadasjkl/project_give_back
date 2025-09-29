@@ -138,24 +138,6 @@
             ot.oauth2_name = #{oAuth2name}
     </select>
 
-    <select id="findUserByEmail"
-            parameterType="string"
-            resultMap="UserResultMap"
-    >
-        select
-            user_id,
-            user_username,
-            user_password,
-            user_name,
-            user_email,
-            user_nickname,
-            user_phone
-        from
-            user_tb
-        where
-            user_email = #{email}
-    </select>
-
     <update id="resetPasswordByEmail">
         update
             user_tb
@@ -177,6 +159,20 @@
         WHERE
             user_name = #{name}
         AND user_email = #{email}
+    </select>
+
+    <select id="findByUsernameAndEmail"
+            parameterType="string"
+            resultMap="UserResultMap"
+    >
+        SELECT
+            user_id,
+            user_username
+        FROM
+            user_tb
+        WHERE
+            user_username = #{username}
+            AND user_email = #{email}
     </select>
 
     <update id="updatePasswordByUserId">
