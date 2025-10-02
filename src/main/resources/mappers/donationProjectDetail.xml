@@ -37,6 +37,15 @@
             (0, #{donationProjectId}, #{donationProjectDetailSubtitle}, #{donationProjectDetailImageUrl}, #{donationProjectDetailContent}, #{donationProjectDetailOrderNo}, now(), now())
     </insert>
 
+    <insert id="insertBatch" parameterType="list">
+        INSERT INTO
+            donation_project_detail_tb
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (0, #{item.donationProjectId}, #{item.donationProjectDetailSubtitle}, #{item.donationProjectDetailImageUrl}, #{item.donationProjectDetailContent}, #{item.donationProjectDetailOrderNo}, now(), now())
+        </foreach>
+    </insert>
+
     <select id="selectDonationProjectDetailById" parameterType="int" resultMap="DonationProjectDetailWithProjectMap">
         select
             dpdt.donation_project_detail_id,

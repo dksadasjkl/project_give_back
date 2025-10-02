@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/donation-project-details")
 public class DonationProjectDetailController {
@@ -15,9 +17,17 @@ public class DonationProjectDetailController {
     @Autowired
     private DonationProjectDetailService donationProjectDetailService;
 
+    // 단일 저장
     @PostMapping
     public ResponseEntity<?> createDetail(@RequestBody PostDonationProjectDetailRequestDto postDonationProjectDetailRequestDto) {
         donationProjectDetailService.createDonationProjectDetail(postDonationProjectDetailRequestDto);
+        return ResponseEntity.created(null).body(true);
+    }
+
+    // 배치 저장
+    @PostMapping("/batch")
+    public ResponseEntity<?> createDetailsBatch(@RequestBody List<PostDonationProjectDetailRequestDto> projectDetailRequestDtoList) {
+        donationProjectDetailService.createDonationProjectDetailBatch(projectDetailRequestDtoList);
         return ResponseEntity.created(null).body(true);
     }
 
