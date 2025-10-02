@@ -71,6 +71,8 @@
             on dpdt.donation_project_id = dpt.donation_project_id
         where
             dpdt.donation_project_id = #{donationProjectId}
+        order by
+            dpdt.donation_project_detail_order_no asc
     </select>
 
     <delete id="deleteDonationProjectDetailById" parameterType="int">

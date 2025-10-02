@@ -48,10 +48,9 @@ public class DonationProjectDetailService {
 
 
 
-
-
-    public GetDonationProjectDetailResponseDto getDetailsByDonationProjectId (int donationProjectId) {
-        return donationProjectDetailMapper.selectDonationProjectDetailById(donationProjectId).toGetDonationProjectDetailResponseDto();
+    public List<GetDonationProjectDetailResponseDto> getDetailsByDonationProjectId (int donationProjectId) {
+        List<DonationProjectDetail> donationProjectDetails = donationProjectDetailMapper.selectDonationProjectDetailById(donationProjectId);
+        return donationProjectDetails.stream().map(DonationProjectDetail::toGetDonationProjectDetailResponseDto).collect(Collectors.toList());
     }
 
     public void deleteDonationProjectDetailById(int donationProjectId) {
