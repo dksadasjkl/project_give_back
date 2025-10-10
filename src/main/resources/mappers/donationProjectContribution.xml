@@ -41,4 +41,30 @@
             donation_project_contribution_id = #{donationProjectContributionId}
     </delete>
 
+    <select id="selectContributionsWithPaging" resultMap="DonationProjectContributionMap">
+        select
+            donation_project_contribution_id,
+            donation_project_id,
+            user_id,
+            donation_project_contributor_name,
+            donation_project_contribution_amount,
+            donation_project_contribution_date
+        from
+            donation_project_contribution_tb
+        where
+            donation_project_id = #{donationProjectId}
+        order by
+            donation_project_contribution_date DESC
+        limit #{startIndex}, #{count}
+    </select>
+
+    <select id="selectContributionCount" resultType="integer">
+        select count(*)
+        from
+            donation_project_contribution_tb
+        where
+            donation_project_id = #{donationProjectId}
+    </select>
+
+
 </mapper>
