@@ -28,14 +28,14 @@
 
     <select id="selectCommentsByProjectId" parameterType="int" resultMap="DonationProjectCommentMap">
         SELECT
-        dpc.donation_project_comment_id,
-        dpc.donation_project_id,
-        dpc.user_id,
-        dpc.donation_project_comment_text,
-        dpc.create_date,
-        dpc.update_date,
-        ut.user_nickname,
-        ut.user_username
+            dpc.donation_project_comment_id,
+            dpc.donation_project_id,
+            dpc.user_id,
+            dpc.donation_project_comment_text,
+            dpc.create_date,
+            dpc.update_date,
+            ut.user_nickname,
+            ut.user_username
         FROM
             donation_project_comment_tb dpc
             left outer join user_tb ut on ut.user_id = dpc.user_id
@@ -59,4 +59,36 @@
         WHERE
             donation_project_comment_id = #{donationProjectCommentId}
     </delete>
+
+    <select id="selectCommentsWithPaging" resultMap="DonationProjectCommentMap">
+        SELECT
+            dpc.donation_project_comment_id,
+            dpc.donation_project_id,
+            dpc.user_id,
+            dpc.donation_project_comment_text,
+            dpc.create_date,
+            dpc.update_date,
+            ut.user_nickname,
+            ut.user_username
+        FROM
+            donation_project_comment_tb dpc
+            LEFT OUTER JOIN user_tb ut ON ut.user_id = dpc.user_id
+        WHERE
+            donation_project_id = #{donationProjectId}
+        ORDER BY
+            create_date DESC
+        LIMIT
+            #{startIndex}, #{count}
+    </select>
+
+    <select id="selectCommentCount" resultType="integer">
+        SELECT
+            COUNT(*)
+        FROM
+            donation_project_comment_tb
+        WHERE
+            donation_project_id = #{donationProjectId}
+    </select>
+
+
 </mapper>

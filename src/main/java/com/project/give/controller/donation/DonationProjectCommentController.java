@@ -1,5 +1,6 @@
 package com.project.give.controller.donation;
 
+import com.project.give.dto.donation.request.GetDonationCommentSearchRequestDto;
 import com.project.give.dto.donation.request.PostDonationProjectCommentRequestDto;
 import com.project.give.dto.donation.request.PutDonationProjectCommentRequestDto;
 import com.project.give.service.DonationProjectCommentService;
@@ -41,4 +42,17 @@ public class DonationProjectCommentController {
         donationProjectCommentService.deleteDonationProjectComment(donationProjectCommentId);
         return ResponseEntity.ok("댓글 삭제 완료");
     }
+
+    // 특정 프로젝트 댓글 조회 (페이징)
+    @GetMapping("/load-more")
+    public ResponseEntity<?> loadMoreComments(GetDonationCommentSearchRequestDto getDonationCommentSearchRequestDto) {
+        return ResponseEntity.ok(donationProjectCommentService.loadMoreComments(getDonationCommentSearchRequestDto));
+    }
+
+    // 댓글 총 개수
+    @GetMapping("/count")
+    public ResponseEntity<?> getCommentCount(GetDonationCommentSearchRequestDto getDonationCommentSearchRequestDto) {
+        return ResponseEntity.ok(donationProjectCommentService.totalLoadCommentCount(getDonationCommentSearchRequestDto));
+    }
+
 }

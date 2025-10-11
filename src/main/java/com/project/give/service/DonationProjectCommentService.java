@@ -1,8 +1,10 @@
 package com.project.give.service;
 
+import com.project.give.dto.donation.request.GetDonationCommentSearchRequestDto;
 import com.project.give.dto.donation.request.PostDonationProjectCommentRequestDto;
 import com.project.give.dto.donation.request.PutDonationProjectCommentRequestDto;
 import com.project.give.dto.donation.response.GetDonationProjectCommentsResponseDto;
+import com.project.give.dto.donation.response.GetDonationProjectCountResponseDto;
 import com.project.give.entity.DonationProjectComment;
 import com.project.give.exception.DataNotFoundException;
 import com.project.give.exception.DataSaveException;
@@ -30,7 +32,6 @@ public class DonationProjectCommentService {
 
     public List<GetDonationProjectCommentsResponseDto> getCommentsByProjectId(int donationProjectId) {
         List<DonationProjectComment> donationProjectComments = donationProjectCommentMapper.selectCommentsByProjectId(donationProjectId);
-
         if (donationProjectComments == null || donationProjectComments.isEmpty()) {
             throw new DataNotFoundException("댓글이 없습니다.");
         }
@@ -52,4 +53,26 @@ public class DonationProjectCommentService {
         donationProjectCommentMapper.deleteDonationProjectComment(donationProjectCommentId);
     }
 
+
+    public List<GetDonationProjectCommentsResponseDto> loadMoreComments(GetDonationCommentSearchRequestDto dto) {
+        List<DonationProjectComment> comments = donationProjectCommentMapper.selectCommentsWithPaging(
+                dto.getStartIndex(),
+                dto.getCount(),
+                dto.getDonationProjectId()
+        );
+
+        return comments.stream()
+                .map(DonationProjectComment::toGetDonationProjectCommentsResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public GetDonationProjectCountResponseDto totalLoadCommentCount(GetDonationCommentSearchRequestDto dto) {
+        int totalCount = donationProjectCommentMapper.selectCommentCount(dto.getDonationProjectId());
+        int totalLoadCount = (int) Math.ceil(((double) totalCount) / dto.getCount());
+
+        return GetDonationProjectCountResponseDto.builder()
+                .totalCount(totalCount)
+                .totalLoadCount(totalLoadCount)
+                .build();
+    }
 }
