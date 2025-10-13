@@ -180,5 +180,14 @@
             donation_project_id = #{donationProjectId}
     </update>
 
+    <update id="updateDonationCurrentAmount">
+        UPDATE
+            donation_project_tb
+        SET
+            donation_project_current_amount = donation_project_current_amount + #{donationProjectContributionAmount},
+            update_date = NOW()
+        WHERE
+            donation_project_id = #{donationProjectId}
+    </update>
 
 </mapper>

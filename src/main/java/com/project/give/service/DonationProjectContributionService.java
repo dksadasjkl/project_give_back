@@ -12,6 +12,7 @@ import com.project.give.entity.User;
 import com.project.give.exception.DataNotFoundException;
 import com.project.give.exception.DataSaveException;
 import com.project.give.repository.DonationProjectContributionMapper;
+import com.project.give.repository.DonationProjectMapper;
 import com.project.give.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class DonationProjectContributionService {
     private UserMapper userMapper;
     @Autowired
     private DonationProjectContributionMapper donationProjectContributionMapper;
+    @Autowired
+    private DonationProjectMapper donationProjectMapper;
 
     public void createDonationProjectContribution(PostDonationProjectContributionRequestDto postDonationProjectContributionRequestDto) {
         User user = userMapper.findNicknameByUserId(postDonationProjectContributionRequestDto.getUserId());
@@ -39,6 +42,12 @@ public class DonationProjectContributionService {
         if(affectedRows != 1) {
             throw new DataSaveException("기부 모금 실패");
         }
+
+        // 2. 모금액 업데이트
+        donationProjectMapper.updateDonationCurrentAmount(
+                postDonationProjectContributionRequestDto.getDonationProjectId(),
+                postDonationProjectContributionRequestDto.getDonationProjectContributionAmount()
+        );
     }
 
     public List<GetDonationProjectContributionsResponseDto> getContributionsByProjectId(int donationProjectId) {

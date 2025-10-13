@@ -20,4 +20,6 @@ public interface DonationProjectMapper {
             @Param("searchTypeId") int searchTypeId
             );
     public int selectDonationProjectCount(@Param("donationCategoryId") int donationCategoryId);
+    public int updateDonationCurrentAmount(@Param("donationProjectId") int donationProjectId,
+                                           @Param("donationProjectContributionAmount") int donationProjectContributionAmount);
 }
