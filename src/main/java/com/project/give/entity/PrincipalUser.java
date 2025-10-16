@@ -17,6 +17,7 @@ public class PrincipalUser implements UserDetails {
     private String name;
     private String nickname;
     private String phone;
+    private String profileImageUrl;
     private Collection<? extends  GrantedAuthority> authorities;
 
     @Override

@@ -23,6 +23,7 @@ public class User {
     private String name;
     private String nickname;
     private String phone;
+    private String profileImageUrl;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
@@ -44,6 +45,7 @@ public class User {
                 .name(name)
                 .nickname(nickname)
                 .phone(phone)
+                .profileImageUrl(profileImageUrl)
                 .authorities(getAuthorities())
                 .build();
     }

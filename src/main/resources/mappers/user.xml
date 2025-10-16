@@ -25,6 +25,7 @@
         <result property="name" column="user_name" />
         <result property="nickname" column="user_nickname" />
         <result property="phone" column="user_phone" />
+        <result property="profileImageUrl" column="user_profile_image_url" />
         <result property="createDate" column="create_date" />
         <result property="updateDate" column="update_date" />
         <!-- 권한 리스트 매핑 여러 개의 권한 확인-->
@@ -38,7 +39,7 @@
         insert into
             user_tb
         values
-            (0, #{username}, #{password}, #{email}, #{name}, #{nickname}, #{phone}, now(), now())
+            (0, #{username}, #{password}, #{email}, #{name}, #{nickname}, #{phone}, #{profileImageUrl}, now(), now())
     </insert>
 
     <insert id="saveRole">
@@ -69,6 +70,7 @@
             ut.user_email,
             ut.user_nickname,
             ut.user_phone,
+            ut.user_profile_image_url,
             ut.create_date,
             ut.update_date,
             rrt.role_register_id,
@@ -95,6 +97,7 @@
             ut.user_email,
             ut.user_nickname,
             ut.user_phone,
+            ut.user_profile_image_url,
             ut.create_date,
             ut.update_date,
             rrt.role_register_id,
@@ -120,6 +123,7 @@
             ut.user_email,
             ut.user_nickname,
             ut.user_phone,
+            ut.user_profile_image_url,
             ut.create_date,
             ut.update_date,
             rrt.role_register_id,

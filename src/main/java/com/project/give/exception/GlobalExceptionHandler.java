@@ -21,12 +21,21 @@ public class GlobalExceptionHandler {
      * - 주로 로그인 실패, 비밀번호 불일치 시 발생
      */
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<MyAccountException.ErrorMessage> handleBadCredentials(BadCredentialsException ex) {
-        // MyAccountException.ErrorMessage : 메시지를 담는 DTO
-        MyAccountException.ErrorMessage errorMessage = new MyAccountException.ErrorMessage(ex.getMessage());
+    public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
+        Map<String, Object> result = new HashMap<>();
 
-        // HTTP 상태 코드 400(BAD_REQUEST)와 함께 메시지 반환
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        String message = ex.getMessage();
+        Map<String, String> errors = new HashMap<>();
+        if (message.contains("현재 비밀번호")) {
+            errors.put("oldPassword", message);
+        } else if (message.contains("새 비밀번호가 일치하지 않습니다")) {
+            errors.put("newPasswordCheck", message);
+        } else {
+            errors.put("newPasswordCheck", message); // 기본 위치
+        }
+
+        result.put("errors", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     /*
