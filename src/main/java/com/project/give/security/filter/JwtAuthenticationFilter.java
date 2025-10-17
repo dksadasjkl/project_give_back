@@ -65,15 +65,20 @@ public class JwtAuthenticationFilter extends GenericFilter {
             Claims claims = null;
             try {
                 claims = jwtProvider.getClaims(removeBearerToken);
+//                System.out.println("[JWT Filter] Claims: " + claims);
             } catch (ExpiredJwtException e) {
+//                System.out.println("[JWT Filter] Token expired: " + e.getMessage());
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             } catch (Exception e) {
+//                System.out.println("[JWT Filter] Token invalid: " + e.getMessage());
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }
 
             Authentication authentication = jwtProvider.getAuthentication(claims);
+//            System.out.println("[JWT Filter] Authentication Principal: " + authentication.getPrincipal());
+
             if(authentication == null) {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;

@@ -239,4 +239,18 @@
             user_nickname = #{nickname}
     </select>
 
+    <update id="updateProfile" parameterType="map">
+        UPDATE user_tb
+        <set>
+            <if test="nickname != null and nickname != ''">
+                user_nickname = #{nickname},
+            </if>
+            <if test="profileImageUrl != null and profileImageUrl != ''">
+                user_profile_image_url = #{profileImageUrl},
+            </if>
+            update_date = now()
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
 </mapper>

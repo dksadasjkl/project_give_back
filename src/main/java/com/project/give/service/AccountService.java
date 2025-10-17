@@ -5,6 +5,7 @@ import com.project.give.dto.account.request.PasswordResetRequestDto;
 import com.project.give.dto.account.request.UserPasswordRequestDto;
 import com.project.give.entity.PrincipalUser;
 import com.project.give.entity.User;
+import com.project.give.exception.MyAccountException;
 import com.project.give.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -154,5 +155,19 @@ public class AccountService {
     public boolean checkNicknameExists(String nickname) {
         return userMapper.countByNickname(nickname) > 0;
     }
+    
+    // 프로필 닉네임 수정
+    @Transactional(rollbackFor = Exception.class)
+    public void updateProfile(int userId, String nickname, String profileImageUrl) {
 
+        // 닉네임이 있으면 중복 체크
+        if (nickname != null && !nickname.isEmpty()) {
+            if (checkNicknameExists(nickname)) {
+                throw new MyAccountException("이미 사용 중인 닉네임입니다.");
+            }
+        }
+
+        // 값이 있으면 UserMapper로 업데이트
+        userMapper.updateProfile(userId, nickname, profileImageUrl);
+    }
 }

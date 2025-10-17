@@ -40,4 +40,7 @@ public interface UserMapper {
     // 중복 체크
     public int countByUsername(@Param("username") String username);
     public int countByNickname(@Param("nickname") String nickname);
+    public void updateProfile(@Param("userId") int userId,
+                       @Param("nickname") String nickname,
+                       @Param("profileImageUrl") String profileImageUrl);
 }

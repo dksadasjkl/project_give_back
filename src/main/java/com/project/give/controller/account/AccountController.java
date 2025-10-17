@@ -86,4 +86,22 @@ public class AccountController {
         boolean exists = accountService.checkNicknameExists(nicknameCheckRequestDto.getNickname());
         return ResponseEntity.ok(exists);
     }
+
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(
+            @RequestBody ProfileUpdateRequestDto profileUpdateRequestDto,
+            @AuthenticationPrincipal PrincipalUser principalUser) {
+
+        String nickname = profileUpdateRequestDto.getNickname();
+        String profileImageUrl = profileUpdateRequestDto.getProfileImageUrl();
+
+        if ((nickname == null || nickname.isBlank()) && (profileImageUrl == null || profileImageUrl.isBlank())) {
+            return ResponseEntity.badRequest().body("닉네임 또는 프로필 이미지 중 하나는 입력해주세요.");
+        }
+
+        accountService.updateProfile(principalUser.getUserId(), nickname, profileImageUrl);
+
+        return ResponseEntity.ok("프로필 업데이트 완료");
+    }
+
 }
