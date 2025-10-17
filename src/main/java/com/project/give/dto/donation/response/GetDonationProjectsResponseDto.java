@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -24,4 +25,6 @@ public class GetDonationProjectsResponseDto {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private String donationCategoryNameKor;
+    private BigDecimal totalContribution;
+    private LocalDateTime lastContributionDate;
 }

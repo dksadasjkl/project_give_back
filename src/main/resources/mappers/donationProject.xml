@@ -17,6 +17,9 @@
         <result property="createDate" column="create_date"/>
         <result property="updateDate" column="update_date"/>
 
+        <result property="totalContribution" column="total_contribution"/>
+        <result property="lastContributionDate" column="last_contribution_date"/>
+
         <association property="donationCategory" javaType="com.project.give.entity.DonationCategory">
             <id property="donationCategoryId" column="donation_category_id"/>
             <result property="donationCategoryNameKor" column="donation_category_name_kor"/>
@@ -189,5 +192,48 @@
         WHERE
             donation_project_id = #{donationProjectId}
     </update>
+
+    <select id="findMyDonationsByUserId" resultMap="DonationProjectMap" parameterType="int">
+        select
+            dpt.donation_project_id,
+            dpt.donation_project_title,
+            dpt.donation_project_organization,
+            dpt.donation_project_organization_image_url,
+            dpt.donation_project_image_url,
+            dpt.donation_category_id,
+            dpt.donation_project_current_amount,
+            dpt.donation_project_target_amount,
+            dpt.donation_project_start_date,
+            dpt.donation_project_end_date,
+            dpt.create_date,
+            dpt.update_date,
+            dct.donation_category_name_kor,
+            sum(dt.donation_project_contribution_amount) as total_contribution,
+            max(dt.donation_project_contribution_date) as last_contribution_date
+        from
+            donation_project_tb dpt
+            left join donation_category_tb dct
+            on dpt.donation_category_id = dct.donation_category_id
+            inner join donation_project_contribution_tb dt
+            on dpt.donation_project_id = dt.donation_project_id
+        where
+            dt.user_id = #{userId}
+            group by
+            dpt.donation_project_id,
+            dpt.donation_project_title,
+            dpt.donation_project_organization,
+            dpt.donation_project_organization_image_url,
+            dpt.donation_project_image_url,
+            dpt.donation_category_id,
+            dpt.donation_project_current_amount,
+            dpt.donation_project_target_amount,
+            dpt.donation_project_start_date,
+            dpt.donation_project_end_date,
+            dpt.create_date,
+            dpt.update_date,
+            dct.donation_category_name_kor
+        order by
+            last_contribution_date DESC
+    </select>
 
 </mapper>

@@ -4,9 +4,11 @@ import com.project.give.dto.donation.request.GetDonationProjectSearchRequestDto;
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
 import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
 import com.project.give.entity.DonationProject;
+import com.project.give.entity.PrincipalUser;
 import com.project.give.service.DonationProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,4 +59,11 @@ public class DonationProjectController {
     public ResponseEntity<?> getProductCount(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
         return ResponseEntity.ok(donationProjectService.totalLoadDonationProjectCount(getDonationProjectSearchRequestDto));
     }
+
+    // 1. 내가 참여한 기부 리스트 조회
+    @GetMapping("/mypage")
+    public ResponseEntity<?> getMyDonations(@AuthenticationPrincipal PrincipalUser principalUser) {
+        return ResponseEntity.ok(donationProjectService.getMyDonations(principalUser));
+    }
+
 }

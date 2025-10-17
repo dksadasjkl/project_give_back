@@ -22,4 +22,6 @@ public interface DonationProjectMapper {
     public int selectDonationProjectCount(@Param("donationCategoryId") int donationCategoryId);
     public int updateDonationCurrentAmount(@Param("donationProjectId") int donationProjectId,
                                            @Param("donationProjectContributionAmount") int donationProjectContributionAmount);
+
+    public List<DonationProject> findMyDonationsByUserId(@Param("userId") int userId);
 }

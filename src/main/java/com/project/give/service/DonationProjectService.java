@@ -6,6 +6,7 @@ import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
 import com.project.give.dto.donation.response.GetDonationProjectCountResponseDto;
 import com.project.give.dto.donation.response.GetDonationProjectsResponseDto;
 import com.project.give.entity.DonationProject;
+import com.project.give.entity.PrincipalUser;
 import com.project.give.exception.DataSaveException;
 import com.project.give.repository.DonationProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +72,9 @@ public class DonationProjectService {
         donationProjectMapper.updateDonationProject(putDonationProjectRequestDto.toEntity(donationProjectId));
     }
 
+    public List<GetDonationProjectsResponseDto> getMyDonations(PrincipalUser principalUser) {
+        List<DonationProject> donationProjects = donationProjectMapper.findMyDonationsByUserId(principalUser.getUserId());
+        return donationProjects.stream().map(DonationProject::toGetDonationProjectsResponseDto).collect(Collectors.toList());
+    }
 
 }

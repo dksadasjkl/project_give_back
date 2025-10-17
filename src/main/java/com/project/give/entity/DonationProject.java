@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -26,6 +27,9 @@ public class DonationProject {
     private LocalDate donationProjectEndDate;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
+
+    private BigDecimal totalContribution;
+    private LocalDateTime lastContributionDate;
 
     private DonationCategory donationCategory;
 
@@ -52,6 +56,8 @@ public class DonationProject {
                 .createDate(createDate)
                 .updateDate(updateDate)
                 .donationCategoryNameKor(donationCategory.getDonationCategoryNameKor())
+                .totalContribution(totalContribution)
+                .lastContributionDate(lastContributionDate)
                 .build();
     }
 }
