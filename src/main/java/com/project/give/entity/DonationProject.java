@@ -28,7 +28,7 @@ public class DonationProject {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
-    private BigDecimal totalContribution;
+    private int totalContribution;
     private LocalDateTime lastContributionDate;
 
     private DonationCategory donationCategory;

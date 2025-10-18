@@ -25,6 +25,6 @@ public class GetDonationProjectsResponseDto {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private String donationCategoryNameKor;
-    private BigDecimal totalContribution;
+    private int totalContribution;
     private LocalDateTime lastContributionDate;
 }

@@ -59,11 +59,6 @@ public class DonationProjectController {
     public ResponseEntity<?> getProductCount(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
         return ResponseEntity.ok(donationProjectService.totalLoadDonationProjectCount(getDonationProjectSearchRequestDto));
     }
-
-    // 1. 내가 참여한 기부 리스트 조회
-    @GetMapping("/mypage")
-    public ResponseEntity<?> getMyDonations(@AuthenticationPrincipal PrincipalUser principalUser) {
-        return ResponseEntity.ok(donationProjectService.getMyDonations(principalUser));
-    }
+    
 
 }

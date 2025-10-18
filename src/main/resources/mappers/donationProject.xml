@@ -208,7 +208,7 @@
             dpt.create_date,
             dpt.update_date,
             dct.donation_category_name_kor,
-            sum(dt.donation_project_contribution_amount) as total_contribution,
+            coalesce(sum(dt.donation_project_contribution_amount), 0) as total_contribution,
             max(dt.donation_project_contribution_date) as last_contribution_date
         from
             donation_project_tb dpt
