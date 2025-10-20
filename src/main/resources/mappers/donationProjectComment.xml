@@ -90,5 +90,26 @@
             donation_project_id = #{donationProjectId}
     </select>
 
+    <select id="selectCommentsByUserId" resultMap="DonationProjectCommentMap">
+        SELECT
+            dpc.donation_project_comment_id,
+            dpc.donation_project_id,
+            dpc.user_id,
+            dpc.donation_project_comment_text,
+            dpc.create_date,
+            dpc.update_date,
+            ut.user_nickname,
+            ut.user_username,
+            dp.donation_project_title
+        FROM
+            donation_project_comment_tb dpc
+            LEFT OUTER JOIN user_tb ut ON ut.user_id = dpc.user_id
+            LEFT OUTER JOIN donation_project_tb dp ON dp.donation_project_id = dpc.donation_project_id
+        WHERE
+            dpc.user_id = #{userId}
+        ORDER BY
+            dpc.create_date DESC
+    </select>
+
 
 </mapper>

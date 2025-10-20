@@ -6,6 +6,7 @@ import com.project.give.dto.donation.request.PutDonationProjectCommentRequestDto
 import com.project.give.dto.donation.response.GetDonationProjectCommentsResponseDto;
 import com.project.give.dto.donation.response.GetDonationProjectCountResponseDto;
 import com.project.give.entity.DonationProjectComment;
+import com.project.give.entity.PrincipalUser;
 import com.project.give.exception.DataNotFoundException;
 import com.project.give.exception.DataSaveException;
 import com.project.give.repository.DonationProjectCommentMapper;
@@ -74,5 +75,13 @@ public class DonationProjectCommentService {
                 .totalCount(totalCount)
                 .totalLoadCount(totalLoadCount)
                 .build();
+    }
+
+    public List<GetDonationProjectCommentsResponseDto> getMyDonationComments(PrincipalUser principalUser) {
+        List<DonationProjectComment> comments = donationProjectCommentMapper.selectCommentsByUserId(principalUser.getUserId());
+
+        return comments.stream()
+                .map(DonationProjectComment::toGetDonationProjectCommentsResponseDto)
+                .collect(Collectors.toList());
     }
 }

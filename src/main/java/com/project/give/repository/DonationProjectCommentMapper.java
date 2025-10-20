@@ -18,4 +18,5 @@ public interface DonationProjectCommentMapper {
             @Param("donationProjectId") int donationProjectId
     );
     int selectCommentCount(@Param("donationProjectId") int donationProjectId);
+    List<DonationProjectComment> selectCommentsByUserId(@Param("userId") int userId);
 }
