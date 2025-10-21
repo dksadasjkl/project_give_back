@@ -13,6 +13,9 @@
         <result property="createDate" column="create_date"/>
         <result property="updateDate" column="update_date"/>
 
+        <result property="donationProjectTitle" column="donation_project_title"/>
+        <result property="donationProjectImageUrl" column="donation_project_image_url"/>
+
         <association property="user" javaType="com.project.give.entity.User">
             <result property="username" column="user_username"/>
             <result property="nickname" column="user_nickname"/>
@@ -100,7 +103,8 @@
             dpc.update_date,
             ut.user_nickname,
             ut.user_username,
-            dp.donation_project_title
+            dp.donation_project_title,
+            dp.donation_project_image_url
         FROM
             donation_project_comment_tb dpc
             LEFT OUTER JOIN user_tb ut ON ut.user_id = dpc.user_id

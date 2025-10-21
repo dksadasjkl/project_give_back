@@ -22,6 +22,9 @@ public class DonationProjectComment {
 
     private User user;
 
+    private String donationProjectTitle;
+    private String donationProjectImageUrl;
+
     public GetDonationProjectCommentsResponseDto toGetDonationProjectCommentsResponseDto() {
         return GetDonationProjectCommentsResponseDto.builder()
                 .donationProjectCommentId(donationProjectCommentId)
@@ -32,6 +35,8 @@ public class DonationProjectComment {
                 .updateDate(updateDate)
                 .username(user.getUsername())
                 .nickname(user.getNickname())
+                .donationProjectTitle(donationProjectTitle)
+                .donationProjectImageUrl(donationProjectImageUrl)
                 .build();
     }
 }

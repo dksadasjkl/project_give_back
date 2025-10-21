@@ -18,4 +18,7 @@ public class GetDonationProjectCommentsResponseDto {
     private String username;
     private String nickname;
 
+    private String donationProjectTitle;
+    private String donationProjectImageUrl;
+
 }
