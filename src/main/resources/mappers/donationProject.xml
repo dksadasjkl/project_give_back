@@ -17,6 +17,8 @@
         <result property="createDate" column="create_date"/>
         <result property="updateDate" column="update_date"/>
 
+        <result property="donationProjectType" column="donation_project_type"/>
+
         <result property="totalContribution" column="total_contribution"/>
         <result property="lastContributionDate" column="last_contribution_date"/>
 
@@ -41,6 +43,7 @@
                 #{donationProjectTargetAmount},
                 now(),
                 now(),
+                'DONATION',
                 now(),
                 now()
         )
@@ -110,6 +113,7 @@
             left outer join donation_category_tb dct
             on(dpt.donation_category_id = dct.donation_category_id)
         where 1 = 1
+        and dpt.donation_project_type = 'DONATION'
         <if test="donationCategoryId != 0">
             and dpt.donation_category_id = #{donationCategoryId}
         </if>
@@ -152,6 +156,7 @@
         select count(*)
         from donation_project_tb
         <where>
+            donation_project_type = 'DONATION'
             <if test="donationCategoryId != 0">
                 AND donation_category_id = #{donationCategoryId}
             </if>

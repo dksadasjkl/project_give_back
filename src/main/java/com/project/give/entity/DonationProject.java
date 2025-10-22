@@ -28,6 +28,7 @@ public class DonationProject {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
+    private String donationProjectType;
     private int totalContribution;
     private LocalDateTime lastContributionDate;
 
