@@ -37,8 +37,8 @@ public class DonationProjectService {
         return donationProjectMapper.selectDonationProjectById(donationProjectId).toGetDonationProjectsResponseDto();
     }
 
-    public List<GetDonationProjectsResponseDto> getDonationProjects () {
-        List<DonationProject> donationProjects = donationProjectMapper.selectAllDonationProjects();
+    public List<GetDonationProjectsResponseDto> getDonationProjects(String donationProjectType) {
+        List<DonationProject> donationProjects = donationProjectMapper.selectAllDonationProjects(donationProjectType);
         return donationProjects.stream().map(DonationProject::toGetDonationProjectsResponseDto).collect(Collectors.toList());
     }
 
@@ -47,14 +47,16 @@ public class DonationProjectService {
                 getDonationProjectSearchRequestDto.getStartIndex(),
                 getDonationProjectSearchRequestDto.getCount(),
                 getDonationProjectSearchRequestDto.getDonationCategoryId(),
-                getDonationProjectSearchRequestDto.getSearchTypeId()
+                getDonationProjectSearchRequestDto.getSearchTypeId(),
+                getDonationProjectSearchRequestDto.getDonationProjectType()
         );
         return donationProjects.stream().map(DonationProject::toGetDonationProjectsResponseDto).collect(Collectors.toList());
     }
 
     public GetDonationProjectCountResponseDto totalLoadDonationProjectCount(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
         int totalCount = donationProjectMapper.selectDonationProjectCount(
-                getDonationProjectSearchRequestDto.getDonationCategoryId()
+                getDonationProjectSearchRequestDto.getDonationCategoryId(),
+                getDonationProjectSearchRequestDto.getDonationProjectType()
         );
         int totalLoadCount = (int) Math.ceil(((double) totalCount) / getDonationProjectSearchRequestDto.getCount());
 

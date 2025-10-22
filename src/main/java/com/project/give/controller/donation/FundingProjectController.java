@@ -17,7 +17,7 @@ public class FundingProjectController {
 
     @PostMapping
     public ResponseEntity<?> createFundingProject(@RequestBody PostDonationProjectRequestDto dto) {
-        dto.setDonationProjectType("FUNDING"); // 타입만 FUNDING으로 설정
+        dto.setDonationProjectType("FUNDING"); // 타입 지정
         donationProjectService.createDonationProject(dto);
         return ResponseEntity.created(null).body(true);
     }
@@ -27,14 +27,10 @@ public class FundingProjectController {
         return ResponseEntity.ok(donationProjectService.getDonationProject(fundingProjectId));
     }
 
-//    @GetMapping
-//    public ResponseEntity<?> getFundingProjects() {
-//        return ResponseEntity.ok(
-//                donationProjectService.getDonationProjects().stream()
-//                        .filter(p -> "FUNDING".equals(p.getDonationProjectType()))
-//                        .toList()
-//        );
-//    }
+    @GetMapping
+    public ResponseEntity<?> getFundingProjects(GetDonationProjectSearchRequestDto dto) {
+        return ResponseEntity.ok(donationProjectService.getDonationProjects("FUNDING"));
+    }
 
     @DeleteMapping("/{fundingProjectId}")
     public ResponseEntity<?> deleteFundingProject(@PathVariable int fundingProjectId) {
@@ -50,18 +46,15 @@ public class FundingProjectController {
         return ResponseEntity.ok("펀딩 프로젝트 수정 완료");
     }
 
-//    @GetMapping("/load-more")
-//    public ResponseEntity<?> loadMoreFundingProjects(GetDonationProjectSearchRequestDto dto) {
-//        return ResponseEntity.ok(
-//                donationProjectService.loadMoreDonationProjects(dto).stream()
-//                        .filter(p -> "FUNDING".equals(p.getDonationProjectType()))
-//                        .toList()
-//        );
-//    }
+    @GetMapping("/load-more")
+    public ResponseEntity<?> loadMoreFundingProjects(GetDonationProjectSearchRequestDto dto) {
+        dto.setDonationProjectType("FUNDING");
+        return ResponseEntity.ok(donationProjectService.loadMoreDonationProjects(dto));
+    }
 
     @GetMapping("/count")
     public ResponseEntity<?> getFundingProjectCount(GetDonationProjectSearchRequestDto dto) {
-        int totalCount = donationProjectService.totalLoadDonationProjectCount(dto).getTotalCount();
-        return ResponseEntity.ok(totalCount);
+        dto.setDonationProjectType("FUNDING");
+        return ResponseEntity.ok(donationProjectService.totalLoadDonationProjectCount(dto));
     }
 }

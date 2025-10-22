@@ -8,4 +8,5 @@ public class GetDonationProjectSearchRequestDto {
     private int count;
     private int donationCategoryId;
     private int searchTypeId;
+    private String donationProjectType;
 }

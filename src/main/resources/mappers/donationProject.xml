@@ -91,6 +91,11 @@
             donation_project_tb dpt
             left outer join donation_category_tb dct
             on(dpt.donation_category_id = dct.donation_category_id)
+        <where>
+            <if test="donationProjectType != null">
+                donation_project_type = #{donationProjectType}
+            </if>
+        </where>
     </select>
 
     <select id="selectDonationProjectsWithPaging" resultMap="DonationProjectMap">
@@ -113,7 +118,9 @@
             left outer join donation_category_tb dct
             on(dpt.donation_category_id = dct.donation_category_id)
         where 1 = 1
-        and dpt.donation_project_type = 'DONATION'
+        <if test="donationProjectType != null">
+            and donation_project_type = #{donationProjectType}
+        </if>
         <if test="donationCategoryId != 0">
             and dpt.donation_category_id = #{donationCategoryId}
         </if>
@@ -156,7 +163,9 @@
         select count(*)
         from donation_project_tb
         <where>
-            donation_project_type = 'DONATION'
+            <if test="donationProjectType != null">
+                donation_project_type = #{donationProjectType}
+            </if>
             <if test="donationCategoryId != 0">
                 AND donation_category_id = #{donationCategoryId}
             </if>

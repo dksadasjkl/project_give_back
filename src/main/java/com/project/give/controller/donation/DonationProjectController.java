@@ -33,7 +33,7 @@ public class DonationProjectController {
 
     @GetMapping
     public ResponseEntity<?> getDonationProjects() {
-        return ResponseEntity.ok(donationProjectService.getDonationProjects());
+        return ResponseEntity.ok(donationProjectService.getDonationProjects("DONATION"));
     }
 
     @DeleteMapping("/{donationProjectId}")
@@ -52,11 +52,13 @@ public class DonationProjectController {
 
     @GetMapping("/load-more")
     public ResponseEntity<?> loadMoreDonationProjects(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
+        getDonationProjectSearchRequestDto.setDonationProjectType("DONATION");
         return ResponseEntity.ok(donationProjectService.loadMoreDonationProjects(getDonationProjectSearchRequestDto));
     }
 
     @GetMapping("/count")
     public ResponseEntity<?> getProductCount(GetDonationProjectSearchRequestDto getDonationProjectSearchRequestDto) {
+        getDonationProjectSearchRequestDto.setDonationProjectType("DONATION");
         return ResponseEntity.ok(donationProjectService.totalLoadDonationProjectCount(getDonationProjectSearchRequestDto));
     }
     

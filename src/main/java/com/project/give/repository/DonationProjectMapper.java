@@ -10,16 +10,23 @@ import java.util.List;
 public interface DonationProjectMapper {
     public int insertDonationProject(DonationProject donationProject);
     public DonationProject selectDonationProjectById(@Param("donationProjectId") int donationProjectId);
-    public List<DonationProject> selectAllDonationProjects();
+    public List<DonationProject> selectAllDonationProjects(@Param("donationProjectType") String donationProjectType);
     public int deleteDonationProjectById(@Param("donationProjectId") int donationProjectId);
     public int updateDonationProject(DonationProject donationProject);
-    public List<DonationProject> selectDonationProjectsWithPaging (
+
+    List<DonationProject> selectDonationProjectsWithPaging(
             @Param("startIndex") int startIndex,
             @Param("count") int count,
             @Param("donationCategoryId") int donationCategoryId,
-            @Param("searchTypeId") int searchTypeId
-            );
-    public int selectDonationProjectCount(@Param("donationCategoryId") int donationCategoryId);
+            @Param("searchTypeId") int searchTypeId,
+            @Param("donationProjectType") String donationProjectType // ✅ 추가
+    );
+
+    int selectDonationProjectCount(
+            @Param("donationCategoryId") int donationCategoryId,
+            @Param("donationProjectType") String donationProjectType // ✅ 추가
+    );
+
     public int updateDonationCurrentAmount(@Param("donationProjectId") int donationProjectId,
                                            @Param("donationProjectContributionAmount") int donationProjectContributionAmount);
 
