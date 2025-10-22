@@ -15,6 +15,9 @@ public class PostDonationProjectRequestDto {
     private int donationProjectCurrentAmount;
     private int donationProjectTargetAmount;
 
+    // ✅ 기부 / 펀딩 구분용 필드 추가
+    private String donationProjectType;
+
     public DonationProject toEntity() {
         return DonationProject.builder()
                 .donationProjectTitle(donationProjectTitle)
@@ -24,6 +27,7 @@ public class PostDonationProjectRequestDto {
                 .donationCategoryId(donationCategoryId)
                 .donationProjectCurrentAmount(donationProjectCurrentAmount)
                 .donationProjectTargetAmount(donationProjectTargetAmount)
+                .donationProjectType(donationProjectType != null ? donationProjectType : "DONATION")
                 .build();
     }
 }

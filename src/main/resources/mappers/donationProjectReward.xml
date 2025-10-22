@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.DonationProjectRewardMapper">
+
+    <resultMap id="RewardMap" type="com.project.give.entity.DonationProjectReward">
+        <id property="donationProjectRewardId" column="donation_project_reward_id"/>
+        <result property="donationProjectId" column="donation_project_id"/>
+        <result property="donationProjectRewardTitle" column="donation_project_reward_title"/>
+        <result property="donationProjectRewardDescription" column="donation_project_reward_description"/>
+        <result property="donationProjectRewardPrice" column="donation_project_reward_price"/>
+        <result property="donationProjectRewardQuantity" column="donation_project_reward_quantity"/>
+        <result property="donationProjectRewardRemaining" column="donation_project_reward_remaining"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <insert id="insertDonationProjectReward" parameterType="com.project.give.entity.DonationProjectReward" useGeneratedKeys="true" keyProperty="donationProjectRewardId">
+        INSERT INTO donation_project_reward_tb
+        VALUES (
+        0,
+        #{donationProjectId},
+        #{donationProjectRewardTitle},
+        #{donationProjectRewardDescription},
+        #{donationProjectRewardPrice},
+        #{donationProjectRewardQuantity},
+        #{donationProjectRewardRemaining},
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <select id="selectDonationProjectRewards" resultMap="RewardMap" parameterType="int">
+        SELECT *
+        FROM donation_project_reward_tb
+        WHERE donation_project_id = #{donationProjectId}
+        ORDER BY create_date DESC
+    </select>
+
+    <update id="updateDonationProjectReward" parameterType="com.project.give.entity.DonationProjectReward">
+        UPDATE donation_project_reward_tb
+        SET
+        donation_project_reward_title = #{donationProjectRewardTitle},
+        donation_project_reward_description = #{donationProjectRewardDescription},
+        donation_project_reward_price = #{donationProjectRewardPrice},
+        donation_project_reward_quantity = #{donationProjectRewardQuantity},
+        donation_project_reward_remaining = #{donationProjectRewardRemaining},
+        update_date = NOW()
+        WHERE donation_project_reward_id = #{donationProjectRewardId}
+    </update>
+
+    <delete id="deleteDonationProjectReward" parameterType="int">
+        DELETE FROM donation_project_reward_tb
+        WHERE donation_project_reward_id = #{donationProjectRewardId}
+    </delete>
+
+</mapper>
