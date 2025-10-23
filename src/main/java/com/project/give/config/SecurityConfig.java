@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable(); //  // CSRF 보호 기능 비활성화
         http.authorizeRequests()
-                .antMatchers("/auth/**", "/users/**", "/account/**", "/donations/**", "/donation-categories/**",
+                .antMatchers("/auth/**", "/users/**", "/account/**", "/donations/**", "/categories/**",
                                 "/donation-project-details/**", "/donation-project-contributions/**", "/donation-project-comments/**", "/fundings/**"
                 ) // 비회원, 회원, 관리자 방식으로 수정 예정
                 .permitAll()

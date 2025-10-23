@@ -3,6 +3,7 @@ package com.project.give.controller.donation;
 import com.project.give.dto.donation.request.GetDonationProjectSearchRequestDto;
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
 import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
+import com.project.give.service.CategoryService;
 import com.project.give.service.DonationProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class FundingProjectController {
 
     @Autowired
-    private DonationProjectService donationProjectService; // 재사용
+    private DonationProjectService donationProjectService;
+
+    @Autowired
+    private CategoryService donationCategoryService;
 
     @PostMapping
     public ResponseEntity<?> createFundingProject(@RequestBody PostDonationProjectRequestDto dto) {
@@ -56,5 +60,10 @@ public class FundingProjectController {
     public ResponseEntity<?> getFundingProjectCount(GetDonationProjectSearchRequestDto dto) {
         dto.setDonationProjectType("FUNDING");
         return ResponseEntity.ok(donationProjectService.totalLoadDonationProjectCount(dto));
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<?> getFundingCategories() {
+        return ResponseEntity.ok(donationCategoryService.getCategoriesByType("FUNDING"));
     }
 }

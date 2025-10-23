@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 "/users",
                 "/auth/login",
                 "/donations",
-                "/donation-categories",
+                "/categories",
                 "/donation-project-details", "/donation-project-details/",
                 "/donation-project-contributions", "/donation-project-contributions/",
                 "/donation-project-comments", "/donation-project-comments/",

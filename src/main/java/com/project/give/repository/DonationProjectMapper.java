@@ -19,12 +19,12 @@ public interface DonationProjectMapper {
             @Param("count") int count,
             @Param("donationCategoryId") int donationCategoryId,
             @Param("searchTypeId") int searchTypeId,
-            @Param("donationProjectType") String donationProjectType // ✅ 추가
+            @Param("donationProjectType") String donationProjectType
     );
 
     int selectDonationProjectCount(
             @Param("donationCategoryId") int donationCategoryId,
-            @Param("donationProjectType") String donationProjectType // ✅ 추가
+            @Param("donationProjectType") String donationProjectType
     );
 
     public int updateDonationCurrentAmount(@Param("donationProjectId") int donationProjectId,

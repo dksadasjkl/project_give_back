@@ -3,15 +3,11 @@ package com.project.give.controller.donation;
 import com.project.give.dto.donation.request.GetDonationProjectSearchRequestDto;
 import com.project.give.dto.donation.request.PostDonationProjectRequestDto;
 import com.project.give.dto.donation.request.PutDonationProjectRequestDto;
-import com.project.give.entity.DonationProject;
-import com.project.give.entity.PrincipalUser;
+import com.project.give.service.CategoryService;
 import com.project.give.service.DonationProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/donations")
@@ -19,6 +15,9 @@ public class DonationProjectController {
 
     @Autowired
     private DonationProjectService donationProjectService;
+
+    @Autowired
+    private CategoryService donationCategoryService;
 
     @PostMapping
     public ResponseEntity<?> createDonationProject(@RequestBody PostDonationProjectRequestDto postDonationProjectRequestDto) {
@@ -61,6 +60,10 @@ public class DonationProjectController {
         getDonationProjectSearchRequestDto.setDonationProjectType("DONATION");
         return ResponseEntity.ok(donationProjectService.totalLoadDonationProjectCount(getDonationProjectSearchRequestDto));
     }
-    
+
+    @GetMapping("/categories")
+    public ResponseEntity<?> getDonationCategories() {
+        return ResponseEntity.ok(donationCategoryService.getCategoriesByType("DONATION"));
+    }
 
 }
