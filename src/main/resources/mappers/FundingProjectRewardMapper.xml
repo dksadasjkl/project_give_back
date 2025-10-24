@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.FundingProjectRewardMapper">
+
+    <resultMap id="FundingRewardMap" type="com.project.give.entity.FundingProjectReward">
+        <id property="fundingProjectRewardId" column="funding_project_reward_id"/>
+        <result property="donationProjectId" column="donation_project_id"/>
+        <result property="fundingProjectRewardTitle" column="funding_project_reward_title"/>
+        <result property="fundingProjectRewardDescription" column="funding_project_reward_description"/>
+        <result property="fundingProjectRewardPrice" column="funding_project_reward_price"/>
+        <result property="fundingProjectRewardQuantity" column="funding_project_reward_quantity"/>
+        <result property="fundingProjectRewardRemaining" column="funding_project_reward_remaining"/>
+        <result property="fundingProjectRewardDeliveryInfo" column="funding_project_reward_delivery_info"/>
+        <result property="fundingProjectRewardNotice" column="funding_project_reward_notice"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <insert id="insertFundingProjectReward"
+            parameterType="com.project.give.entity.FundingProjectReward"
+            useGeneratedKeys="true"
+            keyProperty="fundingProjectRewardId">
+        INSERT INTO
+            funding_project_reward_tb
+        VALUES (
+            0,
+            #{donationProjectId},
+            #{fundingProjectRewardTitle},
+            #{fundingProjectRewardDescription},
+            #{fundingProjectRewardPrice},
+            #{fundingProjectRewardQuantity},
+            #{fundingProjectRewardRemaining},
+            #{fundingProjectRewardDeliveryInfo},
+            #{fundingProjectRewardNotice},
+            now(),
+            now()
+        )
+    </insert>
+
+    <select id="selectFundingProjectRewards" resultMap="FundingRewardMap" parameterType="int">
+        SELECT * FROM funding_project_reward_tb
+        WHERE donation_project_id = #{donationProjectId}
+        ORDER BY create_date DESC
+    </select>
+
+    <update id="updateFundingProjectReward" parameterType="com.project.give.entity.FundingProjectReward">
+        UPDATE funding_project_reward_tb
+        SET
+            funding_project_reward_title = #{fundingProjectRewardTitle},
+            funding_project_reward_description = #{fundingProjectRewardDescription},
+            funding_project_reward_price = #{fundingProjectRewardPrice},
+            funding_project_reward_quantity = #{fundingProjectRewardQuantity},
+            funding_project_reward_remaining = #{fundingProjectRewardRemaining},
+            funding_project_reward_delivery_info = #{fundingProjectRewardDeliveryInfo},
+            funding_project_reward_notice = #{fundingProjectRewardNotice},
+            update_date = NOW()
+        WHERE
+            funding_project_reward_id = #{fundingProjectRewardId}
+    </update>
+
+    <delete id="deleteFundingProjectReward" parameterType="int">
+        DELETE FROM
+            funding_project_reward_tb
+        WHERE
+            funding_project_reward_id = #{fundingProjectRewardId}
+    </delete>
+
+</mapper>
