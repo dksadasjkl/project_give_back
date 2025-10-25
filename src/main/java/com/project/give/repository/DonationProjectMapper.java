@@ -31,4 +31,5 @@ public interface DonationProjectMapper {
                                            @Param("donationProjectContributionAmount") int donationProjectContributionAmount);
 
     public List<DonationProject> findMyDonationsByUserId(@Param("userId") int userId);
+    public List<DonationProject> findMyFundingsByUserId(@Param("userId") int userId);
 }

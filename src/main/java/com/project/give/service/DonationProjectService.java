@@ -79,4 +79,11 @@ public class DonationProjectService {
         return donationProjects.stream().map(DonationProject::toGetDonationProjectsResponseDto).collect(Collectors.toList());
     }
 
+    public List<GetDonationProjectsResponseDto> getMyFundings(PrincipalUser principalUser) {
+        List<DonationProject> fundings = donationProjectMapper.findMyFundingsByUserId(principalUser.getUserId());
+        return fundings.stream()
+                .map(DonationProject::toGetDonationProjectsResponseDto)
+                .collect(Collectors.toList());
+    }
+
 }

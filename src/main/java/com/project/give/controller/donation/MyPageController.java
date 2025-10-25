@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mypage")
-public class MyDonationsController {
+public class MyPageController {
 
     @Autowired
     private DonationProjectService donationProjectService;
@@ -30,5 +30,10 @@ public class MyDonationsController {
     @GetMapping("/donation-comments")
     public ResponseEntity<?> getMyDonationComments(@AuthenticationPrincipal PrincipalUser principalUser) {
         return ResponseEntity.ok(donationProjectCommentService.getMyDonationComments(principalUser));
+    }
+
+    @GetMapping("/fundings")
+    public ResponseEntity<?> getMyFundings(@AuthenticationPrincipal PrincipalUser principalUser) {
+        return ResponseEntity.ok(donationProjectService.getMyFundings(principalUser));
     }
 }

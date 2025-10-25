@@ -13,15 +13,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FundingProjectReward {
-    private int fundingProjectRewardId;
-    private int donationProjectId;
+    private int fundingProjectRewardId;       // PK
+    private int donationProjectId;            // FK
     private String fundingProjectRewardTitle;
     private String fundingProjectRewardDescription;
+    private String fundingProjectRewardDetail;   // 추가
     private int fundingProjectRewardPrice;
     private int fundingProjectRewardQuantity;
     private int fundingProjectRewardRemaining;
     private String fundingProjectRewardDeliveryInfo;
     private String fundingProjectRewardNotice;
+    private String fundingProjectRewardImageUrl; // 추가
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 }

@@ -8,22 +8,26 @@ public class PostFundingProjectRewardRequestDto {
     private int donationProjectId;
     private String fundingProjectRewardTitle;
     private String fundingProjectRewardDescription;
+    private String fundingProjectRewardDetail; // 추가
     private int fundingProjectRewardPrice;
     private int fundingProjectRewardQuantity;
     private int fundingProjectRewardRemaining;
     private String fundingProjectRewardDeliveryInfo;
     private String fundingProjectRewardNotice;
+    private String fundingProjectRewardImageUrl; // 추가
 
     public FundingProjectReward toEntity() {
         return FundingProjectReward.builder()
                 .donationProjectId(donationProjectId)
                 .fundingProjectRewardTitle(fundingProjectRewardTitle)
                 .fundingProjectRewardDescription(fundingProjectRewardDescription)
+                .fundingProjectRewardDetail(fundingProjectRewardDetail)
                 .fundingProjectRewardPrice(fundingProjectRewardPrice)
                 .fundingProjectRewardQuantity(fundingProjectRewardQuantity)
                 .fundingProjectRewardRemaining(fundingProjectRewardRemaining)
                 .fundingProjectRewardDeliveryInfo(fundingProjectRewardDeliveryInfo)
                 .fundingProjectRewardNotice(fundingProjectRewardNotice)
+                .fundingProjectRewardImageUrl(fundingProjectRewardImageUrl)
                 .build();
     }
 }
