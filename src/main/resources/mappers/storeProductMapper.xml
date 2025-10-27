@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.StoreProductMapper">
+
+    <resultMap id="StoreProductMap" type="com.project.give.entity.StoreProduct">
+        <id property="productId" column="product_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="sellerId" column="seller_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="productDescription" column="product_description"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="productOriginalPrice" column="product_original_price"/>
+        <result property="productStock" column="product_stock"/>
+        <result property="productImageUrl" column="product_image_url"/>
+        <result property="active" column="is_active"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <insert id="insertStoreProduct" parameterType="com.project.give.entity.StoreProduct" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO store_product_tb
+        VALUES (
+        0,
+        #{categoryId},
+        #{sellerId},
+        #{productName},
+        #{productDescription},
+        #{productPrice},
+        #{productOriginalPrice},
+        #{productStock},
+        #{productImageUrl},
+        <choose>
+            <when test="active">1</when>
+            <otherwise>0</otherwise>
+        </choose>,
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <!-- ✅ 단일 상품 조회 -->
+    <select id="selectStoreProductById" resultMap="StoreProductMap">
+        SELECT * FROM store_product_tb WHERE product_id = #{productId}
+    </select>
+
+    <!-- ✅ 전체 상품 조회 -->
+    <select id="selectAllStoreProducts" resultMap="StoreProductMap">
+        SELECT * FROM store_product_tb
+        WHERE is_active = 1
+        ORDER BY create_date DESC
+    </select>
+
+    <!-- ✅ 페이지네이션 조회 -->
+    <select id="selectStoreProductsWithPaging" resultMap="StoreProductMap">
+        SELECT * FROM store_product_tb
+        WHERE is_active = 1
+        <if test="categoryId != 0">
+            AND category_id = #{categoryId}
+        </if>
+        ORDER BY
+        <choose>
+            <when test="searchTypeId == 1"> create_date DESC </when>
+            <when test="searchTypeId == 2"> product_price ASC </when>
+            <when test="searchTypeId == 3"> product_price DESC </when>
+            <otherwise> create_date DESC </otherwise>
+        </choose>
+        LIMIT #{startIndex}, #{count}
+    </select>
+
+    <!-- ✅ 상품 개수 -->
+    <select id="selectStoreProductCount" resultType="int">
+        SELECT COUNT(*) FROM store_product_tb
+        WHERE is_active = 1
+        <if test="categoryId != 0">
+            AND category_id = #{categoryId}
+        </if>
+    </select>
+
+    <update id="updateStoreProduct" parameterType="com.project.give.entity.StoreProduct">
+        UPDATE store_product_tb
+        SET
+        product_name = #{productName},
+        product_description = #{productDescription},
+        product_price = #{productPrice},
+        product_original_price = #{productOriginalPrice},
+        product_stock = #{productStock},
+        product_image_url = #{productImageUrl},
+        is_active =
+        <choose>
+            <when test="active == true">1</when>
+            <otherwise>0</otherwise>
+        </choose>,
+        update_date = NOW()
+        WHERE product_id = #{productId}
+    </update>
+
+    <!-- ✅ 상품 삭제 -->
+    <delete id="deleteStoreProduct" parameterType="int">
+        DELETE FROM store_product_tb WHERE product_id = #{productId}
+    </delete>
+
+</mapper>
