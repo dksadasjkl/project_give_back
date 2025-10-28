@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.StoreShippingMapper">
+
+    <resultMap id="StoreShippingMap" type="com.project.give.entity.StoreShipping">
+        <id property="shippingId" column="shipping_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="recipientName" column="recipient_name"/>
+        <result property="recipientPhone" column="recipient_phone"/>
+        <result property="address" column="address"/>
+        <result property="zipcode" column="zipcode"/>
+        <result property="shippingCarrier" column="shipping_carrier"/>
+        <result property="trackingNumber" column="tracking_number"/>
+        <result property="shippingStatus" column="shipping_status"/>
+        <result property="shippedAt" column="shipped_at"/>
+        <result property="deliveredAt" column="delivered_at"/>
+    </resultMap>
+
+    <!--  배송 등록 -->
+    <insert id="insertShipping" parameterType="com.project.give.entity.StoreShipping" useGeneratedKeys="true" keyProperty="shippingId">
+        INSERT INTO store_shipping_tb
+        (order_id, recipient_name, recipient_phone, address, zipcode, shipping_carrier, tracking_number, shipping_status, shipped_at, delivered_at)
+        VALUES
+        (#{orderId}, #{recipientName}, #{recipientPhone}, #{address}, #{zipcode}, #{shippingCarrier}, #{trackingNumber},
+         #{shippingStatus}, now(), #{deliveredAt});
+    </insert>
+
+    <!--  주문별 배송 조회 -->
+    <select id="selectShippingByOrder" resultMap="StoreShippingMap">
+        SELECT * FROM store_shipping_tb WHERE order_id = #{orderId}
+    </select>
+
+    <!--  사용자별 배송 내역 조회 -->
+    <select id="selectShippingByUser" resultMap="StoreShippingMap">
+        SELECT * FROM store_shipping_tb
+        WHERE order_id IN (SELECT order_id FROM store_order_tb WHERE user_id = #{userId})
+        ORDER BY shipped_at DESC
+    </select>
+
+    <!--  배송 상태 변경 -->
+    <update id="updateShippingStatus">
+        UPDATE store_shipping_tb
+        SET shipping_status = #{status}
+        WHERE shipping_id = #{shippingId};
+    </update>
+
+    <!-- 전체 배송 목록 조회 (자동 상태 업데이트용) -->
+    <select id="selectAllShippings" resultMap="StoreShippingMap">
+        SELECT * FROM store_shipping_tb
+    </select>
+</mapper>

@@ -13,7 +13,7 @@ public class StorePaymentService {
     @Autowired
     private StorePaymentMapper storePaymentMapper;
 
-    // ✅ 결제 등록
+    //  결제 등록
     public void createPayment(PostStorePaymentRequestDto dto) {
         StorePayment payment = dto.toEntity();
         storePaymentMapper.insertPayment(payment);
@@ -24,7 +24,7 @@ public class StorePaymentService {
         }
     }
 
-    // ✅ 특정 주문의 결제 조회
+    //  특정 주문의 결제 조회
     public GetStorePaymentResponseDto getPaymentByOrder(int orderId) {
         StorePayment payment = storePaymentMapper.selectPaymentByOrder(orderId);
         return payment != null ? payment.toResponseDto() : null;

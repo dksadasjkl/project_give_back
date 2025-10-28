@@ -19,42 +19,42 @@ public class StoreProductService {
     @Autowired
     private StoreProductMapper storeProductMapper;
 
-    // ✅ 상품 등록
+    //  상품 등록
     public void createProduct(PostStoreProductRequestDto dto) {
         StoreProduct product = dto.toEntity();
         int result = storeProductMapper.insertStoreProduct(product);
         if (result != 1) throw new DataSaveException("상품 등록 실패");
     }
 
-    // ✅ 단일 상품 조회
+    //  단일 상품 조회
     public GetStoreProductResponseDto getProduct(int productId) {
         return storeProductMapper.selectStoreProductById(productId).toResponseDto();
     }
 
-    // ✅ 전체 상품 조회
+    //  전체 상품 조회
     public List<GetStoreProductResponseDto> getProducts() {
         return storeProductMapper.selectAllStoreProducts()
                 .stream().map(StoreProduct::toResponseDto).collect(Collectors.toList());
     }
 
-    // ✅ 페이지네이션 조회
+    //  페이지네이션 조회
     public List<GetStoreProductResponseDto> loadMoreProducts(GetStoreProductSearchRequestDto dto) {
         List<StoreProduct> products = storeProductMapper.selectStoreProductsWithPaging(
                 dto.getStartIndex(), dto.getCount(), dto.getCategoryId(), dto.getSearchTypeId());
         return products.stream().map(StoreProduct::toResponseDto).collect(Collectors.toList());
     }
 
-    // ✅ 총 상품 개수 조회
+    // 총 상품 개수 조회
     public int getProductCount(GetStoreProductSearchRequestDto dto) {
         return storeProductMapper.selectStoreProductCount(dto.getCategoryId());
     }
 
-    // ✅ 상품 수정
+    //  상품 수정
     public void updateProduct(int productId, PutStoreProductRequestDto dto) {
         storeProductMapper.updateStoreProduct(dto.toEntity(productId));
     }
 
-    // ✅ 상품 삭제
+    //  상품 삭제
     public void deleteProduct(int productId) {
         storeProductMapper.deleteStoreProduct(productId);
     }

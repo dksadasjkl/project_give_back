@@ -16,31 +16,33 @@ public class StoreOrderService {
     @Autowired
     private StoreOrderMapper storeOrderMapper;
 
-    // ✅ 주문 생성
+    // 주문 생성
     public void createOrder(PostStoreOrderRequestDto dto) {
-        StoreOrder order = dto.toEntity();
-        storeOrderMapper.insertOrder(order);
+        int result = storeOrderMapper.insertOrder(dto.toEntity());
+        if (result == 0) {
+            throw new RuntimeException("주문 생성 실패");
+        }
     }
 
-    // ✅ 내 주문 목록 조회
+    // 내 주문 목록 조회
     public List<GetStoreOrderResponseDto> getOrdersByUser(int userId) {
         return storeOrderMapper.selectOrdersByUser(userId)
                 .stream().map(StoreOrder::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    // ✅ 주문 상세 조회
+    // 주문 상세 조회
     public GetStoreOrderResponseDto getOrder(int orderId, int userId) {
         StoreOrder order = storeOrderMapper.selectOrderById(orderId, userId);
         return order != null ? order.toResponseDto() : null;
     }
 
-    // ✅ 주문 상태 변경
+    // 주문 상태 변경
     public void updateOrderStatus(int orderId, int userId, String status) {
         storeOrderMapper.updateOrderStatus(orderId, userId, status);
     }
 
-    // ✅ Service
+
     public void cancelOrder(int orderId, int userId) {
         // 상태만 변경
         int result = storeOrderMapper.updateOrderStatus(orderId, userId, "CANCELLED");

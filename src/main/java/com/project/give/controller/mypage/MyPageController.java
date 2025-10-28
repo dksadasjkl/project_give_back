@@ -4,6 +4,7 @@ import com.project.give.entity.PrincipalUser;
 import com.project.give.service.DonationProjectCommentService;
 import com.project.give.service.DonationProjectService;
 import com.project.give.service.StoreOrderService;
+import com.project.give.service.StoreShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,9 @@ public class MyPageController {
 
     @Autowired
     private StoreOrderService storeOrderService;
+
+    @Autowired
+    private StoreShippingService storeShippingService;
 
 
     // 1. 내가 참여한 기부 리스트 조회
@@ -46,5 +50,11 @@ public class MyPageController {
     public ResponseEntity<?> getMyStoreOrders(@AuthenticationPrincipal PrincipalUser principalUser) {
         int userId = principalUser.getUserId();
         return ResponseEntity.ok(storeOrderService.getOrdersByUser(userId));
+    }
+
+    @GetMapping("/store-shipping")
+    public ResponseEntity<?> getMyShipping(@AuthenticationPrincipal PrincipalUser principalUser) {
+        int userId = principalUser.getUserId();
+        return ResponseEntity.ok(storeShippingService.getShippingByUser(userId));
     }
 }

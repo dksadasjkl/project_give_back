@@ -15,26 +15,26 @@
         <result property="orderDate" column="order_date"/>
     </resultMap>
 
-    <!-- ✅ 주문 등록 -->
+    <!--  주문 등록 -->
     <insert id="insertOrder" parameterType="com.project.give.entity.StoreOrder" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO store_order_tb
         VALUES (0, #{userId}, #{productId}, #{quantity}, #{totalAmount}, #{orderStatus}, NOW())
     </insert>
 
-    <!-- ✅ 유저별 주문 목록 -->
+    <!--  유저별 주문 목록 -->
     <select id="selectOrdersByUser" resultMap="StoreOrderMap">
         SELECT * FROM store_order_tb
         WHERE user_id = #{userId}
         ORDER BY order_date DESC
     </select>
 
-    <!-- ✅ 주문 단일 조회 -->
+    <!--  주문 단일 조회 -->
     <select id="selectOrderById" resultMap="StoreOrderMap">
         SELECT * FROM store_order_tb
         WHERE order_id = #{orderId} AND user_id = #{userId}
     </select>
 
-    <!-- ✅ 주문 상태 변경 -->
+    <!--  주문 상태 변경 -->
     <update id="updateOrderStatus">
         UPDATE store_order_tb
         SET order_status = #{status}

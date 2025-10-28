@@ -41,19 +41,19 @@
         )
     </insert>
 
-    <!-- ✅ 단일 상품 조회 -->
+    <!--  단일 상품 조회 -->
     <select id="selectStoreProductById" resultMap="StoreProductMap">
         SELECT * FROM store_product_tb WHERE product_id = #{productId}
     </select>
 
-    <!-- ✅ 전체 상품 조회 -->
+    <!--  전체 상품 조회 -->
     <select id="selectAllStoreProducts" resultMap="StoreProductMap">
         SELECT * FROM store_product_tb
         WHERE is_active = 1
         ORDER BY create_date DESC
     </select>
 
-    <!-- ✅ 페이지네이션 조회 -->
+    <!--  페이지네이션 조회 -->
     <select id="selectStoreProductsWithPaging" resultMap="StoreProductMap">
         SELECT * FROM store_product_tb
         WHERE is_active = 1
@@ -70,7 +70,7 @@
         LIMIT #{startIndex}, #{count}
     </select>
 
-    <!-- ✅ 상품 개수 -->
+    <!--  상품 개수 -->
     <select id="selectStoreProductCount" resultType="int">
         SELECT COUNT(*) FROM store_product_tb
         WHERE is_active = 1
@@ -97,7 +97,7 @@
         WHERE product_id = #{productId}
     </update>
 
-    <!-- ✅ 상품 삭제 -->
+    <!--  상품 삭제 -->
     <delete id="deleteStoreProduct" parameterType="int">
         DELETE FROM store_product_tb WHERE product_id = #{productId}
     </delete>

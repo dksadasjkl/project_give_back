@@ -13,14 +13,14 @@ public class StorePaymentController {
     @Autowired
     private StorePaymentService storePaymentService;
 
-    // ✅ 결제 등록
+    //  결제 등록
     @PostMapping
     public ResponseEntity<?> createPayment(@RequestBody PostStorePaymentRequestDto dto) {
         storePaymentService.createPayment(dto);
         return ResponseEntity.ok("결제 내역이 저장되었습니다.");
     }
 
-    // ✅ 특정 주문의 결제 내역 조회
+    //  특정 주문의 결제 내역 조회
     @GetMapping("/order/{orderId}")
     public ResponseEntity<?> getPaymentByOrder(@PathVariable int orderId) {
         return ResponseEntity.ok(storePaymentService.getPaymentByOrder(orderId));
