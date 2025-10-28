@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.StoreWishlistMapper">
+
+    <resultMap id="StoreWishlistMap" type="com.project.give.entity.StoreWishlist">
+        <id property="wishlistId" column="wishlist_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="createDate" column="create_date"/>
+    </resultMap>
+
+    <!-- 찜 등록 -->
+    <insert id="insertWishlist">
+        INSERT INTO store_wishlist_tb
+        VALUES (0, #{userId}, #{productId}, now());
+    </insert>
+
+    <!-- 찜 삭제 -->
+    <delete id="deleteWishlist">
+        DELETE FROM store_wishlist_tb WHERE user_id = #{userId} AND product_id = #{productId};
+    </delete>
+
+    <!-- 중복 확인 -->
+    <select id="existsWishlist" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM store_wishlist_tb WHERE user_id = #{userId} AND product_id = #{productId};
+    </select>
+
+    <!-- 사용자 찜 목록 -->
+    <select id="selectWishlistByUser" resultMap="StoreWishlistMap">
+        SELECT * FROM store_wishlist_tb WHERE user_id = #{userId} ORDER BY create_date DESC;
+    </select>
+</mapper>
