@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.StoreCartMapper">
+
+    <resultMap id="StoreCartMap" type="com.project.give.entity.StoreCart">
+        <id property="cartId" column="cart_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createDate" column="create_date"/>
+    </resultMap>
+
+    <!--  장바구니 추가 -->
+    <insert id="insertCart" parameterType="com.project.give.entity.StoreCart" useGeneratedKeys="true" keyProperty="cartId">
+        INSERT INTO store_cart_tb (user_id, product_id, quantity, create_date)
+        VALUES (#{userId}, #{productId}, #{quantity}, NOW());
+    </insert>
+
+    <!--  유저별 장바구니 조회 -->
+    <select id="selectCartByUser" resultMap="StoreCartMap">
+        SELECT * FROM store_cart_tb WHERE user_id = #{userId} ORDER BY create_date DESC
+    </select>
+
+    <!--  수량 변경 -->
+    <update id="updateCartQuantity">
+        UPDATE store_cart_tb
+        SET quantity = #{quantity}
+        WHERE cart_id = #{cartId};
+    </update>
+
+    <!--  삭제 -->
+    <delete id="deleteCart">
+        DELETE FROM store_cart_tb WHERE cart_id = #{cartId};
+    </delete>
+
+    <!--  중복 상품 존재 여부 -->
+    <select id="existsCartItem" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM store_cart_tb
+        WHERE user_id = #{userId} AND product_id = #{productId};
+    </select>
+
+</mapper>
