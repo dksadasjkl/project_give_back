@@ -1,4 +1,4 @@
-package com.project.give.controller.donation;
+package com.project.give.controller.mypage;
 
 import com.project.give.entity.PrincipalUser;
 import com.project.give.service.DonationProjectCommentService;

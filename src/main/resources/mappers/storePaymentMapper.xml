@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.StorePaymentMapper">
+
+    <resultMap id="StorePaymentMap" type="com.project.give.entity.StorePayment">
+        <id property="paymentId" column="payment_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="paymentMethod" column="payment_method"/>
+        <result property="paymentStatus" column="payment_status"/>
+        <result property="amount" column="amount"/>
+        <result property="paidAt" column="paid_at"/>
+        <result property="transactionId" column="transaction_id"/>
+    </resultMap>
+
+    <!-- ✅ 결제 등록 -->
+    <insert id="insertPayment" parameterType="com.project.give.entity.StorePayment" useGeneratedKeys="true" keyProperty="paymentId">
+        INSERT INTO store_payment_tb
+        (order_id, payment_method, payment_status, amount, paid_at, transaction_id)
+        VALUES
+        (#{orderId}, #{paymentMethod}, #{paymentStatus}, #{amount}, now(), #{transactionId});
+    </insert>
+
+    <!-- ✅ 주문별 결제 조회 -->
+    <select id="selectPaymentByOrder" resultMap="StorePaymentMap">
+        SELECT * FROM store_payment_tb WHERE order_id = #{orderId}
+    </select>
+
+    <!-- ✅ 결제 성공 시 주문 상태 변경 -->
+    <update id="updateOrderStatusToPaid">
+        UPDATE store_order_tb
+        SET order_status = 'READY'
+        WHERE order_id = #{orderId};
+    </update>
+
+</mapper>
