@@ -21,7 +21,7 @@ public class StorePaymentService {
         StorePayment payment = dto.toEntity();
         storePaymentMapper.insertPayment(payment);
 
-        // 결제 성공이면 주문 상태 업데이트
+        // 결제 성공이면 주문 상태 업데이트 => 포인트 적립
         if ("SUCCESS".equals(payment.getPaymentStatus())) {
             storePaymentMapper.updateOrderStatusToPaid(payment.getOrderId());
             storePointService.addPoint(userId, payment.getOrderId(), payment.getAmount());

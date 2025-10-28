@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.ProjectCommentRatingMapper">
+
+    <resultMap id="ProjectCommentRatingMap" type="com.project.give.entity.ProjectCommentRating">
+        <id property="ratingId" column="rating_id"/>
+        <result property="commentId" column="donation_project_comment_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="rating" column="rating"/>
+        <result property="createDate" column="create_date"/>
+    </resultMap>
+
+    <!-- 별점 등록 -->
+    <insert id="insertRating" parameterType="com.project.give.entity.ProjectCommentRating">
+        INSERT INTO project_comment_rating_tb
+        (donation_project_comment_id, user_id, rating, create_date)
+        VALUES (#{commentId}, #{userId}, #{rating}, NOW());
+    </insert>
+
+    <!-- 댓글별 평균 별점 -->
+    <select id="selectAverageRatingByComment" resultType="double">
+        SELECT IFNULL(AVG(rating), 0) FROM project_comment_rating_tb WHERE donation_project_comment_id = #{commentId};
+    </select>
+
+    <!-- 사용자별 평가 여부 확인 -->
+    <select id="existsRatingByUser" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM project_comment_rating_tb WHERE donation_project_comment_id = #{commentId} AND user_id = #{userId};
+    </select>
+</mapper>
