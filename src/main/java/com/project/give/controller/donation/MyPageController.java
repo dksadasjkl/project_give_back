@@ -3,6 +3,7 @@ package com.project.give.controller.donation;
 import com.project.give.entity.PrincipalUser;
 import com.project.give.service.DonationProjectCommentService;
 import com.project.give.service.DonationProjectService;
+import com.project.give.service.StoreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,9 @@ public class MyPageController {
     @Autowired
     private DonationProjectCommentService donationProjectCommentService;
 
+    @Autowired
+    private StoreOrderService storeOrderService;
+
 
     // 1. 내가 참여한 기부 리스트 조회
     @GetMapping("/donations")
@@ -35,5 +39,12 @@ public class MyPageController {
     @GetMapping("/fundings")
     public ResponseEntity<?> getMyFundings(@AuthenticationPrincipal PrincipalUser principalUser) {
         return ResponseEntity.ok(donationProjectService.getMyFundings(principalUser));
+    }
+
+    // ✅ 내가 주문한 공감가게 상품 목록
+    @GetMapping("/store-orders")
+    public ResponseEntity<?> getMyStoreOrders(@AuthenticationPrincipal PrincipalUser principalUser) {
+        int userId = principalUser.getUserId();
+        return ResponseEntity.ok(storeOrderService.getOrdersByUser(userId));
     }
 }
