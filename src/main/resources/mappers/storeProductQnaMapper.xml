@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.StoreProductQnaMapper">
+
+    <resultMap id="StoreProductQnaMap" type="com.project.give.entity.StoreProductQna">
+        <id property="qnaId" column="qna_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="questionTitle" column="question_title"/>
+        <result property="questionContent" column="question_content"/>
+        <result property="secret" column="is_secret"/>
+        <result property="answerContent" column="answer_content"/>
+        <result property="answerDate" column="answer_date"/>
+        <result property="createDate" column="create_date"/>
+    </resultMap>
+
+    <!-- 문의 등록 -->
+    <insert id="insertQna" parameterType="com.project.give.entity.StoreProductQna" useGeneratedKeys="true" keyProperty="qnaId">
+        INSERT INTO store_product_qna_tb
+        (product_id, user_id, question_title, question_content, is_secret, create_date)
+        VALUES (#{productId}, #{userId}, #{questionTitle}, #{questionContent}, #{secret}, now());
+    </insert>
+
+    <!-- 상품별 문의 조회 -->
+    <select id="selectQnaByProduct" resultMap="StoreProductQnaMap">
+        SELECT * FROM store_product_qna_tb WHERE product_id = #{productId} ORDER BY create_date DESC;
+    </select>
+
+    <!-- 관리자 답변 등록 -->
+    <update id="updateAnswer">
+        UPDATE
+            store_product_qna_tb
+        SET
+            answer_content = #{answerContent}, answer_date = now()
+        WHERE
+            qna_id = #{qnaId};
+    </update>
+
+    <!-- 문의 삭제 -->
+    <delete id="deleteQna">
+        DELETE FROM store_product_qna_tb WHERE qna_id = #{qnaId} AND user_id = #{userId};
+    </delete>
+</mapper>
