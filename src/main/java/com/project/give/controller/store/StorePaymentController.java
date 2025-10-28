@@ -1,9 +1,11 @@
 package com.project.give.controller.store;
 
 import com.project.give.dto.store.request.PostStorePaymentRequestDto;
+import com.project.give.entity.PrincipalUser;
 import com.project.give.service.StorePaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,8 +17,11 @@ public class StorePaymentController {
 
     //  결제 등록
     @PostMapping
-    public ResponseEntity<?> createPayment(@RequestBody PostStorePaymentRequestDto dto) {
-        storePaymentService.createPayment(dto);
+    public ResponseEntity<?> createPayment(
+            @RequestBody PostStorePaymentRequestDto dto,
+            @AuthenticationPrincipal PrincipalUser principalUser
+    ) {
+        storePaymentService.createPayment(principalUser.getUserId(), dto);
         return ResponseEntity.ok("결제 내역이 저장되었습니다.");
     }
 
