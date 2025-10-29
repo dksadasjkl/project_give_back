@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.StoreReviewMapper">
+
+    <resultMap id="StoreReviewWithRatingMap" type="com.project.give.dto.store.response.GetStoreReviewWithRatingResponseDto">
+        <id property="commentId" column="comment_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="commentText" column="comment_text"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="averageRating" column="average_rating"/>
+    </resultMap>
+
+    <!-- 💬 상품별 리뷰 + 평균 별점 -->
+    <select id="selectReviewsWithRatings" resultMap="StoreReviewWithRatingMap">
+        SELECT
+        sct.comment_id,
+        sct.product_id,
+        sct.user_id,
+        sct.comment_text,
+        sct.create_date,
+        sct.update_date,
+        IFNULL(AVG(srrt.rating), 0) AS average_rating
+        FROM
+        store_comment_tb sct
+        LEFT JOIN store_review_rating_tb srrt ON srrt.comment_id = sct.comment_id
+        WHERE
+        sct.product_id = #{productId}
+        GROUP BY
+        sct.comment_id, sct.product_id, sct.user_id, sct.comment_text, sct.create_date, sct.update_date
+        ORDER BY
+        sct.create_date DESC;
+    </select>
+
+</mapper>
