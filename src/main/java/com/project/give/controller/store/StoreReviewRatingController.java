@@ -1,7 +1,7 @@
-package com.project.give.controller.donation;
+package com.project.give.controller.store;
 
 import com.project.give.entity.PrincipalUser;
-import com.project.give.service.ProjectCommentRatingService;
+import com.project.give.service.StoreReviewRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/store/review-rating")
-public class ProjectCommentRatingController {
+public class StoreReviewRatingController {
 
     @Autowired
-    private ProjectCommentRatingService ratingService;
+    private StoreReviewRatingService ratingService;
 
     // 별점 등록
     @PostMapping("/{commentId}")
