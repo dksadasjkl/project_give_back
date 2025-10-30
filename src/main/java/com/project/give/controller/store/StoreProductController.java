@@ -25,7 +25,6 @@ public class StoreProductController {
     //  특정 상품 상세 조회
     @GetMapping("/{productId}")
     public ResponseEntity<?> getProduct(@PathVariable int productId) {
-        System.out.println(productId);
         return ResponseEntity.ok(storeProductService.getProduct(productId));
     }
 

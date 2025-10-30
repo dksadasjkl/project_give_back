@@ -13,6 +13,7 @@ public class PostStoreProductRequestDto {
     private int productOriginalPrice;
     private int productStock;
     private String productImageUrl;
+    private String productImageDetailUrl;
 
     public StoreProduct toEntity() {
         return StoreProduct.builder()
@@ -24,6 +25,7 @@ public class PostStoreProductRequestDto {
                 .productOriginalPrice(productOriginalPrice)
                 .productStock(productStock)
                 .productImageUrl(productImageUrl)
+                .productImageDetailUrl(productImageDetailUrl)
                 .active(true)
                 .build();
     }

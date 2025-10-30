@@ -15,6 +15,7 @@
         <result property="productOriginalPrice" column="product_original_price"/>
         <result property="productStock" column="product_stock"/>
         <result property="productImageUrl" column="product_image_url"/>
+        <result property="productImageDetailUrl" column="product_image_detail_url"/>
         <result property="active" column="is_active"/>
         <result property="createDate" column="create_date"/>
         <result property="updateDate" column="update_date"/>
@@ -32,6 +33,7 @@
         #{productOriginalPrice},
         #{productStock},
         #{productImageUrl},
+        #{productImageDetailUrl},
         <choose>
             <when test="active">1</when>
             <otherwise>0</otherwise>
@@ -88,6 +90,7 @@
         product_original_price = #{productOriginalPrice},
         product_stock = #{productStock},
         product_image_url = #{productImageUrl},
+        product_image_detail_url = #{productImageDetailUrl},
         is_active =
         <choose>
             <when test="active == true">1</when>

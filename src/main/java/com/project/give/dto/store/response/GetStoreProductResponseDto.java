@@ -15,6 +15,7 @@ public class GetStoreProductResponseDto {
     private int productOriginalPrice;
     private int productStock;
     private String productImageUrl;
+    private String productImageDetailUrl;
     private boolean active;
     private LocalDateTime createDate;
 }

@@ -22,6 +22,7 @@ public class StoreProduct {
     private int productOriginalPrice;
     private int productStock;
     private String productImageUrl;
+    private String productImageDetailUrl;
     private boolean active;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
@@ -35,6 +36,7 @@ public class StoreProduct {
                 .productOriginalPrice(productOriginalPrice)
                 .productStock(productStock)
                 .productImageUrl(productImageUrl)
+                .productImageDetailUrl(productImageDetailUrl)
                 .active(active)
                 .createDate(createDate)
                 .build();

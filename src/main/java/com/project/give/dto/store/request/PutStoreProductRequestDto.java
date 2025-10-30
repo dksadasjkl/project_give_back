@@ -11,6 +11,7 @@ public class PutStoreProductRequestDto {
     private int productOriginalPrice;
     private int productStock;
     private String productImageUrl;
+    private String productImageDetailUrl;
     private boolean active;
 
     public StoreProduct toEntity(int productId) {
@@ -22,6 +23,7 @@ public class PutStoreProductRequestDto {
                 .productOriginalPrice(productOriginalPrice)
                 .productStock(productStock)
                 .productImageUrl(productImageUrl)
+                .productImageDetailUrl(productImageDetailUrl)
                 .active(active)
                 .build();
     }
