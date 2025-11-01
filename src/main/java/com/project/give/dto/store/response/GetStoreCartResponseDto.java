@@ -13,4 +13,8 @@ public class GetStoreCartResponseDto {
     private int productId;
     private int quantity;
     private LocalDateTime createDate;
+
+    private String productName;
+    private Integer productPrice;
+    private String productImageUrl;
 }

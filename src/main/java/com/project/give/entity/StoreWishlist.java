@@ -18,11 +18,18 @@ public class StoreWishlist {
     private int productId;
     private LocalDateTime createDate;
 
+    private String productName;
+    private Integer productPrice;
+    private String productImageUrl;
+
     public GetStoreWishlistResponseDto toResponseDto() {
         return GetStoreWishlistResponseDto.builder()
                 .wishlistId(wishlistId)
                 .productId(productId)
                 .createDate(createDate)
+                .productName(productName)
+                .productPrice(productPrice)
+                .productImageUrl(productImageUrl)
                 .build();
     }
 }

@@ -6,6 +6,7 @@ import com.project.give.entity.StoreOrder;
 import com.project.give.repository.StoreOrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,11 +18,14 @@ public class StoreOrderService {
     private StoreOrderMapper storeOrderMapper;
 
     // 주문 생성
-    public void createOrder(PostStoreOrderRequestDto dto) {
-        int result = storeOrderMapper.insertOrder(dto.toEntity());
+    @Transactional
+    public int createOrder(PostStoreOrderRequestDto dto) {
+        StoreOrder order = dto.toEntity();
+        int result = storeOrderMapper.insertOrder(order);
         if (result == 0) {
             throw new RuntimeException("주문 생성 실패");
         }
+        return order.getOrderId(); // ✅ useGeneratedKeys 로 세팅된 값 반환
     }
 
     // 내 주문 목록 조회

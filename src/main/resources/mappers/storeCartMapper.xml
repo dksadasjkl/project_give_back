@@ -11,6 +11,10 @@
         <result property="productId" column="product_id"/>
         <result property="quantity" column="quantity"/>
         <result property="createDate" column="create_date"/>
+
+        <result property="productName" column="product_name"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="productImageUrl" column="product_image_url"/>
     </resultMap>
 
     <!--  장바구니 추가 -->
@@ -19,9 +23,17 @@
         VALUES (#{userId}, #{productId}, #{quantity}, NOW());
     </insert>
 
-    <!--  유저별 장바구니 조회 -->
+    <!-- 유저별 장바구니 조회 -->
     <select id="selectCartByUser" resultMap="StoreCartMap">
-        SELECT * FROM store_cart_tb WHERE user_id = #{userId} ORDER BY create_date DESC
+        SELECT
+        sc.*,
+        sp.product_name,
+        sp.product_price,
+        sp.product_image_url
+        FROM store_cart_tb sc
+        JOIN store_product_tb sp ON sc.product_id = sp.product_id
+        WHERE sc.user_id = #{userId}
+        ORDER BY sc.create_date DESC;
     </select>
 
     <!--  수량 변경 -->

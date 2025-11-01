@@ -19,6 +19,10 @@ public class StoreCart {
     private int quantity;
     private LocalDateTime createDate;
 
+    private String productName;
+    private Integer productPrice;
+    private String productImageUrl;
+
     public GetStoreCartResponseDto toResponseDto() {
         return GetStoreCartResponseDto.builder()
                 .cartId(cartId)
@@ -26,6 +30,9 @@ public class StoreCart {
                 .productId(productId)
                 .quantity(quantity)
                 .createDate(createDate)
+                .productName(productName)
+                .productPrice(productPrice)
+                .productImageUrl(productImageUrl)
                 .build();
     }
 }

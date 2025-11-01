@@ -16,4 +16,20 @@ public class GetStoreOrderResponseDto {
     private String orderStatus;
     private String orderStatusText;
     private LocalDateTime orderDate;
+
+    // 상품 정보
+    private String productName;
+    private String productImageUrl;
+
+    // 결제 정보
+    private String paymentMethod;
+    private String paymentStatus;
+    private int paymentAmount;
+
+    // 배송 정보
+    private String recipientName;
+    private String address;
+    private String shippingCarrier;
+    private String trackingNumber;
+    private String shippingStatus;
 }

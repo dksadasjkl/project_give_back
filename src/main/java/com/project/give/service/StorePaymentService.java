@@ -15,7 +15,6 @@ public class StorePaymentService {
 
     @Autowired
     private StorePointService storePointService;
-
     //  결제 등록
     public void createPayment(int userId, PostStorePaymentRequestDto dto) {
         StorePayment payment = dto.toEntity();

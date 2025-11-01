@@ -10,6 +10,10 @@
         <result property="userId" column="user_id"/>
         <result property="productId" column="product_id"/>
         <result property="createDate" column="create_date"/>
+
+        <result property="productName" column="product_name"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="productImageUrl" column="product_image_url"/>
     </resultMap>
 
     <!-- 찜 등록 -->
@@ -30,6 +34,14 @@
 
     <!-- 사용자 찜 목록 -->
     <select id="selectWishlistByUser" resultMap="StoreWishlistMap">
-        SELECT * FROM store_wishlist_tb WHERE user_id = #{userId} ORDER BY create_date DESC;
+        SELECT
+        sw.*,
+        sp.product_name,
+        sp.product_price,
+        sp.product_image_url
+        FROM store_wishlist_tb sw
+        JOIN store_product_tb sp ON sw.product_id = sp.product_id
+        WHERE sw.user_id = #{userId}
+        ORDER BY sw.create_date DESC;
     </select>
 </mapper>
