@@ -23,6 +23,9 @@ public class StoreProductQna {
     private LocalDateTime answerDate;
     private LocalDateTime createDate;
 
+    private String username;
+    private String nickname;
+
     public GetStoreProductQnaResponseDto toResponseDto() {
         return GetStoreProductQnaResponseDto.builder()
                 .qnaId(qnaId)
@@ -34,6 +37,8 @@ public class StoreProductQna {
                 .answerContent(answerContent)
                 .answerDate(answerDate)
                 .createDate(createDate)
+                .username(username)
+                .nickname(nickname)
                 .build();
     }
 }

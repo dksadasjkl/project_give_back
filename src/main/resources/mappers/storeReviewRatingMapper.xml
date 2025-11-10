@@ -20,6 +20,14 @@
         VALUES (#{commentId}, #{userId}, #{rating}, NOW());
     </insert>
 
+    <!-- ⭐ 별점 수정 -->
+    <update id="updateRating">
+        UPDATE store_review_rating_tb
+        SET rating = #{rating}, create_date = NOW()
+        WHERE comment_id = #{commentId}
+        AND user_id = #{userId};
+    </update>
+
     <!-- ⭐ 댓글(리뷰)별 평균 별점 -->
     <select id="selectAverageRatingByComment" resultType="double">
         SELECT IFNULL(AVG(rating), 0)

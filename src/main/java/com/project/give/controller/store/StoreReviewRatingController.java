@@ -14,14 +14,15 @@ public class StoreReviewRatingController {
     @Autowired
     private StoreReviewRatingService ratingService;
 
-    // 별점 등록
+    // ⭐ 별점 등록 및 수정
     @PostMapping("/{commentId}")
-    public ResponseEntity<?> createRating(
+    public ResponseEntity<?> createOrUpdateRating(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @PathVariable int commentId,
-            @RequestParam int rating) {
+            @RequestParam int rating
+    ) {
         ratingService.createRating(principalUser.getUserId(), commentId, rating);
-        return ResponseEntity.ok("별점이 등록되었습니다.");
+        return ResponseEntity.ok("별점이 등록 또는 수정되었습니다.");
     }
 
     // 댓글별 평균 별점 조회

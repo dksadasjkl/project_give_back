@@ -15,6 +15,10 @@
         <result property="answerContent" column="answer_content"/>
         <result property="answerDate" column="answer_date"/>
         <result property="createDate" column="create_date"/>
+
+        <!-- 👇 작성자 닉네임 / 아이디 추가 -->
+        <result property="username" column="user_username"/>
+        <result property="nickname" column="user_nickname"/>
     </resultMap>
 
     <!-- 문의 등록 -->
@@ -24,9 +28,20 @@
         VALUES (#{productId}, #{userId}, #{questionTitle}, #{questionContent}, #{secret}, now());
     </insert>
 
-    <!-- 상품별 문의 조회 -->
+    <!-- ✅ 상품별 문의 조회 (user_tb 조인) -->
     <select id="selectQnaByProduct" resultMap="StoreProductQnaMap">
-        SELECT * FROM store_product_qna_tb WHERE product_id = #{productId} ORDER BY create_date DESC;
+        SELECT
+            qna.*,
+            ut.user_username,
+            ut.user_nickname
+        FROM
+            store_product_qna_tb qna
+        JOIN
+            user_tb ut ON ut.user_id = qna.user_id
+        WHERE
+            qna.product_id = #{productId}
+        ORDER BY
+            qna.create_date DESC;
     </select>
 
     <!-- 관리자 답변 등록 -->

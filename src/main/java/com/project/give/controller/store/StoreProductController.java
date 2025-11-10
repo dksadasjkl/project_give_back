@@ -3,6 +3,7 @@ package com.project.give.controller.store;
 import com.project.give.dto.store.request.PostStoreProductRequestDto;
 import com.project.give.dto.store.request.PutStoreProductRequestDto;
 import com.project.give.dto.store.response.GetStoreProductSearchRequestDto;
+import com.project.give.service.CategoryService;
 import com.project.give.service.StoreProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,9 @@ public class StoreProductController {
 
     @Autowired
     private StoreProductService storeProductService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     //  상품 등록
     @PostMapping
@@ -59,5 +63,11 @@ public class StoreProductController {
     public ResponseEntity<?> deleteProduct(@PathVariable int productId) {
         storeProductService.deleteProduct(productId);
         return ResponseEntity.ok("상품 삭제 완료");
+    }
+
+    // ✅ STORE 카테고리 목록 조회
+    @GetMapping("/categories")
+    public ResponseEntity<?> getStoreCategories() {
+        return ResponseEntity.ok(categoryService.getCategoriesByType("STORE"));
     }
 }

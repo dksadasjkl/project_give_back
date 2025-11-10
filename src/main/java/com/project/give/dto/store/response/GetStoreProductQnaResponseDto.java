@@ -17,4 +17,7 @@ public class GetStoreProductQnaResponseDto {
     private String answerContent;
     private LocalDateTime answerDate;
     private LocalDateTime createDate;
+
+    private String username;
+    private String nickname;
 }

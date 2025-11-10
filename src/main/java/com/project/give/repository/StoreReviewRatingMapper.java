@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface StoreReviewRatingMapper {
     public int insertRating(StoreReviewRating rating);
+    int updateRating(@Param("commentId") int commentId, @Param("userId") int userId, @Param("rating") int rating);
     public Double selectAverageRatingByComment(@Param("commentId") int commentId);
     public boolean existsRatingByUser(@Param("commentId") int commentId, @Param("userId") int userId);
 }
