@@ -18,10 +18,13 @@ public class StoreCommentService {
     private StoreCommentMapper storeCommentMapper;
 
     // 💬 댓글 등록
-    public void createComment(int userId, PostStoreCommentRequestDto dto) {
+    public int createComment(int userId, PostStoreCommentRequestDto dto) {
         StoreComment comment = dto.toEntity(userId);
         int result = storeCommentMapper.insertComment(comment);
         if (result == 0) throw new RuntimeException("댓글 등록 실패");
+
+        // ✅ MyBatis useGeneratedKeys로 commentId 자동 채워짐
+        return comment.getCommentId();
     }
 
     // 💬 상품별 댓글 조회

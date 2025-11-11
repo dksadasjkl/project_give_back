@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/store/comments")
 public class StoreCommentController {
@@ -22,8 +24,11 @@ public class StoreCommentController {
             @RequestBody PostStoreCommentRequestDto dto,
             @AuthenticationPrincipal PrincipalUser principalUser) {
         int userId = principalUser.getUserId();
-        storeCommentService.createComment(userId, dto);
-        return ResponseEntity.ok("댓글 등록 완료");
+        int commentId = storeCommentService.createComment(userId, dto);
+        return ResponseEntity.ok(Map.of(
+                "message", "댓글 등록 완료",
+                "commentId", commentId
+        ));
     }
 
     // 💬 상품별 댓글 목록 조회

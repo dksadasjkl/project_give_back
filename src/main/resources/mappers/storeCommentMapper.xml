@@ -15,9 +15,10 @@
     </resultMap>
 
     <!-- 💬 댓글 등록 -->
-    <insert id="insertComment" parameterType="com.project.give.entity.StoreComment" useGeneratedKeys="true" keyProperty="commentId">
+    <insert id="insertComment" parameterType="com.project.give.entity.StoreComment"
+            useGeneratedKeys="true" keyProperty="commentId">
         INSERT INTO store_comment_tb
-        VALUES (0, #{productId}, #{userId}, #{commentText}, now(), now());
+        VALUES (0, #{productId}, #{userId}, #{commentText}, NOW(), NOW());
     </insert>
 
     <!-- 💬 상품별 댓글 조회 -->

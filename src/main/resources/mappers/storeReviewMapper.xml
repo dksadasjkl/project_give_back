@@ -9,31 +9,64 @@
         <id property="commentId" column="comment_id"/>
         <result property="productId" column="product_id"/>
         <result property="userId" column="user_id"/>
+        <result property="username" column="user_username"/>
+        <result property="profileImageUrl" column="user_profile_image_url"/>
         <result property="commentText" column="comment_text"/>
         <result property="createDate" column="create_date"/>
         <result property="updateDate" column="update_date"/>
         <result property="averageRating" column="average_rating"/>
+        <result property="ratingCount" column="rating_count"/>
     </resultMap>
 
-    <!-- 💬 상품별 리뷰 + 평균 별점 -->
-    <select id="selectReviewsWithRatings" resultMap="StoreReviewWithRatingMap">
+    <!-- 💬 페이지 단위 리뷰 조회 -->
+    <select id="selectReviewsWithRatingsPaged" resultMap="StoreReviewWithRatingMap">
         SELECT
         sct.comment_id,
         sct.product_id,
         sct.user_id,
+        ut.user_username,
+        ut.user_profile_image_url,
         sct.comment_text,
         sct.create_date,
         sct.update_date,
-        IFNULL(AVG(srrt.rating), 0) AS average_rating
+        IFNULL(AVG(srrt.rating), 0) AS average_rating,
+        COUNT(srrt.rating) AS rating_count
         FROM
         store_comment_tb sct
-        LEFT JOIN store_review_rating_tb srrt ON srrt.comment_id = sct.comment_id
+        LEFT JOIN
+        store_review_rating_tb srrt ON srrt.comment_id = sct.comment_id
+        LEFT JOIN
+        user_tb ut ON ut.user_id = sct.user_id
         WHERE
         sct.product_id = #{productId}
         GROUP BY
-        sct.comment_id, sct.product_id, sct.user_id, sct.comment_text, sct.create_date, sct.update_date
+        sct.comment_id, sct.product_id, sct.user_id, ut.user_username,
+        sct.comment_text, sct.create_date, sct.update_date
         ORDER BY
-        sct.create_date DESC;
+        ${orderBy}
+        LIMIT #{size} OFFSET #{offset};
+    </select>
+
+    <!-- ⭐ 평점 분포 -->
+    <select id="selectRatingDistribution" resultType="map">
+        SELECT
+        srrt.rating,
+        COUNT(*) AS count
+        FROM
+        store_review_rating_tb srrt
+        INNER JOIN
+        store_comment_tb sct ON sct.comment_id = srrt.comment_id
+        WHERE
+        sct.product_id = #{productId}
+        GROUP BY
+        srrt.rating
+        ORDER BY
+        srrt.rating DESC;
+    </select>
+
+    <!-- 💬 리뷰 개수 -->
+    <select id="countReviewsByProduct" resultType="int">
+        SELECT COUNT(*) FROM store_comment_tb WHERE product_id = #{productId};
     </select>
 
 </mapper>
