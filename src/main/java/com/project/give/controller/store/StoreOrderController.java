@@ -66,4 +66,16 @@ public class StoreOrderController {
         storeOrderService.cancelOrder(orderId, userId);
         return ResponseEntity.ok("주문이 취소되었습니다.");
     }
+
+    // ✅ 구매 확정 (DELIVERED → CONFIRMED)
+    @PutMapping("/{orderId}/confirm")
+    public ResponseEntity<?> confirmOrder(
+            @PathVariable int orderId,
+            @AuthenticationPrincipal PrincipalUser principalUser
+    ) {
+        storeOrderService.confirmOrder(orderId, principalUser.getUserId());
+        return ResponseEntity.ok("구매가 확정되었습니다.");
+    }
+
+
 }

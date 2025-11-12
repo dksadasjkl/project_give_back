@@ -69,4 +69,16 @@
         SELECT COUNT(*) FROM store_comment_tb WHERE product_id = #{productId};
     </select>
 
+    <!-- ✅ 구매자 여부 확인  (배송 완료 상태만 리뷰 가능) -->
+    <select id="existsOrderByUserAndProduct" resultType="boolean">
+        SELECT
+            EXISTS(
+        SELECT 1
+            FROM store_order_tb
+        WHERE
+            user_id = #{userId}
+            AND product_id = #{productId}
+            AND order_status = 'CONFIRMED'
+        );
+    </select>
 </mapper>

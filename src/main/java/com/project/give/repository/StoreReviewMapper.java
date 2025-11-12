@@ -25,4 +25,7 @@ public interface StoreReviewMapper {
 
     // 💬 전체 리뷰 개수
     int countReviewsByProduct(@Param("productId") int productId);
+
+    // ✅ 리뷰 작성 자격 확인 (상품 구매 여부)
+    boolean existsOrderByUserAndProduct(@Param("userId") int userId, @Param("productId") int productId);
 }

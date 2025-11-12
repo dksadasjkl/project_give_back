@@ -52,4 +52,17 @@ public class StoreOrderService {
         int result = storeOrderMapper.updateOrderStatus(orderId, userId, "CANCELLED");
         if (result == 0) throw new RuntimeException("주문 취소 실패 또는 권한 없음");
     }
+
+    // ✅ 구매 확정 (배송 완료된 주문만 가능)
+    @Transactional
+    public void confirmOrder(int orderId, int userId) {
+        StoreOrder order = storeOrderMapper.selectOrderById(orderId, userId);
+        if (order == null) throw new RuntimeException("주문을 찾을 수 없습니다.");
+        if (!"DELIVERED".equals(order.getOrderStatus())) {
+            throw new RuntimeException("배송 완료 상태에서만 구매 확정이 가능합니다.");
+        }
+        storeOrderMapper.updateOrderStatus(orderId, userId, "CONFIRMED");
+    }
+
+
 }
