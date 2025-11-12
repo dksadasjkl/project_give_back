@@ -23,10 +23,20 @@ public class StoreProductQnaController {
         return ResponseEntity.ok("상품 문의가 등록되었습니다.");
     }
 
-    // 상품별 문의 조회
+//    // 상품별 문의 조회
+//    @GetMapping("/product/{productId}")
+//    public ResponseEntity<?> getQnaByProduct(@PathVariable int productId) {
+//        return ResponseEntity.ok(storeProductQnaService.getQnaByProduct(productId));
+//    }
+
+    // ✅ 상품별 문의 조회 (페이지네이션)
     @GetMapping("/product/{productId}")
-    public ResponseEntity<?> getQnaByProduct(@PathVariable int productId) {
-        return ResponseEntity.ok(storeProductQnaService.getQnaByProduct(productId));
+    public ResponseEntity<?> getQnaByProduct(
+            @PathVariable int productId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size // ✅ 한 페이지당 10개
+    ) {
+        return ResponseEntity.ok(storeProductQnaService.getQnaByProductPaged(productId, page, size));
     }
 
     // 관리자 답변 등록

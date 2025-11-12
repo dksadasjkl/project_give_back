@@ -28,20 +28,42 @@
         VALUES (#{productId}, #{userId}, #{questionTitle}, #{questionContent}, #{secret}, now());
     </insert>
 
-    <!-- ✅ 상품별 문의 조회 (user_tb 조인) -->
-    <select id="selectQnaByProduct" resultMap="StoreProductQnaMap">
+<!--    &lt;!&ndash; ✅ 상품별 문의 조회 (user_tb 조인) &ndash;&gt;-->
+<!--    <select id="selectQnaByProduct" resultMap="StoreProductQnaMap">-->
+<!--        SELECT-->
+<!--            qna.*,-->
+<!--            ut.user_username,-->
+<!--            ut.user_nickname-->
+<!--        FROM-->
+<!--            store_product_qna_tb qna-->
+<!--        JOIN-->
+<!--            user_tb ut ON ut.user_id = qna.user_id-->
+<!--        WHERE-->
+<!--            qna.product_id = #{productId}-->
+<!--        ORDER BY-->
+<!--            qna.create_date DESC;-->
+<!--    </select>-->
+
+    <!-- ✅ 페이지네이션 조회 -->
+    <select id="selectQnaByProductPaged" resultMap="StoreProductQnaMap">
         SELECT
             qna.*,
             ut.user_username,
             ut.user_nickname
-        FROM
+            FROM
             store_product_qna_tb qna
         JOIN
             user_tb ut ON ut.user_id = qna.user_id
         WHERE
             qna.product_id = #{productId}
-        ORDER BY
-            qna.create_date DESC;
+            ORDER BY
+        qna.create_date DESC
+            LIMIT #{size} OFFSET #{offset};
+    </select>
+
+    <!-- ✅ 전체 문의 개수 -->
+    <select id="countQnaByProduct" resultType="int">
+        SELECT COUNT(*) FROM store_product_qna_tb WHERE product_id = #{productId};
     </select>
 
     <!-- 관리자 답변 등록 -->

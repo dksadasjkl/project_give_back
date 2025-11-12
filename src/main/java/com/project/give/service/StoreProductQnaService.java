@@ -7,7 +7,9 @@ import com.project.give.repository.StoreProductQnaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,12 +23,31 @@ public class StoreProductQnaService {
         storeProductQnaMapper.insertQna(dto.toEntity(userId));
     }
 
-    // 상품별 문의 조회
-    public List<GetStoreProductQnaResponseDto> getQnaByProduct(int productId) {
-        return storeProductQnaMapper.selectQnaByProduct(productId)
-                .stream()
-                .map(StoreProductQna::toResponseDto)
-                .collect(Collectors.toList());
+//    // 상품별 문의 조회
+//    public List<GetStoreProductQnaResponseDto> getQnaByProduct(int productId) {
+//        return storeProductQnaMapper.selectQnaByProduct(productId)
+//                .stream()
+//                .map(StoreProductQna::toResponseDto)
+//                .collect(Collectors.toList());
+//    }
+
+    public Map<String, Object> getQnaByProductPaged(int productId, int page, int size) {
+        int offset = (page - 1) * size;
+
+        List<GetStoreProductQnaResponseDto> qnaList =
+                storeProductQnaMapper.selectQnaByProductPaged(productId, offset, size)
+                        .stream()
+                        .map(StoreProductQna::toResponseDto)
+                        .collect(Collectors.toList());
+
+        int totalCount = storeProductQnaMapper.countQnaByProduct(productId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("qnaList", qnaList);
+        result.put("totalCount", totalCount);
+        result.put("currentPage", page);
+        result.put("pageSize", size);
+        return result;
     }
 
     public void answerQna(int qnaId, String answerContent) {
