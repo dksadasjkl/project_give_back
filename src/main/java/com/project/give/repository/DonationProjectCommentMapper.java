@@ -19,4 +19,15 @@ public interface DonationProjectCommentMapper {
     );
     int selectCommentCount(@Param("donationProjectId") int donationProjectId);
     List<DonationProjectComment> selectCommentsByUserId(@Param("userId") int userId);
+
+    // ✅ 추가: 마이페이지 댓글 페이징용 쿼리
+    List<DonationProjectComment> findMyDonationCommentsPaged(
+            @Param("userId") int userId,
+            @Param("offset") int offset,
+            @Param("size") int size
+    );
+
+    // ✅ 추가: 마이페이지 댓글 전체 개수
+    int countMyDonationComments(@Param("userId") int userId);
+
 }

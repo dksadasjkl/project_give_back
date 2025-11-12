@@ -295,4 +295,61 @@
             last_contribution_date DESC
     </select>
 
+    <!-- ✅ 내가 참여한 기부 (페이징) -->
+    <select id="findMyDonationsPagedByUserId" resultMap="DonationProjectMap">
+        select
+        dpt.*,
+        dct.donation_category_name_kor,
+        coalesce(sum(dt.donation_project_contribution_amount), 0) as total_contribution,
+        max(dt.donation_project_contribution_date) as last_contribution_date
+        from
+        donation_project_tb dpt
+        left join donation_category_tb dct on dpt.donation_category_id = dct.donation_category_id
+        inner join donation_project_contribution_tb dt on dpt.donation_project_id = dt.donation_project_id
+        where
+        dt.user_id = #{userId}
+        and dpt.donation_project_type = 'DONATION'
+        group by
+        dpt.donation_project_id
+        order by
+        last_contribution_date desc
+        limit #{offset}, #{size}
+    </select>
+
+    <select id="countMyDonations" resultType="int">
+        select count(distinct dpt.donation_project_id)
+        from donation_project_tb dpt
+        inner join donation_project_contribution_tb dt on dpt.donation_project_id = dt.donation_project_id
+        where dt.user_id = #{userId} and dpt.donation_project_type = 'DONATION'
+    </select>
+
+    <!-- ✅ 내가 참여한 펀딩 (페이징) -->
+    <select id="findMyFundingsPagedByUserId" resultMap="DonationProjectMap">
+        select
+        dpt.*,
+        dct.donation_category_name_kor,
+        coalesce(sum(dt.donation_project_contribution_amount), 0) as total_contribution,
+        max(dt.donation_project_contribution_date) as last_contribution_date
+        from
+        donation_project_tb dpt
+        left join donation_category_tb dct on dpt.donation_category_id = dct.donation_category_id
+        inner join donation_project_contribution_tb dt on dpt.donation_project_id = dt.donation_project_id
+        where
+        dt.user_id = #{userId}
+        and dpt.donation_project_type = 'FUNDING'
+        group by
+        dpt.donation_project_id
+        order by
+        last_contribution_date desc
+        limit #{offset}, #{size}
+    </select>
+
+    <select id="countMyFundings" resultType="int">
+        select count(distinct dpt.donation_project_id)
+        from donation_project_tb dpt
+        inner join donation_project_contribution_tb dt on dpt.donation_project_id = dt.donation_project_id
+        where dt.user_id = #{userId} and dpt.donation_project_type = 'FUNDING'
+    </select>
+
+
 </mapper>

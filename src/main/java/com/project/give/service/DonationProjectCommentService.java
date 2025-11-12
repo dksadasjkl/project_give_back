@@ -13,7 +13,9 @@ import com.project.give.repository.DonationProjectCommentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,5 +85,25 @@ public class DonationProjectCommentService {
         return comments.stream()
                 .map(DonationProjectComment::toGetDonationProjectCommentsResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, Object> getMyDonationCommentsPaged(PrincipalUser principalUser, int page, int size) {
+        int offset = (page - 1) * size;
+        int userId = principalUser.getUserId();
+
+        // ✅ Mapper는 entity를 반환하므로, DTO 변환 필요
+        List<DonationProjectComment> comments = donationProjectCommentMapper.findMyDonationCommentsPaged(userId, offset, size);
+        int totalCount = donationProjectCommentMapper.countMyDonationComments(userId);
+
+        // ✅ 변환 로직 추가
+        List<GetDonationProjectCommentsResponseDto> commentDtos = comments.stream()
+                .map(DonationProjectComment::toGetDonationProjectCommentsResponseDto)
+                .collect(Collectors.toList());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("comments", commentDtos);
+        result.put("totalCount", totalCount);
+        result.put("totalPages", (int) Math.ceil((double) totalCount / size));
+        return result;
     }
 }

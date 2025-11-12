@@ -12,7 +12,9 @@ import com.project.give.repository.DonationProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,5 +87,40 @@ public class DonationProjectService {
                 .map(DonationProject::toGetDonationProjectsResponseDto)
                 .collect(Collectors.toList());
     }
+
+
+    // ✅ 페이징된 버전 추가
+    public Map<String, Object> getMyDonationsPaged(PrincipalUser principalUser, int page, int size) {
+        int offset = (page - 1) * size;
+        int userId = principalUser.getUserId();
+
+        List<DonationProject> donations = donationProjectMapper.findMyDonationsPagedByUserId(userId, offset, size);
+        int totalCount = donationProjectMapper.countMyDonations(userId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("donations", donations.stream()
+                .map(DonationProject::toGetDonationProjectsResponseDto)
+                .collect(Collectors.toList()));
+        result.put("totalCount", totalCount);
+        result.put("totalPages", (int) Math.ceil((double) totalCount / size));
+        return result;
+    }
+
+    public Map<String, Object> getMyFundingsPaged(PrincipalUser principalUser, int page, int size) {
+        int offset = (page - 1) * size;
+        int userId = principalUser.getUserId();
+
+        List<DonationProject> fundings = donationProjectMapper.findMyFundingsPagedByUserId(userId, offset, size);
+        int totalCount = donationProjectMapper.countMyFundings(userId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("fundings", fundings.stream()
+                .map(DonationProject::toGetDonationProjectsResponseDto)
+                .collect(Collectors.toList()));
+        result.put("totalCount", totalCount);
+        result.put("totalPages", (int) Math.ceil((double) totalCount / size));
+        return result;
+    }
+
 
 }
