@@ -35,9 +35,15 @@ public class StoreWishlistController {
         return ResponseEntity.ok("상품이 찜 목록에서 제거되었습니다.");
     }
 
-    // 내 찜 목록 조회
+
+
+    // 내 찜 목록 조회 (페이지네이션 추가)
     @GetMapping
-    public ResponseEntity<?> getMyWishlist(@AuthenticationPrincipal PrincipalUser principalUser) {
-        return ResponseEntity.ok(storeWishlistService.getMyWishlist(principalUser.getUserId()));
+    public ResponseEntity<?> getMyWishlist(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "6") int size
+    ) {
+        return ResponseEntity.ok(storeWishlistService.getMyWishlistPaged(principalUser.getUserId(), page, size));
     }
 }

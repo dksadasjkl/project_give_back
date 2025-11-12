@@ -44,4 +44,24 @@
         WHERE sw.user_id = #{userId}
         ORDER BY sw.create_date DESC;
     </select>
+    <select id="selectWishlistByUserPaged" resultMap="StoreWishlistMap">
+        SELECT
+        sw.*,
+        sp.product_name,
+        sp.product_price,
+        sp.product_image_url
+        FROM
+        store_wishlist_tb sw
+        JOIN store_product_tb sp ON sw.product_id = sp.product_id
+        WHERE
+        sw.user_id = #{userId}
+        ORDER BY
+        sw.create_date DESC
+        LIMIT #{offset}, #{size};
+    </select>
+
+    <select id="countWishlistByUser" resultType="int">
+        SELECT COUNT(*) FROM store_wishlist_tb WHERE user_id = #{userId};
+    </select>
+
 </mapper>

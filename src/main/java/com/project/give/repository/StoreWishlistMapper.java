@@ -12,4 +12,10 @@ public interface StoreWishlistMapper {
     public int deleteWishlist(@Param("userId") int userId, @Param("productId") int productId);
     public boolean existsWishlist(@Param("userId") int userId, @Param("productId") int productId);
     public List<StoreWishlist> selectWishlistByUser(@Param("userId") int userId);
+    List<StoreWishlist> selectWishlistByUserPaged(
+            @Param("userId") int userId,
+            @Param("offset") int offset,
+            @Param("size") int size
+    );
+    int countWishlistByUser(@Param("userId") int userId);
 }
