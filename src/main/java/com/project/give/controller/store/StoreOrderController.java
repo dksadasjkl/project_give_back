@@ -33,11 +33,16 @@ public class StoreOrderController {
         ));
     }
 
-    // 주문 목록 조회 (내 주문)
-    @GetMapping("/my")
-    public ResponseEntity<?> getMyOrders(@AuthenticationPrincipal PrincipalUser principalUser) {
-        int userId =  principalUser.getUserId();
-        return ResponseEntity.ok(storeOrderService.getOrdersByUser(userId));
+    // 🔥 페이지네이션 버전
+    @GetMapping
+    public ResponseEntity<?> getMyStoreOrders(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return ResponseEntity.ok(
+                storeOrderService.getOrdersByUserPaged(principalUser.getUserId(), page, size)
+        );
     }
 
     // 주문 상세 조회

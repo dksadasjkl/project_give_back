@@ -17,4 +17,6 @@ public interface StoreOrderMapper {
 
     public int updateOrderStatus(@Param("orderId") int orderId, @Param("userId") int userId, @Param("status") String status);
 
+    List<StoreOrder> selectOrdersByUserPaged(@Param("userId") int userId, @Param("offset") int offset, @Param("size") int size);
+    int countOrdersByUser(@Param("userId") int userId);
 }

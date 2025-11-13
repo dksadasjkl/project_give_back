@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,6 +64,18 @@ public class StoreOrderService {
             throw new RuntimeException("배송 완료 상태에서만 구매 확정이 가능합니다.");
         }
         storeOrderMapper.updateOrderStatus(orderId, userId, "CONFIRMED");
+    }
+
+    public Map<String, Object> getOrdersByUserPaged(int userId, int page, int size) {
+        int offset = (page - 1) * size;
+        List<StoreOrder> orders = storeOrderMapper.selectOrdersByUserPaged(userId, offset, size);
+        int totalCount = storeOrderMapper.countOrdersByUser(userId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("orders", orders.stream().map(StoreOrder::toResponseDto).collect(Collectors.toList()));
+        result.put("totalCount", totalCount);
+        result.put("totalPages", (int) Math.ceil((double) totalCount / size));
+        return result;
     }
 
 

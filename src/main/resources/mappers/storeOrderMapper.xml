@@ -90,4 +90,32 @@
         DELETE FROM store_order_tb WHERE order_id = #{orderId} AND user_id = #{userId};
     </delete>
 
+    <select id="selectOrdersByUserPaged" resultMap="StoreOrderMap">
+        SELECT
+        so.*,
+        sp.product_name,
+        sp.product_image_url,
+        pay.payment_method,
+        pay.payment_status,
+        pay.amount AS payment_amount,
+        ship.recipient_name,
+        ship.address,
+        ship.shipping_carrier,
+        ship.tracking_number,
+        ship.shipping_status
+        FROM
+        store_order_tb so
+        JOIN store_product_tb sp ON so.product_id = sp.product_id
+        LEFT JOIN store_payment_tb pay ON so.order_id = pay.order_id
+        LEFT JOIN store_shipping_tb ship ON so.order_id = ship.order_id
+        WHERE
+        so.user_id = #{userId}
+        ORDER BY
+        so.order_date DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countOrdersByUser" resultType="int">
+        SELECT COUNT(*) FROM store_order_tb WHERE user_id = #{userId}
+    </select>
 </mapper>
