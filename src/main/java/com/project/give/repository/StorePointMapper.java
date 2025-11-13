@@ -9,5 +9,9 @@ import java.util.List;
 @Mapper
 public interface StorePointMapper {
     public int insertPoint(StorePoint storePoint);
-    public List<StorePoint> selectPointsByUser(@Param("userId") int userId);
+    // Mapper.java
+    List<StorePoint> selectPointsByUserPaged(@Param("userId") int userId,
+                                             @Param("offset") int offset,
+                                             @Param("size") int size);
+    int countPointsByUser(@Param("userId") int userId);
 }

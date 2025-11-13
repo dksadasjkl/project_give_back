@@ -21,11 +21,17 @@
         VALUES (#{userId}, #{orderId}, #{pointAmount}, #{pointReason}, NOW());
     </insert>
 
-    <!-- 사용자별 포인트 내역 조회 -->
-    <select id="selectPointsByUser" resultMap="StorePointMap">
-        SELECT * FROM store_point_tb
+    <!-- 사용자별 포인트 내역 조회 페이징 -->
+    <select id="selectPointsByUserPaged" resultMap="StorePointMap">
+        SELECT *
+        FROM store_point_tb
         WHERE user_id = #{userId}
-        ORDER BY create_date DESC;
+        ORDER BY create_date DESC
+        LIMIT #{offset}, #{size};
+    </select>
+
+    <select id="countPointsByUser" resultType="int">
+        SELECT COUNT(*) FROM store_point_tb WHERE user_id = #{userId};
     </select>
 
 </mapper>
