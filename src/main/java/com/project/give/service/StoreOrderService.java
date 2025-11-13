@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,15 +17,46 @@ public class StoreOrderService {
     @Autowired
     private StoreOrderMapper storeOrderMapper;
 
-    // 주문 생성
+//    // 주문 생성
+//    @Transactional
+//    public int createOrder(PostStoreOrderRequestDto dto) {
+//        StoreOrder order = dto.toEntity();
+//        int result = storeOrderMapper.insertOrder(order);
+//        if (result == 0) {
+//            throw new RuntimeException("주문 생성 실패");
+//        }
+//        return order.getOrderId(); // ✅ useGeneratedKeys 로 세팅된 값 반환
+//    }
+
     @Transactional
-    public int createOrder(PostStoreOrderRequestDto dto) {
-        StoreOrder order = dto.toEntity();
-        int result = storeOrderMapper.insertOrder(order);
-        if (result == 0) {
-            throw new RuntimeException("주문 생성 실패");
+    public List<Integer> createOrders(PostStoreOrderRequestDto dto) {
+
+        // 1) 장바구니 결제
+        if (dto.getItems() != null && !dto.getItems().isEmpty()) {
+
+            List<Integer> orderIds = new ArrayList<>();
+
+            for (PostStoreOrderRequestDto.OrderItem item : dto.getItems()) {
+                StoreOrder order = StoreOrder.builder()
+                        .userId(dto.getUserId())
+                        .productId(item.getProductId())
+                        .quantity(item.getQuantity())
+                        .totalAmount(dto.getTotalAmount())
+                        .orderStatus("READY")
+                        .build();
+
+                storeOrderMapper.insertOrder(order);
+                orderIds.add(order.getOrderId());
+            }
+
+            return orderIds;
         }
-        return order.getOrderId(); // ✅ useGeneratedKeys 로 세팅된 값 반환
+
+        // 2) 일반 결제
+        StoreOrder order = dto.toEntity();
+        storeOrderMapper.insertOrder(order);
+
+        return List.of(order.getOrderId());
     }
 
     // 내 주문 목록 조회

@@ -17,7 +17,7 @@ public class StorePointService {
 
     // 포인트 적립
     public void addPoint(int userId, int orderId, int amount) {
-        int point = (int) (amount * 0.05); // 5% 적립
+        int point = (int) (amount * 0.01); // 1% 적립
         StorePoint storePoint = StorePoint.builder()
                 .userId(userId)
                 .orderId(orderId)

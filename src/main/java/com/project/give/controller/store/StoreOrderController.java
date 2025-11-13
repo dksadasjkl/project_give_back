@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,19 +18,33 @@ public class StoreOrderController {
     @Autowired
     private StoreOrderService storeOrderService;
 
+//    @PostMapping
+//    public ResponseEntity<?> createOrder(
+//            @RequestBody PostStoreOrderRequestDto dto,
+//            @AuthenticationPrincipal PrincipalUser principalUser
+//    ) {
+//        int userId = principalUser.getUserId();
+//        dto.setUserId(userId);
+//
+//        int orderId = storeOrderService.createOrder(dto); //  생성된 주문번호 받기
+//
+//        return ResponseEntity.ok(Map.of(
+//                "message", "주문 생성 완료",
+//                "orderId", orderId //  프론트에 전달
+//        ));
+//    }
+
     @PostMapping
     public ResponseEntity<?> createOrder(
             @RequestBody PostStoreOrderRequestDto dto,
             @AuthenticationPrincipal PrincipalUser principalUser
     ) {
-        int userId = principalUser.getUserId();
-        dto.setUserId(userId);
-
-        int orderId = storeOrderService.createOrder(dto); //  생성된 주문번호 받기
+        dto.setUserId(principalUser.getUserId());
+        List<Integer> orderIds = storeOrderService.createOrders(dto);
 
         return ResponseEntity.ok(Map.of(
                 "message", "주문 생성 완료",
-                "orderId", orderId //  프론트에 전달
+                "orderIds", orderIds
         ));
     }
 
