@@ -27,4 +27,7 @@ public interface StoreProductMapper {
     public int updateStoreProduct(StoreProduct storeProduct);
 
     public int deleteStoreProduct(@Param("productId") int productId);
+
+    // 메인 배너용 인기 상품 1개 가져오기
+    StoreProduct selectTopStoreProduct();
 }

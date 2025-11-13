@@ -105,4 +105,11 @@
         DELETE FROM store_product_tb WHERE product_id = #{productId}
     </delete>
 
+    <select id="selectTopStoreProduct" resultMap="StoreProductMap">
+        SELECT *
+        FROM store_product_tb
+        WHERE is_active = 1
+        ORDER BY product_price DESC, create_date DESC
+        LIMIT 1
+    </select>
 </mapper>

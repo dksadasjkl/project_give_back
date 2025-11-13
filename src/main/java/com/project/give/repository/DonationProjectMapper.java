@@ -50,4 +50,6 @@ public interface DonationProjectMapper {
                                                       @Param("size") int size);
 
     int countMyFundings(@Param("userId") int userId);
+
+    DonationProject selectTopDonationProject();
 }

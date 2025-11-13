@@ -351,5 +351,17 @@
         where dt.user_id = #{userId} and dpt.donation_project_type = 'FUNDING'
     </select>
 
+    <select id="selectTopDonationProject" resultMap="DonationProjectMap">
+        SELECT
+        dpt.*,
+        dct.donation_category_name_kor
+        FROM donation_project_tb dpt
+        LEFT JOIN donation_category_tb dct
+        ON dpt.donation_category_id = dct.donation_category_id
+        WHERE dpt.donation_project_type = 'DONATION'
+        ORDER BY (dpt.donation_project_current_amount / dpt.donation_project_target_amount) DESC,
+        dpt.create_date DESC
+        LIMIT 1;
+    </select>
 
 </mapper>
