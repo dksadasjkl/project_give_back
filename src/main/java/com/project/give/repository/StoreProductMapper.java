@@ -28,6 +28,9 @@ public interface StoreProductMapper {
 
     public int deleteStoreProduct(@Param("productId") int productId);
 
-    // 메인 배너용 인기 상품 1개 가져오기
+    // 메인 배너용(단일)
     StoreProduct selectTopStoreProduct();
+
+    // 메인 추천 섹션용 TOP N
+    List<StoreProduct> selectTopStoreProducts(@Param("limit") int limit);
 }

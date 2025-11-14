@@ -105,11 +105,21 @@
         DELETE FROM store_product_tb WHERE product_id = #{productId}
     </delete>
 
+    <!-- 기존 단일 배너용 -->
     <select id="selectTopStoreProduct" resultMap="StoreProductMap">
         SELECT *
         FROM store_product_tb
         WHERE is_active = 1
         ORDER BY product_price DESC, create_date DESC
         LIMIT 1
+    </select>
+
+    <!-- 메인 추천용 쇼핑 TOP N -->
+    <select id="selectTopStoreProducts" resultMap="StoreProductMap">
+        SELECT *
+        FROM store_product_tb
+        WHERE is_active = 1
+        ORDER BY product_price DESC, create_date DESC
+        LIMIT #{limit}
     </select>
 </mapper>

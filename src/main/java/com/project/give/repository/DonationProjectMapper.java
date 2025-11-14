@@ -37,14 +37,14 @@ public interface DonationProjectMapper {
     public List<DonationProject> findMyFundingsByUserId(@Param("userId") int userId);
 
 
-    // ✅ 내가 참여한 기부 (페이징)
+    // 내가 참여한 기부 (페이징)
     List<DonationProject> findMyDonationsPagedByUserId(@Param("userId") int userId,
                                                        @Param("offset") int offset,
                                                        @Param("size") int size);
 
     int countMyDonations(@Param("userId") int userId);
 
-    // ✅ 내가 참여한 펀딩 (페이징)
+    // 내가 참여한 펀딩 (페이징)
     List<DonationProject> findMyFundingsPagedByUserId(@Param("userId") int userId,
                                                       @Param("offset") int offset,
                                                       @Param("size") int size);
@@ -52,4 +52,5 @@ public interface DonationProjectMapper {
     int countMyFundings(@Param("userId") int userId);
 
     DonationProject selectTopDonationProject();
+    List<DonationProject> selectTopDonationProjects(@Param("limit") int limit);
 }

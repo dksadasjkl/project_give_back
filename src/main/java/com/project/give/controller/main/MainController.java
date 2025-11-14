@@ -1,34 +1,27 @@
 package com.project.give.controller.main;
 
-import com.project.give.repository.DonationProjectMapper;
-import com.project.give.repository.StoreProductMapper;
+import com.project.give.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/main")
 public class MainController {
 
     @Autowired
-    private DonationProjectMapper donationProjectMapper;
+    private MainService mainService;
 
-    @Autowired
-    private StoreProductMapper storeProductMapper;
-
+    // 🔹 배너용 1개씩 가져오기
     @GetMapping("/top")
     public ResponseEntity<?> getMainTopItems() {
-
-        var topDonation = donationProjectMapper.selectTopDonationProject();
-        var topProduct = storeProductMapper.selectTopStoreProduct();
-
-        return ResponseEntity.ok(Map.of(
-                "bannerDonation", topDonation,
-                "bannerProduct", topProduct
-        ));
+        return ResponseEntity.ok(mainService.getMainTopItems());
     }
+
+    // 🔹 메인 섹션용 TOP3
+    @GetMapping("/recommend")
+    public ResponseEntity<?> getMainRecommendations() {
+        return ResponseEntity.ok(mainService.getMainRecommend());
+    }
+
 }
