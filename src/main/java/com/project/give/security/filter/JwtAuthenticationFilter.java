@@ -41,7 +41,9 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 "/account/username-check", 
                 "/account/nickname-check",
                 "/fundings",
-                "/store/products"
+                "/store/products",
+                "/main",
+                "/admin" // 임시
         ); // 수정예정
 
         String uri = request.getRequestURI();
