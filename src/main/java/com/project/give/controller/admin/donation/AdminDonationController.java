@@ -1,18 +1,13 @@
 package com.project.give.controller.admin.donation;
 
+import com.project.give.dto.donation.request.AdminDonationCreateRequestDto;
 import com.project.give.entity.DonationProject;
-import com.project.give.entity.DonationProjectComment;
-import com.project.give.entity.DonationProjectContribution;
 import com.project.give.entity.DonationProjectDetail;
 import com.project.give.entity.FundingProjectReward;
 import com.project.give.service.admin.donation.AdminDonationService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-import java.util.List;
 
 @RestController
 @RequestMapping("/admin/donation")
@@ -20,6 +15,13 @@ public class AdminDonationController {
 
     @Autowired
     private AdminDonationService adminDonationService;
+
+    //  프로젝트 등록
+    @PostMapping("/projects")
+    public ResponseEntity<?> insertProject(@RequestBody AdminDonationCreateRequestDto dto) {
+        adminDonationService.insertProject(dto);
+        return ResponseEntity.ok("프로젝트가 등록되었습니다.");
+    }
 
     // ✔ 전체 프로젝트 목록 조회 (기부 + 펀딩)
     @GetMapping

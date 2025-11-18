@@ -1,11 +1,14 @@
 package com.project.give.service.admin.donation;
 
+import com.project.give.dto.donation.request.AdminDonationCreateRequestDto;
 import com.project.give.entity.*;
 
 import java.util.Map;
 import java.util.List;
 
 public interface AdminDonationService {
+
+    void insertProject(AdminDonationCreateRequestDto dto);
 
     // 프로젝트 목록
     Map<String, Object> getProjectList(int page, int size, Integer categoryId, Integer searchTypeId, String projectType);

@@ -1,5 +1,8 @@
 package com.project.give.service.admin.donation;
 
+import com.project.give.dto.donation.request.AdminDonationCreateRequestDto;
+import com.project.give.dto.donation.request.AdminDonationDetailDto;
+import com.project.give.dto.donation.request.AdminFundingRewardDto;
 import com.project.give.entity.*;
 import com.project.give.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,31 @@ public class AdminDonationServiceImpl implements AdminDonationService {
     private DonationProjectContributionMapper contributionMapper;
     @Autowired
     private FundingProjectRewardMapper rewardMapper;
+
+    @Override
+    public void insertProject(AdminDonationCreateRequestDto dto) {
+
+        DonationProject project = dto.toProjectEntity();  // 변환
+        project.setDonationProjectCurrentAmount(0);
+
+        projectMapper.insertDonationProject(project);
+
+        // 상세 등록
+        if (dto.getDetails() != null) {
+            for (AdminDonationCreateRequestDto.Detail d : dto.getDetails()) {
+                DonationProjectDetail detail = d.toEntity(project.getDonationProjectId());
+                detailMapper.insertDonationProjectDetail(detail);
+            }
+        }
+
+        // 리워드 등록
+        if ("FUNDING".equals(project.getDonationProjectType()) && dto.getRewards() != null) {
+            for (AdminDonationCreateRequestDto.Reward r : dto.getRewards()) {
+                FundingProjectReward reward = r.toEntity(project.getDonationProjectId());
+                rewardMapper.insertFundingProjectReward(reward);
+            }
+        }
+    }
 
     // ✔ 프로젝트 목록
     @Override

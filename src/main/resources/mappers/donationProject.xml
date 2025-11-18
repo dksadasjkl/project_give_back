@@ -29,25 +29,42 @@
     </resultMap>
 
 
-    <insert id="insertDonationProject" parameterType="com.project.give.entity.DonationProject" useGeneratedKeys="true" keyProperty="donationProjectId">
-        insert into
-            donation_project_tb
-        values
-            (   0,
-                #{donationProjectTitle},
-                #{donationProjectOrganization},
-                #{donationProjectOrganizationImageUrl},
-                #{donationProjectImageUrl},
-                #{donationCategoryId},
-                #{donationProjectCurrentAmount},
-                #{donationProjectTargetAmount},
-                now(),
-                now(),
-                #{donationProjectType},
-                now(),
-                now()
+    <insert id="insertDonationProject" parameterType="com.project.give.entity.DonationProject"
+            useGeneratedKeys="true" keyProperty="donationProjectId">
+
+        INSERT INTO donation_project_tb (
+        donation_project_id,
+        donation_project_title,
+        donation_project_organization,
+        donation_project_organization_image_url,
+        donation_project_image_url,
+        donation_category_id,
+        donation_project_current_amount,
+        donation_project_target_amount,
+        donation_project_start_date,
+        donation_project_end_date,
+        create_date,
+        update_date,
+        donation_project_type
         )
+        VALUES (
+        0,
+        #{donationProjectTitle},
+        #{donationProjectOrganization},
+        #{donationProjectOrganizationImageUrl},
+        #{donationProjectImageUrl},
+        #{donationCategoryId},
+        #{donationProjectCurrentAmount},
+        #{donationProjectTargetAmount},
+        #{donationProjectStartDate},
+        #{donationProjectEndDate},
+        NOW(),
+        NOW(),
+        #{donationProjectType}
+        );
+
     </insert>
+
 
     <select id="selectDonationProjectById" parameterType="int" resultMap="DonationProjectMap">
         select
@@ -188,7 +205,6 @@
             donation_project_organization_image_url = #{donationProjectOrganizationImageUrl},
             donation_project_image_url = #{donationProjectImageUrl},
             donation_category_id = #{donationCategoryId},
-            donation_project_current_amount = #{donationProjectCurrentAmount},
             donation_project_target_amount = #{donationProjectTargetAmount},
             donation_project_start_date = #{donationProjectStartDate},
             donation_project_end_date = #{donationProjectEndDate},
