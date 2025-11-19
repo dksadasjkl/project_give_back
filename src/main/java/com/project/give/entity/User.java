@@ -30,6 +30,7 @@ public class User {
     private List<RoleRegister> roleRegisters;
 
     public List<SimpleGrantedAuthority> getAuthorities() {
+        if (roleRegisters == null) return List.of();
         return roleRegisters.stream()
                 .map(roleRegister ->
                         new SimpleGrantedAuthority(roleRegister.getRole().getRoleName()))

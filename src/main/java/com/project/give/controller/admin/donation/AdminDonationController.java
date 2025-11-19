@@ -3,7 +3,7 @@ package com.project.give.controller.admin.donation;
 import com.project.give.dto.donation.request.AdminDonationCreateRequestDto;
 import com.project.give.entity.DonationProject;
 import com.project.give.entity.DonationProjectDetail;
-import com.project.give.entity.FundingProjectReward;
+import com.project.give.service.CategoryService;
 import com.project.give.service.admin.donation.AdminDonationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,9 @@ public class AdminDonationController {
 
     @Autowired
     private AdminDonationService adminDonationService;
+
+    @Autowired
+    private CategoryService donationCategoryService;
 
     //  프로젝트 등록
     @PostMapping("/projects")
@@ -112,22 +115,8 @@ public class AdminDonationController {
         return ResponseEntity.ok("후원 내역이 삭제되었습니다.");
     }
 
-    // ✔ 펀딩 리워드 관리
-    @PostMapping("/projects/{projectId}/rewards")
-    public ResponseEntity<?> insertReward(@PathVariable int projectId, @RequestBody FundingProjectReward dto) {
-        adminDonationService.insertReward(projectId, dto);
-        return ResponseEntity.ok("리워드가 등록되었습니다.");
-    }
-
-    @PutMapping("/rewards/{rewardId}")
-    public ResponseEntity<?> updateReward(@PathVariable int rewardId, @RequestBody FundingProjectReward dto) {
-        adminDonationService.updateReward(rewardId, dto);
-        return ResponseEntity.ok("리워드가 수정되었습니다.");
-    }
-
-    @DeleteMapping("/rewards/{rewardId}")
-    public ResponseEntity<?> deleteReward(@PathVariable int rewardId) {
-        adminDonationService.deleteReward(rewardId);
-        return ResponseEntity.ok("리워드가 삭제되었습니다.");
+    @GetMapping("/categories")
+    public ResponseEntity<?> getAdminDonationCategories() {
+        return ResponseEntity.ok(donationCategoryService.getCategoriesByType("DONATION"));
     }
 }
