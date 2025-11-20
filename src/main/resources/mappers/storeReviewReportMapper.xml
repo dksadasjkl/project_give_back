@@ -15,4 +15,24 @@
         WHERE reporter_id = #{reporterId} AND comment_id = #{commentId};
     </select>
 
+    <select id="selectReviewReportsAdmin" resultType="com.project.give.entity.StoreReviewReport">
+        SELECT * FROM store_review_report_tb
+        ORDER BY create_date DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countReviewReportsAdmin" resultType="int">
+        SELECT COUNT(*) FROM store_review_report_tb
+    </select>
+
+    <delete id="deleteReportsByCommentIdAdmin">
+        DELETE FROM store_review_report_tb WHERE comment_id = #{commentId}
+    </delete>
+
+    <update id="updateReportResolvedAdmin">
+        UPDATE store_review_report_tb
+        SET resolved = 1
+        WHERE report_id = #{reportId}
+    </update>
+
 </mapper>

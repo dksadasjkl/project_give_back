@@ -33,4 +33,15 @@ public interface StoreProductMapper {
 
     // 메인 추천 섹션용 TOP N
     List<StoreProduct> selectTopStoreProducts(@Param("limit") int limit);
+
+    // 관리자
+    List<StoreProduct> selectAdminStoreProductsWithPaging(
+            @Param("startIndex") int startIndex,
+            @Param("count") int count,
+            @Param("categoryId") Integer categoryId
+    );
+
+    int selectAdminStoreProductCount(
+            @Param("categoryId") Integer categoryId
+    );
 }

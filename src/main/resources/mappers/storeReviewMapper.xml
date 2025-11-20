@@ -18,7 +18,7 @@
         <result property="ratingCount" column="rating_count"/>
     </resultMap>
 
-    <!-- 💬 페이지 단위 리뷰 조회 -->
+    <!--  페이지 단위 리뷰 조회 -->
     <select id="selectReviewsWithRatingsPaged" resultMap="StoreReviewWithRatingMap">
         SELECT
         sct.comment_id,
@@ -47,7 +47,7 @@
         LIMIT #{size} OFFSET #{offset};
     </select>
 
-    <!-- ⭐ 평점 분포 -->
+    <!-- 평점 분포 -->
     <select id="selectRatingDistribution" resultType="map">
         SELECT
         srrt.rating,
@@ -64,12 +64,12 @@
         srrt.rating DESC;
     </select>
 
-    <!-- 💬 리뷰 개수 -->
+    <!-- 리뷰 개수 -->
     <select id="countReviewsByProduct" resultType="int">
         SELECT COUNT(*) FROM store_comment_tb WHERE product_id = #{productId};
     </select>
 
-    <!-- ✅ 구매자 여부 확인  (배송 완료 상태만 리뷰 가능) -->
+    <!-- 구매자 여부 확인  (배송 완료 상태만 리뷰 가능) -->
     <select id="existsOrderByUserAndProduct" resultType="boolean">
         SELECT
             EXISTS(
@@ -81,4 +81,61 @@
             AND order_status = 'CONFIRMED'
         );
     </select>
+
+    <!-- ================= 관리자(Admin) ================= -->
+
+    <select id="selectReviewListAdmin" resultMap="StoreReviewWithRatingMap">
+        SELECT
+        sct.comment_id,
+        sct.product_id,
+        sct.user_id,
+        ut.user_username,
+        ut.user_profile_image_url,
+        sct.comment_text,
+        sct.create_date,
+        sct.update_date,
+        IFNULL(AVG(srrt.rating), 0) AS average_rating,
+        COUNT(srrt.rating) AS rating_count
+        FROM store_comment_tb sct
+        LEFT JOIN store_review_rating_tb srrt ON srrt.comment_id = sct.comment_id
+        LEFT JOIN user_tb ut ON ut.user_id = sct.user_id
+        <if test="productId != null">
+            WHERE sct.product_id = #{productId}
+        </if>
+        GROUP BY sct.comment_id
+        ORDER BY sct.create_date DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countReviewsAdmin" resultType="int">
+        SELECT COUNT(*)
+        FROM store_comment_tb
+        <if test="productId != null">
+            WHERE product_id = #{productId}
+        </if>
+    </select>
+
+    <select id="selectReviewDetailAdmin" resultMap="StoreReviewWithRatingMap">
+        SELECT
+        sct.comment_id,
+        sct.product_id,
+        sct.user_id,
+        ut.user_username,
+        ut.user_profile_image_url,
+        sct.comment_text,
+        sct.create_date,
+        sct.update_date,
+        IFNULL(AVG(srrt.rating), 0) AS average_rating,
+        COUNT(srrt.rating) AS rating_count
+        FROM store_comment_tb sct
+        LEFT JOIN store_review_rating_tb srrt ON srrt.comment_id = sct.comment_id
+        LEFT JOIN user_tb ut ON ut.user_id = sct.user_id
+        WHERE sct.comment_id = #{commentId}
+        GROUP BY sct.comment_id
+    </select>
+
+    <delete id="deleteReviewAdmin">
+        DELETE FROM store_comment_tb
+        WHERE comment_id = #{commentId}
+    </delete>
 </mapper>

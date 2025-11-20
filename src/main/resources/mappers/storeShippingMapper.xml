@@ -51,4 +51,44 @@
     <select id="selectAllShippings" resultMap="StoreShippingMap">
         SELECT * FROM store_shipping_tb
     </select>
+
+    <!-- 전체 배송 목록 (페이징) -->
+    <select id="selectShippingListAdmin" resultMap="StoreShippingMap">
+        SELECT *
+        FROM store_shipping_tb
+        ORDER BY shipped_at DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 전체 배송 개수 -->
+    <select id="countAllShippingAdmin" resultType="int">
+        SELECT COUNT(*) FROM store_shipping_tb
+    </select>
+
+    <!-- 관리자 상세 조회 -->
+    <select id="selectShippingDetailAdmin" resultMap="StoreShippingMap">
+        SELECT *
+        FROM store_shipping_tb
+        WHERE shipping_id = #{shippingId}
+    </select>
+
+    <!-- 관리자 운송장 번호 수정 -->
+    <update id="updateTrackingNumberAdmin">
+        UPDATE store_shipping_tb
+        SET tracking_number = #{trackingNumber}
+        WHERE shipping_id = #{shippingId}
+    </update>
+
+    <!-- 관리자 배송 삭제 -->
+    <delete id="deleteShippingAdmin">
+        DELETE FROM store_shipping_tb
+        WHERE shipping_id = #{shippingId}
+    </delete>
+
+    <update id="updateShippingStatusAdmin">
+        UPDATE store_shipping_tb
+        SET shipping_status = #{status}
+        WHERE shipping_id = #{shippingId}
+    </update>
+
 </mapper>

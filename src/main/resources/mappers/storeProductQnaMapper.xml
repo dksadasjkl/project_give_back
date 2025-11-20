@@ -80,4 +80,67 @@
     <delete id="deleteQna">
         DELETE FROM store_product_qna_tb WHERE qna_id = #{qnaId} AND user_id = #{userId};
     </delete>
+
+    <!-- ================= 관리자(Admin) ================= -->
+
+    <!-- 관리자 QnA 목록 -->
+    <select id="selectQnAListAdmin" resultMap="StoreProductQnaMap">
+        SELECT
+        qna.*,
+        ut.user_username,
+        ut.user_nickname
+        FROM store_product_qna_tb qna
+        JOIN user_tb ut ON ut.user_id = qna.user_id
+        <if test="productId != null">
+            WHERE qna.product_id = #{productId}
+        </if>
+        ORDER BY qna.create_date DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 관리자 QnA 개수 -->
+    <select id="countQnAAdmin" resultType="int">
+        SELECT COUNT(*)
+        FROM store_product_qna_tb
+        <if test="productId != null">
+            WHERE product_id = #{productId}
+        </if>
+    </select>
+
+    <!-- 관리자 상세 조회 -->
+    <select id="selectQnADetailAdmin" resultMap="StoreProductQnaMap">
+        SELECT
+        qna.*,
+        ut.user_username,
+        ut.user_nickname
+        FROM store_product_qna_tb qna
+        JOIN user_tb ut ON ut.user_id = qna.user_id
+        WHERE qna.qna_id = #{qnaId};
+    </select>
+
+    <!-- 관리자 답변 등록 -->
+    <update id="insertAnswerAdmin">
+        UPDATE store_product_qna_tb
+        SET
+        answer_content = #{answer},
+        answer_date = NOW()
+        WHERE qna_id = #{qnaId}
+    </update>
+
+    <!-- 관리자 답변 수정 -->
+    <update id="updateAnswerAdmin">
+        UPDATE store_product_qna_tb
+        SET
+        answer_content = #{answer},
+        answer_date = NOW()
+        WHERE qna_id = #{qnaId}
+    </update>
+
+    <!-- 관리자 삭제 -->
+    <delete id="deleteQnAAdmin">
+        DELETE FROM store_product_qna_tb
+        WHERE qna_id = #{qnaId}
+    </delete>
+
+
 </mapper>

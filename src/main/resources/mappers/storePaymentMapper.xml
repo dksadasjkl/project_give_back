@@ -35,4 +35,38 @@
         WHERE order_id = #{orderId};
     </update>
 
+    <!-- 관리자 -->
+
+    <!-- 전체 결제 목록 -->
+    <select id="selectPaymentsPagedAdmin" resultMap="StorePaymentMap">
+        SELECT *
+        FROM store_payment_tb
+        ORDER BY paid_at DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 전체 결제 수 -->
+    <select id="countAllPaymentsAdmin" resultType="int">
+        SELECT COUNT(*) FROM store_payment_tb
+    </select>
+
+    <!-- 결제 상세조회 -->
+    <select id="selectPaymentDetailAdmin" resultMap="StorePaymentMap">
+        SELECT *
+        FROM store_payment_tb
+        WHERE payment_id = #{paymentId}
+    </select>
+
+    <!-- 결제 상태 변경 -->
+    <update id="updatePaymentStatusAdmin">
+        UPDATE store_payment_tb
+        SET payment_status = #{status}
+        WHERE payment_id = #{paymentId};
+    </update>
+
+    <!-- 관리자 삭제 -->
+    <delete id="deletePaymentAdmin">
+        DELETE FROM store_payment_tb
+        WHERE payment_id = #{paymentId};
+    </delete>
 </mapper>

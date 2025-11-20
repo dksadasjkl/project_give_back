@@ -122,4 +122,23 @@
         ORDER BY product_price DESC, create_date DESC
         LIMIT #{limit}
     </select>
+
+    <!--  관리자  -->
+    <select id="selectAdminStoreProductsWithPaging" resultMap="StoreProductMap">
+        SELECT *
+        FROM store_product_tb
+        <if test="categoryId != null and categoryId != 0">
+            WHERE category_id = #{categoryId}
+        </if>
+        ORDER BY create_date DESC
+        LIMIT #{startIndex}, #{count}
+    </select>
+
+    <select id="selectAdminStoreProductCount" resultType="int">
+        SELECT COUNT(*)
+        FROM store_product_tb
+        <if test="categoryId != null and categoryId != 0">
+            WHERE category_id = #{categoryId}
+        </if>
+    </select>
 </mapper>
