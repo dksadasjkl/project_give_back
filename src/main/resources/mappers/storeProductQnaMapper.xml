@@ -16,9 +16,11 @@
         <result property="answerDate" column="answer_date"/>
         <result property="createDate" column="create_date"/>
 
-        <!-- 👇 작성자 닉네임 / 아이디 추가 -->
+        <!-- 작성자 닉네임 / 아이디 추가 -->
         <result property="username" column="user_username"/>
         <result property="nickname" column="user_nickname"/>
+
+        <result property="productName" column="product_name"/>
     </resultMap>
 
     <!-- 문의 등록 -->
@@ -28,7 +30,7 @@
         VALUES (#{productId}, #{userId}, #{questionTitle}, #{questionContent}, #{secret}, now());
     </insert>
 
-<!--    &lt;!&ndash; ✅ 상품별 문의 조회 (user_tb 조인) &ndash;&gt;-->
+<!--    &lt;!&ndash;  상품별 문의 조회 (user_tb 조인) &ndash;&gt;-->
 <!--    <select id="selectQnaByProduct" resultMap="StoreProductQnaMap">-->
 <!--        SELECT-->
 <!--            qna.*,-->
@@ -44,7 +46,7 @@
 <!--            qna.create_date DESC;-->
 <!--    </select>-->
 
-    <!-- ✅ 페이지네이션 조회 -->
+    <!--  페이지네이션 조회 -->
     <select id="selectQnaByProductPaged" resultMap="StoreProductQnaMap">
         SELECT
             qna.*,
@@ -61,7 +63,7 @@
             LIMIT #{size} OFFSET #{offset};
     </select>
 
-    <!-- ✅ 전체 문의 개수 -->
+    <!--  전체 문의 개수 -->
     <select id="countQnaByProduct" resultType="int">
         SELECT COUNT(*) FROM store_product_qna_tb WHERE product_id = #{productId};
     </select>
@@ -83,20 +85,23 @@
 
     <!-- ================= 관리자(Admin) ================= -->
 
-    <!-- 관리자 QnA 목록 -->
+    <!-- 수정 관리자 QnA 목록 -->
     <select id="selectQnAListAdmin" resultMap="StoreProductQnaMap">
         SELECT
         qna.*,
         ut.user_username,
-        ut.user_nickname
+        ut.user_nickname,
+        p.product_name
         FROM store_product_qna_tb qna
-        JOIN user_tb ut ON ut.user_id = qna.user_id
+        LEFT JOIN user_tb ut ON ut.user_id = qna.user_id
+        LEFT JOIN store_product_tb p ON p.product_id = qna.product_id
         <if test="productId != null">
             WHERE qna.product_id = #{productId}
         </if>
         ORDER BY qna.create_date DESC
         LIMIT #{offset}, #{size}
     </select>
+
 
     <!-- 관리자 QnA 개수 -->
     <select id="countQnAAdmin" resultType="int">
@@ -107,14 +112,16 @@
         </if>
     </select>
 
-    <!-- 관리자 상세 조회 -->
+    <!-- 수정 관리자 상세 조회 **** -->
     <select id="selectQnADetailAdmin" resultMap="StoreProductQnaMap">
         SELECT
         qna.*,
         ut.user_username,
-        ut.user_nickname
+        ut.user_nickname,
+        p.product_name
         FROM store_product_qna_tb qna
-        JOIN user_tb ut ON ut.user_id = qna.user_id
+        LEFT JOIN user_tb ut ON ut.user_id = qna.user_id
+        LEFT JOIN store_product_tb p ON p.product_id = qna.product_id
         WHERE qna.qna_id = #{qnaId};
     </select>
 

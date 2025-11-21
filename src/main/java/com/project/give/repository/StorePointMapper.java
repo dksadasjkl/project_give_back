@@ -14,4 +14,9 @@ public interface StorePointMapper {
                                              @Param("offset") int offset,
                                              @Param("size") int size);
     int countPointsByUser(@Param("userId") int userId);
+
+    List<StorePoint> selectAllPointsPaged(@Param("offset") int offset,
+                                          @Param("size") int size);
+
+    int countAllPoints();
 }

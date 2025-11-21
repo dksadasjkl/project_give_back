@@ -4,6 +4,18 @@
 
 <mapper namespace="com.project.give.repository.StoreReviewReportMapper">
 
+    <resultMap id="StoreReviewReportAdminMap" type="com.project.give.entity.StoreReviewReport">
+        <id property="reportId" column="report_id" />
+        <result property="commentId" column="comment_id" />
+        <result property="reporterId" column="reporter_id" />
+        <result property="reason" column="reason" />
+        <result property="createDate" column="create_date" />
+
+        <result property="reporterUsername" column="reporter_username" />
+        <result property="commentText" column="comment_text" />
+        <result property="productName" column="product_name" />
+    </resultMap>
+
     <insert id="insertReport" parameterType="com.project.give.entity.StoreReviewReport">
         INSERT INTO store_review_report_tb (comment_id, reporter_id, reason, create_date)
         VALUES (#{commentId}, #{reporterId}, #{reason}, NOW());
@@ -15,9 +27,23 @@
         WHERE reporter_id = #{reporterId} AND comment_id = #{commentId};
     </select>
 
-    <select id="selectReviewReportsAdmin" resultType="com.project.give.entity.StoreReviewReport">
-        SELECT * FROM store_review_report_tb
-        ORDER BY create_date DESC
+    <select id="selectReviewReportsAdmin" resultMap="StoreReviewReportAdminMap">
+        SELECT
+        r.report_id,
+        r.comment_id,
+        r.reporter_id,
+        r.reason,
+        r.create_date,
+
+        u.user_username AS reporter_username,
+        c.comment_text,
+        p.product_name
+
+        FROM store_review_report_tb r
+        LEFT JOIN user_tb u ON r.reporter_id = u.user_id
+        LEFT JOIN store_comment_tb c ON r.comment_id = c.comment_id
+        LEFT JOIN store_product_tb p ON c.product_id = p.product_id
+        ORDER BY r.create_date DESC
         LIMIT #{offset}, #{size}
     </select>
 

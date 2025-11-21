@@ -20,4 +20,6 @@ public class GetStoreProductQnaResponseDto {
 
     private String username;
     private String nickname;
+
+    private String productName;
 }

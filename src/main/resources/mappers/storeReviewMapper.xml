@@ -78,7 +78,7 @@
         WHERE
             user_id = #{userId}
             AND product_id = #{productId}
-            AND order_status = 'CONFIRMED'
+            AND order_status = 'DELIVERED'
         );
     </select>
 

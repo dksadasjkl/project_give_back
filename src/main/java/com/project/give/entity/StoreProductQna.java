@@ -26,6 +26,8 @@ public class StoreProductQna {
     private String username;
     private String nickname;
 
+    private String productName;
+
     public GetStoreProductQnaResponseDto toResponseDto() {
         return GetStoreProductQnaResponseDto.builder()
                 .qnaId(qnaId)
@@ -39,6 +41,7 @@ public class StoreProductQna {
                 .createDate(createDate)
                 .username(username)
                 .nickname(nickname)
+                .productName(productName)
                 .build();
     }
 }

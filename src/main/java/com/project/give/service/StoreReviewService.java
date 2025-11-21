@@ -57,7 +57,7 @@ public class StoreReviewService {
     }
 
     /**
-     * ✅ 리뷰 작성 자격 확인 (상품 구매 여부)
+     *  리뷰 작성 자격 확인 (상품 구매 여부)
      */
     public boolean checkReviewEligibility(int userId, int productId) {
         return storeReviewMapper.existsOrderByUserAndProduct(userId, productId);

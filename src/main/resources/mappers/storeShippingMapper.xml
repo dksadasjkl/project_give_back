@@ -41,9 +41,20 @@
     </select>
 
     <!--  배송 상태 변경 -->
+<!--    <update id="updateShippingStatus">-->
+<!--        UPDATE store_shipping_tb-->
+<!--        SET shipping_status = #{status}-->
+<!--        WHERE shipping_id = #{shippingId};-->
+<!--    </update>-->
+
+    <!--  배송 상태 변경  배송완료 시 해당시간 -->
     <update id="updateShippingStatus">
         UPDATE store_shipping_tb
-        SET shipping_status = #{status}
+        SET shipping_status = #{status},
+        delivered_at = CASE
+        WHEN #{status} = 'DELIVERED' THEN NOW()
+        ELSE delivered_at
+        END
         WHERE shipping_id = #{shippingId};
     </update>
 
@@ -85,10 +96,21 @@
         WHERE shipping_id = #{shippingId}
     </delete>
 
+<!--    <update id="updateShippingStatusAdmin">-->
+<!--        UPDATE store_shipping_tb-->
+<!--        SET shipping_status = #{status}-->
+<!--        WHERE shipping_id = #{shippingId}-->
+<!--    </update>-->
+
+    <!--  관리자 배송 상태 변경  배송완료 시 해당시간 -->
     <update id="updateShippingStatusAdmin">
         UPDATE store_shipping_tb
-        SET shipping_status = #{status}
-        WHERE shipping_id = #{shippingId}
+        SET shipping_status = #{status},
+        delivered_at = CASE
+        WHEN #{status} = 'DELIVERED' THEN NOW()
+        ELSE delivered_at
+        END
+        WHERE shipping_id = #{shippingId};
     </update>
 
 </mapper>

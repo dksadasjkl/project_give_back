@@ -34,4 +34,17 @@
         SELECT COUNT(*) FROM store_point_tb WHERE user_id = #{userId};
     </select>
 
+    <!--  관리자  -->
+    <select id="selectAllPointsPaged" resultMap="StorePointMap">
+        SELECT p.*, u.user_username, u.user_nickname
+        FROM store_point_tb p
+        LEFT JOIN user_tb u ON p.user_id = u.user_id
+        ORDER BY p.create_date DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countAllPoints" resultType="int">
+        SELECT COUNT(*) FROM store_point_tb
+    </select>
+
 </mapper>

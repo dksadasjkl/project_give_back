@@ -19,11 +19,16 @@ public class StoreReviewReport {
     private String reason;
     private LocalDateTime createDate;
 
+    private String reporterUsername;
+    private String commentText;
+    private String productName;
+
     public static StoreReviewReport toEntity(int reporterId, PostStoreReviewReportRequestDto dto) {
         return StoreReviewReport.builder()
                 .commentId(dto.getCommentId())
                 .reporterId(reporterId)
                 .reason(dto.getReason())
+                .createDate(LocalDateTime.now())
                 .build();
     }
 }
