@@ -5,6 +5,9 @@ import com.project.give.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Map;
+
 @Mapper
 public interface UserMapper {
     // 회원 저장
@@ -43,4 +46,12 @@ public interface UserMapper {
     public void updateProfile(@Param("userId") int userId,
                        @Param("nickname") String nickname,
                        @Param("profileImageUrl") String profileImageUrl);
+
+    // =관리자
+    List<Map<String, Object>> selectUserListAdmin(@Param("offset") int offset,
+                                                  @Param("size") int size);
+
+    int countUsersAdmin();
+
+    Map<String, Object> selectUserDetailAdmin(@Param("userId") int userId);
 }

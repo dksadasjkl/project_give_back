@@ -253,4 +253,40 @@
         WHERE user_id = #{userId}
     </update>
 
+    <select id="selectUserListAdmin" resultType="map">
+        SELECT
+        u.user_id,
+        u.user_username,
+        u.user_email,
+        u.user_nickname,
+        u.user_phone,
+        u.create_date,
+        GROUP_CONCAT(r.role_name_kor) AS roles
+        FROM user_tb u
+        LEFT JOIN role_register_tb rr ON rr.user_id = u.user_id
+        LEFT JOIN role_tb r ON r.role_id = rr.role_id
+        GROUP BY u.user_id
+        ORDER BY u.create_date DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countUsersAdmin" resultType="int">
+        SELECT COUNT(*) FROM user_tb
+    </select>
+
+    <select id="selectUserDetailAdmin" resultType="map">
+        SELECT
+        ut.user_id,
+        ut.user_username,
+        ut.user_nickname,
+        ut.user_email,
+        ut.user_phone,
+        ut.create_date,
+        GROUP_CONCAT(r.role_name_kor SEPARATOR ',') AS roles
+        FROM user_tb ut
+        LEFT JOIN role_register_tb rr ON rr.user_id = ut.user_id
+        LEFT JOIN role_tb r ON r.role_id = rr.role_id
+        WHERE ut.user_id = #{userId}
+        GROUP BY ut.user_id
+    </select>
 </mapper>

@@ -12,6 +12,9 @@
         <result property="pointAmount" column="point_amount"/>
         <result property="pointReason" column="point_reason"/>
         <result property="createDate" column="create_date"/>
+
+        <result property="userUsername" column="user_username"/>
+        <result property="userNickname" column="user_nickname"/>
     </resultMap>
 
     <!-- 포인트 적립 -->

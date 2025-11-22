@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.give.repository.DashboardMapper">
+
+    <!-- 전체 기부 프로젝트 수 -->
+    <select id="countDonationProjects" resultType="int">
+        SELECT COUNT(*)
+        FROM donation_project_tb
+        WHERE donation_project_type = 'DONATION'
+    </select>
+
+    <!-- 전체 펀딩 프로젝트 수 -->
+    <select id="countFundingProjects" resultType="int">
+        SELECT COUNT(*)
+        FROM donation_project_tb
+        WHERE donation_project_type = 'FUNDING'
+    </select>
+
+    <!-- 총 모금액 -->
+    <select id="sumTotalDonationAmount" resultType="int">
+        SELECT IFNULL(SUM(donation_project_contribution_amount), 0)
+        FROM donation_project_contribution_tb
+    </select>
+
+    <!-- 오늘 기부액 -->
+    <select id="sumTodayDonationAmount" resultType="int">
+        SELECT IFNULL(SUM(donation_project_contribution_amount), 0)
+        FROM donation_project_contribution_tb
+        WHERE donation_project_contribution_date <![CDATA[>=]]> CURDATE()
+        AND donation_project_contribution_date <![CDATA[<]]> CURDATE() + INTERVAL 1 DAY
+    </select>
+
+    <!-- 이번달 기부액 -->
+    <select id="sumMonthlyDonationAmount" resultType="int">
+        SELECT IFNULL(SUM(donation_project_contribution_amount), 0)
+        FROM donation_project_contribution_tb
+        WHERE DATE_FORMAT(donation_project_contribution_date, '%Y-%m')
+        = DATE_FORMAT(NOW(), '%Y-%m')
+    </select>
+
+    <!-- 스토어 상품 수 -->
+    <select id="countStoreProducts" resultType="int">
+        SELECT COUNT(*) FROM store_product_tb
+    </select>
+
+    <!-- 전체 주문 수 -->
+    <select id="countStoreOrders" resultType="int">
+        SELECT COUNT(*) FROM store_order_tb
+    </select>
+
+    <!-- 총 매출 (결제 성공) -->
+    <select id="sumTotalSales" resultType="int">
+        SELECT IFNULL(SUM(amount),0)
+        FROM store_payment_tb
+        WHERE payment_status = 'SUCCESS'
+    </select>
+
+    <!-- 오늘 주문 수 -->
+    <select id="countTodayOrders" resultType="int">
+        SELECT COUNT(*)
+        FROM store_order_tb
+        WHERE order_date <![CDATA[>=]]> CURDATE()
+        AND order_date <![CDATA[<]]> CURDATE() + INTERVAL 1 DAY
+    </select>
+
+    <!-- 이번달 매출 -->
+    <select id="sumMonthlySales" resultType="int">
+        SELECT IFNULL(SUM(amount),0)
+        FROM store_payment_tb
+        WHERE payment_status = 'SUCCESS'
+        AND DATE_FORMAT(paid_at, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+    </select>
+
+    <!-- 전체 회원 수 -->
+    <select id="countUsers" resultType="int">
+        SELECT COUNT(*) FROM user_tb
+    </select>
+
+    <!-- 오늘 가입자 -->
+    <select id="countTodayUsers" resultType="int">
+        SELECT COUNT(*)
+        FROM user_tb
+        WHERE create_date <![CDATA[>=]]> CURDATE()
+        AND create_date <![CDATA[<]]> CURDATE() + INTERVAL 1 DAY
+    </select>
+
+    <!--  차트: 일별 기부 통계 -->
+    <select id="getDonationDailyStats" resultType="com.project.give.dto.dashboard.DailyStatDto">
+        SELECT DATE(donation_project_contribution_date) AS date,
+        SUM(donation_project_contribution_amount) AS amount
+        FROM donation_project_contribution_tb
+        GROUP BY DATE(donation_project_contribution_date)
+        ORDER BY date DESC
+        LIMIT 14
+    </select>
+
+
+    <!--  차트: 일별 매출 -->
+    <select id="getSalesDailyStats" resultType="com.project.give.dto.dashboard.DailyStatDto">
+        SELECT DATE(paid_at) AS date,
+        SUM(amount) AS amount
+        FROM store_payment_tb
+        WHERE payment_status = 'SUCCESS'
+        GROUP BY DATE(paid_at)
+        ORDER BY date DESC
+        LIMIT 14
+    </select>
+
+
+    <!--  최근 후원 내역 -->
+    <select id="getRecentDonations" resultType="com.project.give.dto.dashboard.RecentDonationDto">
+        SELECT ut.user_username AS username,
+        ct.donation_project_contribution_amount AS amount,
+        pt.donation_project_title AS projectTitle,
+        ct.donation_project_contribution_date AS date
+        FROM donation_project_contribution_tb ct
+        JOIN user_tb ut ON ut.user_id = ct.user_id
+        JOIN donation_project_tb pt ON pt.donation_project_id = ct.donation_project_id
+        ORDER BY ct.donation_project_contribution_date DESC
+        LIMIT 10
+    </select>
+
+
+    <!--  인기 기부 프로젝트 TOP5 -->
+    <select id="selectTopDonationProjects" resultType="java.util.Map">
+        SELECT
+        p.donation_project_id AS donationProjectId,
+        p.donation_project_title AS donationProjectTitle,
+        p.donation_project_image_url AS donationProjectImageUrl,
+        p.donation_project_organization AS donationProjectOrganization,
+        SUM(c.donation_project_contribution_amount) AS totalAmount
+        FROM donation_project_tb p
+        LEFT JOIN donation_project_contribution_tb c
+        ON p.donation_project_id = c.donation_project_id
+        WHERE p.donation_project_type = 'DONATION'
+        GROUP BY p.donation_project_id
+        ORDER BY totalAmount DESC
+        LIMIT 5
+    </select>
+
+
+    <!--  인기 스토어 상품 TOP5 -->
+    <select id="selectTopStoreProducts" resultType="java.util.Map">
+        SELECT
+        sp.product_id AS productId,
+        sp.product_name AS productName,
+        sp.product_image_url AS productImageUrl,
+        sp.product_price AS productPrice,
+        COUNT(so.order_id) AS orderCount
+        FROM store_product_tb sp
+        LEFT JOIN store_order_tb so
+        ON sp.product_id = so.product_id
+        GROUP BY sp.product_id
+        ORDER BY orderCount DESC
+        LIMIT 5
+    </select>
+</mapper>

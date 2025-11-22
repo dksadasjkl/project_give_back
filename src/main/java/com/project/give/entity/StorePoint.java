@@ -20,6 +20,9 @@ public class StorePoint {
     private String pointReason;
     private LocalDateTime createDate;
 
+    private String userUsername;
+    private String userNickname;
+
     public GetStorePointResponseDto toResponseDto() {
         return GetStorePointResponseDto.builder()
                 .pointId(pointId)
