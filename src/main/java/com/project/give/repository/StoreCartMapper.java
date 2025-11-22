@@ -18,4 +18,6 @@ public interface StoreCartMapper {
     public int deleteCart(@Param("cartId") int cartId);
 
     public boolean existsCartItem(@Param("userId") int userId, @Param("productId") int productId);
+
+    public int clearCartByUser(@Param("userId") int userId);
 }

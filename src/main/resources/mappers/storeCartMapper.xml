@@ -54,4 +54,9 @@
         WHERE user_id = #{userId} AND product_id = #{productId};
     </select>
 
+    <delete id="clearCartByUser">
+        DELETE FROM store_cart_tb
+        WHERE user_id = #{userId};
+    </delete>
+
 </mapper>

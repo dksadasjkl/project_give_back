@@ -42,4 +42,11 @@ public class StoreCartController {
         storeCartService.deleteCartItem(cartId);
         return ResponseEntity.ok("상품이 장바구니에서 삭제되었습니다.");
     }
+
+    // 전체 삭제
+    @DeleteMapping("/clear")
+    public ResponseEntity<?> clearCart(@AuthenticationPrincipal PrincipalUser principalUser) {
+        storeCartService.clearCart(principalUser.getUserId());
+        return ResponseEntity.ok("장바구니를 비웠습니다.");
+    }
 }

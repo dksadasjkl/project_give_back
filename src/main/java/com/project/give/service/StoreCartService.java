@@ -41,4 +41,9 @@ public class StoreCartService {
     public void deleteCartItem(int cartId) {
         storeCartMapper.deleteCart(cartId);
     }
+
+    // 전체 삭제
+    public void clearCart(int userId) {
+        storeCartMapper.clearCartByUser(userId);
+    }
 }
