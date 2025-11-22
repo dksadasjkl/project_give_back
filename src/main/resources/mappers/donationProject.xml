@@ -311,7 +311,7 @@
             last_contribution_date DESC
     </select>
 
-    <!-- ✅ 내가 참여한 기부 (페이징) -->
+    <!--  내가 참여한 기부 (페이징) -->
     <select id="findMyDonationsPagedByUserId" resultMap="DonationProjectMap">
         select
         dpt.*,
@@ -339,7 +339,7 @@
         where dt.user_id = #{userId} and dpt.donation_project_type = 'DONATION'
     </select>
 
-    <!-- ✅ 내가 참여한 펀딩 (페이징) -->
+    <!--  내가 참여한 펀딩 (페이징) -->
     <select id="findMyFundingsPagedByUserId" resultMap="DonationProjectMap">
         select
         dpt.*,
@@ -397,5 +397,36 @@
         dpt.create_date DESC
         LIMIT #{limit}
     </select>
+
+    <!-- 펀딩 배너용 1개 -->
+    <select id="selectTopFundingProject" resultMap="DonationProjectMap">
+        SELECT
+        dpt.*,
+        dct.donation_category_name_kor
+        FROM donation_project_tb dpt
+        LEFT JOIN donation_category_tb dct
+        ON dpt.donation_category_id = dct.donation_category_id
+        WHERE dpt.donation_project_type = 'FUNDING'
+        ORDER BY
+        (dpt.donation_project_current_amount / dpt.donation_project_target_amount) DESC,
+        dpt.create_date DESC
+        LIMIT 1;
+    </select>
+
+    <!-- 펀딩 추천 TOP N -->
+    <select id="selectTopFundingProjects" resultMap="DonationProjectMap">
+        SELECT
+        dpt.*,
+        dct.donation_category_name_kor
+        FROM donation_project_tb dpt
+        LEFT JOIN donation_category_tb dct
+        ON dpt.donation_category_id = dct.donation_category_id
+        WHERE dpt.donation_project_type = 'FUNDING'
+        ORDER BY
+        (dpt.donation_project_current_amount / dpt.donation_project_target_amount) DESC,
+        dpt.create_date DESC
+        LIMIT #{limit};
+    </select>
+
 
 </mapper>

@@ -16,26 +16,30 @@ public class MainService {
     @Autowired
     private StoreProductMapper storeProductMapper;
 
-    // 🔹 배너용(단일 1개씩)
+    // 배너용 1개씩(기부/펀딩/쇼핑)
     public Map<String, Object> getMainTopItems() {
 
         var topDonation = donationProjectMapper.selectTopDonationProject();
+        var topFunding = donationProjectMapper.selectTopFundingProject();
         var topProduct = storeProductMapper.selectTopStoreProduct();
 
         return Map.of(
                 "bannerDonation", topDonation,
+                "bannerFunding", topFunding,
                 "bannerProduct", topProduct
         );
     }
 
-    // 🔹 메인 추천용 (TOP 3)
+    // 추천용 TOP3 (기부/펀딩/쇼핑)
     public Map<String, Object> getMainRecommend() {
 
         var donations = donationProjectMapper.selectTopDonationProjects(3);
+        var fundings = donationProjectMapper.selectTopFundingProjects(3);
         var products = storeProductMapper.selectTopStoreProducts(3);
 
         return Map.of(
                 "donations", donations,
+                "fundings", fundings,
                 "products", products
         );
     }

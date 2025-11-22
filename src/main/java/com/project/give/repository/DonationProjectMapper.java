@@ -53,4 +53,7 @@ public interface DonationProjectMapper {
 
     DonationProject selectTopDonationProject();
     List<DonationProject> selectTopDonationProjects(@Param("limit") int limit);
+
+    DonationProject selectTopFundingProject();
+    List<DonationProject> selectTopFundingProjects(@Param("limit") int limit);
 }
