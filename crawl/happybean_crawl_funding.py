@@ -116,9 +116,9 @@ driver.quit()
 connection = pymysql.connect(
     host="mysql-db.cz6i24w6m9m3.ap-northeast-2.rds.amazonaws.com",
     port=3306,
-    user="아이디",
-    password="비밀번호",
-    database="give_db",
+    user="본인 아이디",
+    password="본인 비밀번호",
+    database="해당 테이블",
 )
 cursor = connection.cursor()
 

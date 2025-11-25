@@ -9,9 +9,7 @@ from selenium.webdriver.chrome.options import Options
 import time
 import pymysql
 
-# ----------------------------
 # 크롬 설정
-# ----------------------------
 options = Options()
 options.add_argument("--start-maximized")
 
@@ -20,15 +18,11 @@ driver = webdriver.Chrome(service=service, options=options)
 
 wait = WebDriverWait(driver, 10)
 
-# ----------------------------
 # 페이지 접속
-# ----------------------------
 driver.get("https://happybean.naver.com/donation/DonateHomeMain")
 time.sleep(2)
 
-# ----------------------------
 # 더보기 함수
-# ----------------------------
 def click_more():
     try:
         btn = wait.until(
@@ -42,25 +36,21 @@ def click_more():
     except:
         return False
 
-# ----------------------------
 # 원하는 index까지 보장해주는 함수
-# ----------------------------
 def ensure_card_loaded(target_index):
     """target_index(예: 0~149)가 존재할 때까지 더보기 누름"""
     while True:
         cards = driver.find_elements(By.CSS_SELECTOR, "a.card")
 
         if len(cards) > target_index:
-            return cards  # 성공적으로 충분히 로드됨
+            return cards  
 
         print(f"카드 {len(cards)}개 → 부족함 → 더보기 클릭")
         if not click_more():
             print("더보기 없음 → 더 이상 확보 불가")
             return cards
 
-# ----------------------------
 # 로고 150개 수집
-# ----------------------------
 MAX_COUNT = 150
 detail_results = []
 
@@ -77,9 +67,7 @@ for idx in range(MAX_COUNT):
 
     card = cards[idx]
 
-    # -------------------------------
     # 클릭
-    # -------------------------------
     driver.execute_script("arguments[0].scrollIntoView(true);", card)
     time.sleep(0.3)
     driver.execute_script("arguments[0].click();", card)
@@ -87,9 +75,7 @@ for idx in range(MAX_COUNT):
     # 상세 페이지 로딩
     time.sleep(1.5)
 
-    # -------------------------------
     # 단체 로고 수집
-    # -------------------------------
     try:
         logo = wait.until(
             EC.presence_of_element_located(
@@ -102,15 +88,11 @@ for idx in range(MAX_COUNT):
     print("단체 로고:", logo)
     detail_results.append(logo)
 
-    # -------------------------------
     # 뒤로가기
-    # -------------------------------
     driver.back()
     time.sleep(1.5)
 
-# ----------------------------
 # 수집 결과 출력
-# ----------------------------
 print("\n=========== 최종 결과 ===========")
 for i, v in enumerate(detail_results, 1):
     print(f"{i}번 =", v)
@@ -122,9 +104,9 @@ driver.quit()
 connection = pymysql.connect(
     host="mysql-db.cz6i24w6m9m3.ap-northeast-2.rds.amazonaws.com",
     port=3306,
-    user="",
-    password="",
-    database="give_db",
+    user="본인 아이디",
+    password="본인 비밀번호",
+    database="해당 테이블",
     charset="utf8mb4",
     autocommit=True
 )
