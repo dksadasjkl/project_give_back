@@ -108,6 +108,29 @@
         LIMIT 14
     </select>
 
+    <!-- 월별 기부 통계 -->
+    <select id="getDonationMonthlyStats" resultType="com.project.give.dto.dashboard.DailyStatDto">
+        SELECT
+        DATE_FORMAT(donation_project_contribution_date, '%Y-%m') AS date,
+        SUM(donation_project_contribution_amount) AS amount
+        FROM donation_project_contribution_tb
+        GROUP BY DATE_FORMAT(donation_project_contribution_date, '%Y-%m')
+        ORDER BY date DESC
+        LIMIT 12
+    </select>
+
+    <!-- 월별 매출 통계 (추가됨) -->
+    <select id="getSalesMonthlyStats" resultType="com.project.give.dto.dashboard.DailyStatDto">
+        SELECT
+        DATE_FORMAT(paid_at, '%Y-%m') AS date,
+        SUM(amount) AS amount
+        FROM store_payment_tb
+        WHERE payment_status = 'SUCCESS'
+        GROUP BY DATE_FORMAT(paid_at, '%Y-%m')
+        ORDER BY date DESC
+        LIMIT 12
+    </select>
+
 
     <!--  최근 후원 내역 -->
     <select id="getRecentDonations" resultType="com.project.give.dto.dashboard.RecentDonationDto">

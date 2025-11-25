@@ -29,6 +29,9 @@ public interface DashboardMapper {
 
     List<DailyStatDto> getDonationDailyStats();
     List<DailyStatDto> getSalesDailyStats();
+    List<DailyStatDto> getDonationMonthlyStats();
+    List<DailyStatDto> getSalesMonthlyStats();
+
     List<RecentDonationDto> getRecentDonations();
 
     List<Map<String, Object>> selectTopDonationProjects();

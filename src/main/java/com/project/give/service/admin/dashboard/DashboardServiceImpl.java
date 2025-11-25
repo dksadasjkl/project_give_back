@@ -32,6 +32,10 @@ public class DashboardServiceImpl implements DashboardService {
 
         dto.setDonationDailyStats(dashboardMapper.getDonationDailyStats());
         dto.setSalesDailyStats(dashboardMapper.getSalesDailyStats());
+
+        dto.setDonationMonthlyStats(dashboardMapper.getDonationMonthlyStats());
+        dto.setSalesMonthlyStats(dashboardMapper.getSalesMonthlyStats());
+
         dto.setRecentDonations(dashboardMapper.getRecentDonations());
 
         dto.setTopDonationProjects(dashboardMapper.selectTopDonationProjects());

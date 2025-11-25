@@ -26,6 +26,10 @@ public class DashboardResponseDto {
 
     private List<DailyStatDto> donationDailyStats;
     private List<DailyStatDto> salesDailyStats;
+
+    private List<DailyStatDto> donationMonthlyStats;
+    private List<DailyStatDto> salesMonthlyStats;
+
     private List<RecentDonationDto> recentDonations;
 
     private List<Map    <String, Object>> topDonationProjects;
