@@ -34,15 +34,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
-        http.csrf().disable(); //  // CSRF 보호 기능 비활성화
+        http.csrf().disable();
+
         http.authorizeRequests()
-                .antMatchers("/auth/**", "/users/**", "/account/**", "/donations/**", "/categories/**",
-                                "/donation-project-details/**", "/donation-project-contributions/**", "/donation-project-comments/**", "/fundings/**", "/store/products/**", "/main/**",
-                        "/admin/**"
-                ) // 비회원, 회원, 관리자 방식으로 수정 예정
-                .permitAll()
-                .anyRequest()
-                .authenticated()
+
+                // 1) 비회원도 접근 가능한 공개 URL
+                .antMatchers(
+                        "/auth/**",
+                        "/users/**",
+                        "/account/**",
+                        "/donations/**",
+                        "/categories/**",
+                        "/donation-project-details/**",
+                        "/donation-project-contributions/**",
+                        "/donation-project-comments/**",
+                        "/fundings/**",
+                        "/store/products/**",
+                        "/main/**"
+                ).permitAll()
+
+                // 2) 회원(로그인 유저)만 접근 가능한 URL
+                .antMatchers(
+                        "/store/cart/**",
+                        "/store/orders/**",
+                        "/store/wishlist/**",
+                        "/mypage/**",
+                        "/donations/like/**",
+                        "/donations/apply/**"
+                ).authenticated()
+
+                // 3) 관리자 전용 URL
+                .antMatchers("/admin/**").hasRole("ADMIN")
+
+                // 나머지는 인증 필요
+                .anyRequest().authenticated()
+
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()

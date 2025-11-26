@@ -42,10 +42,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 "/account/nickname-check",
                 "/fundings",
                 "/store/products",
-                "/main",
-                "/admin" // 임시
-        ); // 수정예정
-
+                "/main"
+        );
         String uri = request.getRequestURI();
 
             request.setAttribute("isPermitAll", false);
