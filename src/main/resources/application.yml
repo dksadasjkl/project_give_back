@@ -6,14 +6,15 @@
 
 spring:
   profiles:
-    active: local
+    active: give_blue_server
     group:
       local: local, common, secret
       give_blue_server: give_blue, common, secret
       give_green_server: give_green, common, secret
 
 server:
-  env: local
+  env: give_blue
+
 
 ---
 
@@ -48,6 +49,7 @@ server:
   port: 8001
   deploy-address: give-portfolio.shop
   name: give_blue
+  env: give_blue
 
 ---
 
@@ -61,6 +63,7 @@ server:
   port: 8002
   deploy-address: give-portfolio.shop
   name: give_green
+  env: give_green
 
 ---
 
