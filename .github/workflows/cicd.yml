@@ -61,12 +61,10 @@ jobs:
           if [ "$STATUS" = "200" ]; then
             CURRENT_COLOR=$(curl -s "http://$SERVER_IP/server/env")
           else
-            # 첫 배포 또는 장애 시 기본값을 give_green 으로
             CURRENT_COLOR="give_green"
           fi
 
           echo "CURRENT_COLOR=$CURRENT_COLOR" >> $GITHUB_ENV
-          echo "CURRENT_COLOR=$CURRENT_COLOR"
 
           if [ "$CURRENT_COLOR" = "give_blue" ]; then
             echo "TARGET_COLOR=give_green" >> $GITHUB_ENV
@@ -88,7 +86,6 @@ jobs:
           username: ubuntu
           host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script_stop: true
           script: |
             cd /home/ubuntu
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/give_server:latest
@@ -108,10 +105,9 @@ jobs:
           username: ubuntu
           host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script_stop: true
           script: |
-            # give-env.inc 안에 현재 타겟 컨테이너 이름을 기록 (give-blue / give-green)
-            sudo docker exec -i nginxserver bash -c 'echo "set \$give_backend {{ env.TARGET_CONTAINER }};" > /etc/nginx/conf.d/give-env.inc && nginx -s reload'
+            sudo docker exec -i nginxserver sh -c 'echo "set \$give_backend ${{ env.TARGET_CONTAINER }};" > /etc/nginx/conf.d/give-env.inc'
+            sudo docker exec -i nginxserver nginx -s reload
 
       - name: Stop previous GIVE container
         uses: appleboy/ssh-action@master
@@ -119,7 +115,6 @@ jobs:
           username: ubuntu
           host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script_stop: true
           script: |
             sudo docker stop ${{ env.CURRENT_CONTAINER }} || true
             sudo docker rm ${{ env.CURRENT_CONTAINER }} || true
