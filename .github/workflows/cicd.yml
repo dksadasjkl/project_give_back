@@ -2,9 +2,9 @@ name: GIVE-CICD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -12,7 +12,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
 
@@ -22,7 +21,7 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Create application-secret.yml from GitHub Secrets
+      - name: Create application-secret.yml
         run: |
           echo "${{ secrets.APPLICATION_SECRET }}" | base64 --decode > ./src/main/resources/application-secret.yml
           echo "===== application-secret.yml created ====="
@@ -51,12 +50,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Determine current color (give_blue | give_green)
+      - name: Determine current color
         run: |
           SERVER_IP=${{ secrets.LIVE_SERVER_IP }}
 
           STATUS=$(curl -o /dev/null -w "%{http_code}" "http://$SERVER_IP/server/env" || echo "000")
-          echo "STATUS=$STATUS"
 
           if [ "$STATUS" = "200" ]; then
             CURRENT_COLOR=$(curl -s "http://$SERVER_IP/server/env")
@@ -106,15 +104,15 @@ jobs:
           host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker exec -i nginxserver sh -c 'echo "set \$give_backend ${{ env.TARGET_CONTAINER }};" > /etc/nginx/conf.d/give-env.inc'
-            sudo docker exec -i nginxserver nginx -s reload
+            sudo docker exec nginxserver sh -c "echo \"set \\$give_backend ${TARGET_CONTAINER};\" > /etc/nginx/conf.d/give-env.inc"
+            sudo docker exec nginxserver sh -c "nginx -s reload"
 
-      - name: Stop previous GIVE container
+      - name: Stop previous container
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
           host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker stop ${{ env.CURRENT_CONTAINER }} || true
-            sudo docker rm ${{ env.CURRENT_CONTAINER }} || true
+            sudo docker stop ${CURRENT_CONTAINER} || true
+            sudo docker rm ${CURRENT_CONTAINER} || true
