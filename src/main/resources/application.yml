@@ -1,8 +1,19 @@
+#spring:
+#  profiles:
+#    active: local
+#    group:
+#      local: local, common, secret
+
 spring:
   profiles:
     active: local
     group:
       local: local, common, secret
+      give_blue_server: give_blue, common, secret
+      give_green_server: give_green, common, secret
+
+server:
+  env: local
 
 ---
 
@@ -23,6 +34,33 @@ server:
   port: 8080
   deploy-address: localhost
   name: local
+
+---
+
+# ============ GIVE - BLUE 서버 ============
+
+spring:
+  config:
+    activate:
+      on-profile: give_blue
+
+server:
+  port: 8001
+  deploy-address: 43.202.167.18
+  name: give_blue
+
+---
+
+# ============ GIVE - GREEN 서버 ============
+spring:
+  config:
+    activate:
+      on-profile: give_green
+
+server:
+  port: 8002
+  deploy-address: 43.202.167.18
+  name: give_green
 
 ---
 
@@ -58,8 +96,11 @@ spring:
             userInfoUri: https://kapi.kakao.com/v2/user/me
             userNameAttribute: id
 
+#client:
+#  deploy-address: "localhost:3000"
+
 client:
-  deploy-address: "localhost:3000"
+  deploy-address: "give-portfolio.shop"
 
 mybatis:
   mapper-locations:
