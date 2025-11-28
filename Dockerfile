@@ -6,9 +6,8 @@ ARG ENV
 
 COPY ${JAR_FILE} app.jar
 
-ENTRYPOINT ["java",
-    "-Dspring.profiles.active=${PROFILES}",
-    "-Dserver.env=${ENV}",
-    "-Dclient.deploy-address=give-portfolio.shop",
-    "-jar", "app.jar"
-]
+ENTRYPOINT ["sh", "-c", "java \
+    -Dspring.profiles.active=$PROFILES \
+    -Dserver.env=$ENV \
+    -Dclient.deploy-address=give-portfolio.shop \
+    -jar app.jar"]
