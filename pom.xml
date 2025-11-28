@@ -112,7 +112,7 @@
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
-							<artifaSctId>lombok</artifaSctId>
+							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
 				</configuration>
