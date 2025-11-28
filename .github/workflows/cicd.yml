@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Determine current upstream (blue | green)
+      - name: Determine current upstream (give_blue | give_green)
         run: |
           STATUS=$(curl -o /dev/null -w "%{http_code}" "http://${{ secrets.LIVE_SERVER_IP }}/server/env")
           echo "STATUS=$STATUS"
@@ -53,19 +53,19 @@ jobs:
           if [ $STATUS = 200 ]; then
             CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.LIVE_SERVER_IP }}/server/env")
           else
-            CURRENT_UPSTREAM=green
+            CURRENT_UPSTREAM=give_green
           fi
 
           echo "CURRENT_UPSTREAM=$CURRENT_UPSTREAM" >> $GITHUB_ENV
 
-          if [ "$CURRENT_UPSTREAM" = "blue" ]; then
+          if [ "$CURRENT_UPSTREAM" = "give_blue" ]; then
             echo "CURRENT_PORT=8001" >> $GITHUB_ENV
             echo "STOPPED_PORT=8002" >> $GITHUB_ENV
-            echo "TARGET_UPSTREAM=green" >> $GITHUB_ENV
-          elif [ "$CURRENT_UPSTREAM" = "green" ]; then
+            echo "TARGET_UPSTREAM=give_green" >> $GITHUB_ENV
+          elif [ "$CURRENT_UPSTREAM" = "give_green" ]; then
             echo "CURRENT_PORT=8002" >> $GITHUB_ENV
             echo "STOPPED_PORT=8001" >> $GITHUB_ENV
-            echo "TARGET_UPSTREAM=blue" >> $GITHUB_ENV
+            echo "TARGET_UPSTREAM=give_blue" >> $GITHUB_ENV
           else
             echo "ERROR: Invalid upstream"
             exit 1
@@ -80,7 +80,7 @@ jobs:
           script_stop: true
           script: |
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/give_server:latest
-            sudo docker-compose -f docker-compose-give-${{ env.TARGET_UPSTREAM }}.yml up -d
+            sudo docker-compose -f /home/ubuntu/give/docker-compose-give-${{ env.TARGET_UPSTREAM }}.yml up -d
 
       - name: Health check new GIVE server
         uses: jtalk/url-health-check-action@v3
@@ -107,5 +107,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
           script: |
-            sudo docker stop ${{env.CURRENT_UPSTREAM}}
-            sudo docker rm ${{env.CURRENT_UPSTREAM}}
+            sudo docker stop ${{env.CURRENT_UPSTREAM}} || true
+            sudo docker rm ${{env.CURRENT_UPSTREAM}} || true
