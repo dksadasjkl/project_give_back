@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -42,10 +41,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         config.setAllowCredentials(true);
 
-        config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("http://127.0.0.1:3000");
-        config.addAllowedOrigin("https://give-portfolio.shop");
-        config.addAllowedOrigin("https://www.give-portfolio.shop");
+        // ⭐ credentials=true 는 addAllowedOrigin() 금지
+        //    addAllowedOriginPattern() 써야 정상 작동
+        config.addAllowedOriginPattern("http://localhost:3000");
+        config.addAllowedOriginPattern("http://127.0.0.1:3000");
+        config.addAllowedOriginPattern("https://give-portfolio.shop");
+        config.addAllowedOriginPattern("https://www.give-portfolio.shop");
 
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
@@ -60,7 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
-
         http.cors().configurationSource(corsConfigurationSource());
 
         http.authorizeRequests()
