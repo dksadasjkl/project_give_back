@@ -41,15 +41,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         config.setAllowCredentials(true);
 
-        // ⭐ credentials=true 는 addAllowedOrigin() 금지
-        //    addAllowedOriginPattern() 써야 정상 작동
-        config.addAllowedOriginPattern("http://localhost:3000");
-        config.addAllowedOriginPattern("http://127.0.0.1:3000");
         config.addAllowedOriginPattern("https://give-portfolio.shop");
         config.addAllowedOriginPattern("https://www.give-portfolio.shop");
+        config.addAllowedOriginPattern("http://localhost:3000");
+        config.addAllowedOriginPattern("http://127.0.0.1:3000");
 
+        config.addAllowedHeader("Authorization");
+        config.addAllowedHeader("Content-Type");
         config.addAllowedHeader("*");
+
         config.addAllowedMethod("*");
+        config.addExposedHeader("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

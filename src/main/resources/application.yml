@@ -14,7 +14,7 @@ spring:
 
 server:
   env: give_blue
-
+  sudo nano /home/ubuntu/nginx/default.conf
 
 ---
 
