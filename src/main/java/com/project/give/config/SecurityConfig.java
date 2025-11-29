@@ -4,9 +4,11 @@ import com.project.give.security.exception.AuthEntryPoint;
 import com.project.give.security.filter.JwtAuthenticationFilter;
 import com.project.give.security.handler.OAuth2SuccessHandler;
 import com.project.give.service.OAuth2PrincipalUserService;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,13 +33,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2SuccessHandler oAuth2SuccessHandler;
 
+    @Autowired
+    private CorsFilter corsFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
+
         http.cors();
         http.csrf().disable();
 
         http.authorizeRequests()
 
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // Blue/Green 배포용 HealthCheck 허용
                 .antMatchers("/server/**").permitAll()
 

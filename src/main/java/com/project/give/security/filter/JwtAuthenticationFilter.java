@@ -42,7 +42,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 "/account/nickname-check",
                 "/fundings",
                 "/store/products",
-                "/main",
+
+                "/main", "/main/", "/main/recommend",
 
                 // Blue/Green HealthCheck 추가
                 "/server", "/server/",
