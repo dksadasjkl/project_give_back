@@ -13,6 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
@@ -23,35 +26,46 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthEntryPoint authEntryPoint;
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-    // 비밀번호 암호화에 사용할 BCryptPasswordEncoder 빈 등록
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
     @Autowired
     private OAuth2PrincipalUserService oAuth2PrincipalUserService;
     @Autowired
     private OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    @Autowired
-    private CorsFilter corsFilter;
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://127.0.0.1:3000");
+        config.addAllowedOrigin("https://give-portfolio.shop");
+        config.addAllowedOrigin("https://www.give-portfolio.shop");
+
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
-        http.cors().disable();  // ★ 기본 CORS 로직 제거 → CorsFilter만 적용
 
-        // ★ CORS 필터 적용
-        http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
+        http.cors().configurationSource(corsConfigurationSource());
 
         http.authorizeRequests()
-
-                // ★ Preflight OPTIONS 반드시 허용
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
                 .antMatchers("/server/**").permitAll()
-
                 .antMatchers(
                         "/auth/**",
                         "/users/**",
@@ -65,18 +79,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/store/products/**",
                         "/main/**"
                 ).permitAll()
-
-                .antMatchers(
-                        "/store/cart/**",
-                        "/store/orders/**",
-                        "/store/wishlist/**",
-                        "/mypage/**",
-                        "/donations/like/**",
-                        "/donations/apply/**"
-                ).authenticated()
-
-                .antMatchers("/admin/**").hasRole("ADMIN")
-
                 .anyRequest().authenticated()
 
                 .and()
@@ -90,5 +92,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userInfoEndpoint()
                 .userService(oAuth2PrincipalUserService);
     }
-
 }
