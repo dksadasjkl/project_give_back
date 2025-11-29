@@ -23,74 +23,83 @@ public class JwtAuthenticationFilter extends GenericFilter {
     private JwtProvider jwtProvider;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-            throws IOException, ServletException {
+    public void doFilter(
+            ServletRequest servletRequest,
+            ServletResponse servletResponse,
+            FilterChain filterChain
+    ) throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        // OPTIONS 요청은 무조건 허용
+        // OPTIONS는 무조건 허용
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        List<String> antMatchers = List.of(
+        // permitAll URL 정의
+        List<String> permitUrls = List.of(
+                "/auth",
+                "/auth/**",
                 "/users",
-                "/auth/login",
+                "/users/**",
+                "/account",
+                "/account/**",
                 "/donations",
+                "/donations/**",
                 "/categories",
-                "/donation-project-details", "/donation-project-details/",
-                "/donation-project-contributions", "/donation-project-contributions/",
-                "/donation-project-comments", "/donation-project-comments/",
-                "/account/find-username",
-                "/account/passwordReset",
-                "/account/username-check",
-                "/account/nickname-check",
+                "/categories/**",
+                "/donation-project-details",
+                "/donation-project-details/**",
+                "/donation-project-contributions",
+                "/donation-project-contributions/**",
+                "/donation-project-comments",
+                "/donation-project-comments/**",
                 "/fundings",
+                "/fundings/**",
                 "/store/products",
-                "/main", "/main/", "/main/recommend",
-                "/server", "/server/", "/server/env", "/server/hc"
+                "/store/products/**",
+                "/main",
+                "/main/**",
+                "/server",
+                "/server/**"
         );
 
         String uri = request.getRequestURI();
-        request.setAttribute("isPermitAll", false);
 
-        for (String antMatcher : antMatchers) {
-            if (uri.startsWith(antMatcher)) {
-                request.setAttribute("isPermitAll", true);
+        // permitAll 체크
+        for (String permit : permitUrls) {
+            if (uri.startsWith(permit.replace("/**", ""))) {
+                filterChain.doFilter(request, response);
+                return;
             }
         }
 
-        Boolean isPermitAll = (Boolean) request.getAttribute("isPermitAll");
+        // JWT 검사
+        String accessToken = request.getHeader("Authorization");
+        String token = jwtProvider.removeBearer(accessToken);
 
-        if (!isPermitAll) {
-            String accessToken = request.getHeader("Authorization");
-            String removeBearerToken = jwtProvider.removeBearer(accessToken);
-
-            if (removeBearerToken == null) {
-                response.sendError(HttpStatus.UNAUTHORIZED.value());
-                return;
-            }
-
-            Claims claims = null;
-            try {
-                claims = jwtProvider.getClaims(removeBearerToken);
-            } catch (Exception e) {
-                response.sendError(HttpStatus.UNAUTHORIZED.value());
-                return;
-            }
-
-            Authentication authentication = jwtProvider.getAuthentication(claims);
-
-            if (authentication == null) {
-                response.sendError(HttpStatus.UNAUTHORIZED.value());
-                return;
-            }
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (token == null) {
+            response.sendError(HttpStatus.UNAUTHORIZED.value());
+            return;
         }
 
+        Claims claims;
+        try {
+            claims = jwtProvider.getClaims(token);
+        } catch (Exception e) {
+            response.sendError(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        Authentication authentication = jwtProvider.getAuthentication(claims);
+        if (authentication == null) {
+            response.sendError(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }
 }
