@@ -39,18 +39,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
-
-        http.cors();
         http.csrf().disable();
+        http.cors().disable();  // ★ 기본 CORS 로직 제거 → CorsFilter만 적용
+
+        // ★ CORS 필터 적용
+        http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests()
 
+                // ★ Preflight OPTIONS 반드시 허용
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // Blue/Green 배포용 HealthCheck 허용
+
                 .antMatchers("/server/**").permitAll()
 
-                // 1) 비회원도 접근 가능한 공개 URL
                 .antMatchers(
                         "/auth/**",
                         "/users/**",
@@ -65,7 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/main/**"
                 ).permitAll()
 
-                // 2) 회원(로그인 유저)만 접근 가능한 URL
                 .antMatchers(
                         "/store/cart/**",
                         "/store/orders/**",
@@ -75,20 +75,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/donations/apply/**"
                 ).authenticated()
 
-                // 3) 관리자 전용 URL
                 .antMatchers("/admin/**").hasRole("ADMIN")
 
-                // 나머지는 인증 필요
                 .anyRequest().authenticated()
 
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(authEntryPoint)
+
                 .and()
                 .oauth2Login()
                 .successHandler(oAuth2SuccessHandler)
                 .userInfoEndpoint()
                 .userService(oAuth2PrincipalUserService);
     }
+
 }

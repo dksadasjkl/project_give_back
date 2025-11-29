@@ -23,11 +23,18 @@ public class JwtAuthenticationFilter extends GenericFilter {
     private JwtProvider jwtProvider;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        
-        // 인증이 필요없는 페이지 (회원가입, 로그인, 아이디찾기, 비밀번호 찾기, 중복체크 등) - 기부페이지는 개발이후 제외 예정
+
+        // OPTIONS 요청은 무조건 허용
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         List<String> antMatchers = List.of(
                 "/users",
                 "/auth/login",
@@ -38,33 +45,29 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 "/donation-project-comments", "/donation-project-comments/",
                 "/account/find-username",
                 "/account/passwordReset",
-                "/account/username-check", 
+                "/account/username-check",
                 "/account/nickname-check",
                 "/fundings",
                 "/store/products",
-
                 "/main", "/main/", "/main/recommend",
-
-                // Blue/Green HealthCheck 추가
-                "/server", "/server/",
-                "/server/env",
-                "/server/hc"
+                "/server", "/server/", "/server/env", "/server/hc"
         );
+
         String uri = request.getRequestURI();
+        request.setAttribute("isPermitAll", false);
 
-            request.setAttribute("isPermitAll", false);
-
-        for(String antMatcher : antMatchers) {
-            if(uri.startsWith(antMatcher)) {
+        for (String antMatcher : antMatchers) {
+            if (uri.startsWith(antMatcher)) {
                 request.setAttribute("isPermitAll", true);
             }
         }
 
         Boolean isPermitAll = (Boolean) request.getAttribute("isPermitAll");
 
-        if(!isPermitAll) {
+        if (!isPermitAll) {
             String accessToken = request.getHeader("Authorization");
             String removeBearerToken = jwtProvider.removeBearer(accessToken);
+
             if (removeBearerToken == null) {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
@@ -73,27 +76,21 @@ public class JwtAuthenticationFilter extends GenericFilter {
             Claims claims = null;
             try {
                 claims = jwtProvider.getClaims(removeBearerToken);
-//                System.out.println("[JWT Filter] Claims: " + claims);
-            } catch (ExpiredJwtException e) {
-//                System.out.println("[JWT Filter] Token expired: " + e.getMessage());
-                response.sendError(HttpStatus.UNAUTHORIZED.value());
-                return;
             } catch (Exception e) {
-//                System.out.println("[JWT Filter] Token invalid: " + e.getMessage());
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }
 
             Authentication authentication = jwtProvider.getAuthentication(claims);
-//            System.out.println("[JWT Filter] Authentication Principal: " + authentication.getPrincipal());
 
-            if(authentication == null) {
+            if (authentication == null) {
                 response.sendError(HttpStatus.UNAUTHORIZED.value());
                 return;
             }
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         filterChain.doFilter(request, response);
     }
 }
