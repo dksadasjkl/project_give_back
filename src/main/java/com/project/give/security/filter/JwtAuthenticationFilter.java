@@ -43,6 +43,12 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 "/fundings",
                 "/store/products",
                 "/main"
+
+
+                // Blue/Green HealthCheck 추가
+                "/server", "/server/",
+                "/server/env",
+                "/server/hc"
         );
         String uri = request.getRequestURI();
 

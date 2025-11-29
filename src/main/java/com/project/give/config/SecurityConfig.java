@@ -38,6 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 
+                // Blue/Green 배포용 HealthCheck 허용
+                .antMatchers("/server/**").permitAll()
+
                 // 1) 비회원도 접근 가능한 공개 URL
                 .antMatchers(
                         "/auth/**",
