@@ -41,17 +41,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         config.setAllowCredentials(true);
 
-        config.addAllowedOriginPattern("https://give-portfolio.shop");
-        config.addAllowedOriginPattern("https://www.give-portfolio.shop");
-        config.addAllowedOriginPattern("http://localhost:3000");
-        config.addAllowedOriginPattern("http://127.0.0.1:3000");
+        config.addAllowedOrigin("https://give-portfolio.shop");
+        config.addAllowedOrigin("https://www.give-portfolio.shop");
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://127.0.0.1:3000");
 
+        // Authorization 명시적으로 추가
         config.addAllowedHeader("Authorization");
         config.addAllowedHeader("Content-Type");
-        config.addAllowedHeader("*");
+        config.addAllowedHeader("X-Requested-With");
+        config.addAllowedHeader("Accept");
+        config.addAllowedHeader("Origin");
 
+        // 모든 메소드 허용
         config.addAllowedMethod("*");
-        config.addExposedHeader("*");
+
+        // 프론트에서 읽을 수 있는 헤더 명시
+        config.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
