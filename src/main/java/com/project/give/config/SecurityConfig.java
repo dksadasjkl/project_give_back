@@ -77,7 +77,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/auth/**",
                         "/users/**",
-                        "/account/**",
+                        "/account/find-username",
+                        "/account/username-check",
+                        "/account/nickname-check",
+                        "/account/passwordReset",
                         "/donations/**",
                         "/categories/**",
                         "/donation-project-details/**",
