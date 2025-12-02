@@ -33,12 +33,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             DefaultOAuth2User oAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
             String providerName =  oAuth2User.getAttribute("provider").toString();
             // 엔드 포인트에서 다시 redirect(회원가입 페이지)
-            response.sendRedirect("http://" + clientAddress + "/account/oauth2/sign-up?name=" + oAuth2name + "&provider=" + providerName);
+            response.sendRedirect("https://" + clientAddress + "/account/oauth2/sign-up?name=" + oAuth2name + "&provider=" + providerName);
             return;
         }
 
         String accessToken = jwtProvider.generateToken(user);
-        response.sendRedirect("http://" + clientAddress + "/account/oauth2/sign-in?accessToken=" + accessToken);
+        response.sendRedirect("https://" + clientAddress + "/account/oauth2/sign-in?accessToken=" + accessToken);
     }
 
 }
